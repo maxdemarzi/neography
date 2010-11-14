@@ -1,0 +1,36 @@
+PATH
+  remote: .
+  specs:
+    neography (0.0.1)
+      httparty (~> 0.6.1)
+      json
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    crack (0.1.8)
+    diff-lcs (1.1.2)
+    httparty (0.6.1)
+      crack (= 0.1.8)
+    json (1.4.6-java)
+    net-http-spy (0.2.1)
+    rspec (2.0.1)
+      rspec-core (~> 2.0.1)
+      rspec-expectations (~> 2.0.1)
+      rspec-mocks (~> 2.0.1)
+    rspec-core (2.0.1)
+    rspec-expectations (2.0.1)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.1)
+      rspec-core (~> 2.0.1)
+      rspec-expectations (~> 2.0.1)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  httparty (~> 0.6.1)
+  json
+  neography!
+  net-http-spy (~> 0.2.1)
+  rspec (~> 2.0.0.beta.22)
