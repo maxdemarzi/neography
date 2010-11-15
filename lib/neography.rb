@@ -39,7 +39,7 @@ end
 require 'httparty'
 require 'json'
 require 'logger'
-#require 'net-http-spy'
+require 'net-http-spy'
 
 #Net::HTTP.http_logger_options = {:verbose => true}
 #Net::HTTP.http_logger_options = {:body => true}

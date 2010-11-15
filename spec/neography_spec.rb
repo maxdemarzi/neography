@@ -1,30 +1,30 @@
 require 'neography'
 
 describe Neography::Neo do
-#  it "has a root node" do
-#    Neography::Neo.root_node.should include("reference_node")
-#  end
+  it "has a root node" do
+    Neography::Neo.root_node.should include("reference_node")
+  end
 end
 
 describe Neography::Node do
   it "can create an empty node" do
-    Neography::Node.new.should include("data"=>{})
+    Neography::Node.new.should include(:neo_id)
   end
 
   it "can create a node with one property" do
-    Neography::Node.new(:name => "Max").should include("data"=>{"name"=>"Max"})
+    Neography::Node.new(:name => "Max").should include("name"=>"Max")
   end
 
   it "can create a node with more than one property" do
-    Neography::Node.new(:age => 31, :name => "Max").should include("data"=>{"age"=>31, "name"=>"Max"})
+    Neography::Node.new(:age => 31, :name => "Max").should include("age"=>31, "name"=>"Max")
   end
 
   it "can find a node by its id" do
-    Neography::Node.get_node(2).should include("self"=>"http://localhost:9999/node/2")
+    Neography::Node.load(2).should include(:neo_id=>"2")
   end
 
   it "fails to find a node that does not exist" do
-    Neography::Node.get_node(999).should be_nil
+    Neography::Node.load(999).should be_nil
   end
 
   it "can get a node's properties" do
@@ -44,6 +44,45 @@ describe Neography::Node do
   it "returns nil if it fails to set properties on a node that does not exist" do
     Neography::Node.set_properties(999,{:age => 33, :name => "Harry"}).should be_nil
   end
+
+  it "can delete a node's property" do
+    Neography::Node.set_properties(2, {:age => 32, :name => "Tom", :weight => 200} ).should be_nil
+    Neography::Node.remove_property(2, :weight).should be_nil
+    Neography::Node.properties(2).should_not include("weight"=>200)
+  end
+
+  it "returns nil if it tries to delete a property that does not exist" do
+    Neography::Node.set_properties(2, {:age => 32, :name => "Tom", :weight => 200} ).should be_nil
+    Neography::Node.remove_property(2, :height).should be_nil
+  end
+
+  it "returns nil if it tries to delete a property on a node that does not exist" do
+    Neography::Node.remove_property(9999, :height).should be_nil
+  end
+
+  it "can delete an unrelated node" do
+    newnode = Neography::Node.new
+    Neography::Node.del(newnode[:neo_id]).should be_nil
+  end
+
+  it "returns nil if it tries to delete a node that does not exist" do
+    Neography::Node.del(9999).should be_nil
+  end
+
+  it "returns nil if it tries to delete a node that has already been deleted" do
+    newnode = Neography::Node.new
+    Neography::Node.del(newnode[:neo_id]).should be_nil
+    Neography::Node.del(newnode[:neo_id]).should be_nil
+  end
+
+  it "returns nil if it tries to delete a node that has existing relationships" do
+    node1 = Neography::Node.new
+    node2 = Neography::Node.new
+    pending "create relationship from node1 to node2"
+    Neography::Node.del(node1[:neo_id]).should be_nil
+    Neography::Node.del(node2[:neo_id]).should be_nil
+  end
+
 
 
 
