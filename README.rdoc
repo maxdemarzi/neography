@@ -7,17 +7,17 @@ Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
 
 === Installation
 
-gem install 'neography'
-require 'neography'
+  gem install 'neography'
+  require 'neography'
 
 
 ==== Configuration
 
-Neography::Config.use do |config|
-  config[:protocol] = 'http://'
-  config[:server] = 'localhost'
-  config[:port] = '9999'
-end
+  Neography::Config.use do |config|
+    config[:protocol] = 'http://'
+    config[:server] = 'localhost'
+    config[:port] = '9999'
+  end
 
 ==== Rails
 
@@ -27,13 +27,13 @@ Use the defaults (shown above) or create neography.rb in your config/initializer
 
 === Documentation
 
-Neography::Node.new # Create an empty node
-Neography::Node.new(:age => 31, :name => "Max") # Create a node with some properties
-Neography::Node.load(id) # Get a node and its properties
-Neography::Node.set_properties(3, {:age => 31, :name => "Max"} ) # Deletes any existing properties with the passed hash
-Neography::Node.properties(3) # Returns a hash of a node's properties or nil
-Neography::Node.remove_property(3, :age) # Deletes the existing property
-Neography::Node.del(3) # Deletes the node
+  Neography::Node.new # Create an empty node
+  Neography::Node.new(:age => 31, :name => "Max") # Create a node with some properties
+  Neography::Node.load(id) # Get a node and its properties
+  Neography::Node.set_properties(3, {:age => 31, :name => "Max"} ) # Deletes any existing properties with the passed hash
+  Neography::Node.properties(3) # Returns a hash of a node's properties or nil
+  Neography::Node.remove_property(3, :age) # Deletes the existing property
+  Neography::Node.del(3) # Deletes the node
 
 
 === License
