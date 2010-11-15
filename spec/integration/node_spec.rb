@@ -54,6 +54,12 @@ describe Neography::Node do
     Neography::Node.remove_property(9999, :height).should be_nil
   end
 
+  it "can delete all of a node's properties" do
+    Neography::Node.set_properties(2, {:age => 32, :name => "Tom", :weight => 200} ).should be_nil
+    Neography::Node.remove_properties(2).should be_nil
+    Neography::Node.properties(2).should be_nil
+  end
+
   it "can delete an unrelated node" do
     newnode = Neography::Node.new
     Neography::Node.del(newnode[:neo_id]).should be_nil
@@ -72,7 +78,7 @@ describe Neography::Node do
   it "returns nil if it tries to delete a node that has existing relationships" do
     node1 = Neography::Node.new
     node2 = Neography::Node.new
-    pending "create relationship from node1 to node2"
+    Neography::Relationship.new(:friends, node1, node2)
     Neography::Node.del(node1[:neo_id]).should be_nil
     Neography::Node.del(node2[:neo_id]).should be_nil
   end

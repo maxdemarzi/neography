@@ -44,8 +44,9 @@ require 'net-http-spy'
 #Net::HTTP.http_logger_options = {:verbose => true}
 #Net::HTTP.http_logger_options = {:body => true}
 
+require 'neography/config'
 require 'neography/neo'
 require 'neography/node'
-
+require 'neography/relationship'
 
 find_and_require_user_defined_code

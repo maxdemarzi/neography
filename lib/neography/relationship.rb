@@ -1,73 +1,67 @@
 module Neography
-  class Node
+  class Relationship
     include HTTParty
-    base_uri 'http://localhost:9999'
+    base_uri Neography::Config.to_s
     format :json
 
     class << self
 
-      def new(*args)
-        if args[0].respond_to?(:each_pair) && args[0] 
-         options = { :body => args[0].to_json, :headers => {'Content-Type' => 'application/json'} } 
-         response = post("/node", options)
+      def new(type, from, to, props = nil)
+         options = { :body => {:to => Neography::Config.to_s + "/node/#{to[:neo_id]}", :data => props, :type => type }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         response = post("/node/#{from[:neo_id]}/relationships", options)
          evaluate_response(response)
-         build_node(response)
-        else
-         response = post("/node")
-         evaluate_response(response)
-         build_node(response)
-        end
+         build_relationship(response)
       end
 
       def load(id)
          begin
            response = get("/node/#{id}")
            evaluate_response(response)
-           build_node(response)
+           build_relationship(response)
          rescue 
            nil
          end
       end
 
       def properties(id)
-        get("/node/#{id}/properties")
+        get("/relationship/#{id}/properties")
       end
 
       def set_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        response = put("/node/#{id}/properties", options)
+        response = put("/relationship/#{id}/properties", options)
         evaluate_response(response)
         response.parsed_response
       end
 
       def remove_property(id, property)
-        response = delete("/node/#{id}/properties/#{property}")
+        response = delete("/relationship/#{id}/properties/#{property}")
         evaluate_response(response)
         response.parsed_response
       end
 
       def remove_properties(id)
-        response = delete("/node/#{id}/properties")
+        response = delete("/relationship/#{id}/properties")
         evaluate_response(response)
         response.parsed_response
       end
 
       def del(id)
-        response = delete("/node/#{id}")
+        response = delete("/relationship/#{id}")
         evaluate_response(response)
         response.parsed_response
       end
 
      private
 
-     def build_node(response)
+     def build_relationship(response)
        begin
-         node = response.parsed_response["data"]
+         relationship = response.parsed_response["data"]
        rescue 
-         node = Array.new
+         relationship = Array.new
        end
-       node[:neo_id] = response.parsed_response["self"].split('/').last
-       node
+       relationship[:rel_id] = response.parsed_response["self"].split('/').last
+       relationship
      end
 
     end

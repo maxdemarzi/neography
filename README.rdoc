@@ -1,0 +1,44 @@
+== Welcome to Neography
+
+Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
+* {Getting Started with REST for Neo4j}[http://wiki.neo4j.org/content/Getting_Started_REST]
+* {Neo4j Rest API Reference}[http://components.neo4j.org/neo4j-rest/]
+
+
+=== Installation
+
+gem install 'neography'
+require 'neography'
+
+
+==== Configuration
+
+Neography::Config.use do |config|
+  config[:protocol] = 'http://'
+  config[:server] = 'localhost'
+  config[:port] = '9999'
+end
+
+==== Rails
+
+Just add gem 'neography' to your Gemfile and run bundle install
+
+Use the defaults (shown above) or create neography.rb in your config/initializers directory.
+
+=== Documentation
+
+Neography::Node.new # Create an empty node
+Neography::Node.new(:age => 31, :name => "Max") # Create a node with some properties
+Neography::Node.load(id) # Get a node and its properties
+Neography::Node.set_properties(3, {:age => 31, :name => "Max"} ) # Deletes any existing properties with the passed hash
+Neography::Node.properties(3) # Returns a hash of a node's properties or nil
+Neography::Node.remove_property(3, :age) # Deletes the existing property
+Neography::Node.del(3) # Deletes the node
+
+
+=== License
+* Neography - MIT, see the LICENSE file http://github.com/maxdemarzi/neography/tree/master/LICENSE.
+* Lucene -  Apache, see http://lucene.apache.org/java/docs/features.html
+* Neo4j - Dual free software/commercial license, see http://neo4j.org/
+
+
