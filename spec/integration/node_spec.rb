@@ -1,10 +1,4 @@
-require 'neography'
-
-describe Neography::Neo do
-  it "has a root node" do
-    Neography::Neo.root_node.should include("reference_node")
-  end
-end
+require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Neography::Node do
   it "can create an empty node" do
@@ -82,8 +76,5 @@ describe Neography::Node do
     Neography::Node.del(node1[:neo_id]).should be_nil
     Neography::Node.del(node2[:neo_id]).should be_nil
   end
-
-
-
 
 end
