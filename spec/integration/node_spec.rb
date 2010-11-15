@@ -30,6 +30,11 @@ describe Neography::Node do
     Neography::Node.properties(1).should be_nil
   end
 
+
+  it "returns nil if the properties of a node that does not exist are requested" do
+    Neography::Node.properties(999).should be_nil
+  end
+
   it "can set a node's properties" do
     Neography::Node.set_properties(2, {:age => 32, :name => "Tom"} ).should be_nil
     Neography::Node.properties(2).should include("age"=>32, "name"=>"Tom")

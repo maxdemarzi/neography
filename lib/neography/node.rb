@@ -30,7 +30,11 @@ module Neography
       end
 
       def properties(id)
-        get("/node/#{id}/properties")
+        begin
+          get("/node/#{id}/properties")
+        rescue 
+          nil
+        end
       end
 
       def set_properties(id, properties)

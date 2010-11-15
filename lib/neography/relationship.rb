@@ -14,17 +14,21 @@ module Neography
       end
 
       def load(id)
-         begin
-           response = get("/node/#{id}")
-           evaluate_response(response)
-           build_relationship(response)
-         rescue 
-           nil
-         end
+        begin
+          response = get("/relationship/#{id}")
+          evaluate_response(response)
+          build_relationship(response)
+        rescue 
+          nil
+        end
       end
 
       def properties(id)
-        get("/relationship/#{id}/properties")
+        begin
+          get("/relationship/#{id}/properties")
+        rescue 
+          nil
+        end
       end
 
       def set_properties(id, properties)
