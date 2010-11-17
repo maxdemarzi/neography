@@ -27,13 +27,25 @@ Use the defaults (shown above) or create neography.rb in your config/initializer
 
 === Documentation
 
-  Neography::Node.new # Create an empty node
-  Neography::Node.new(:age => 31, :name => "Max") # Create a node with some properties
-  Neography::Node.load(id) # Get a node and its properties
+There are two ways to use Neography:
+
+A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and returns JSON or Nil:
+
+  Neography::Rest.get_root                                  # Get the root node
+  Neography::Rest.create_node                               # Create an empty node
+  Neography::Rest.create_node("age" => 31, "name" => "Max") # Create a node with some properties
+  Neography::Rest.get_node(id)                              # Get a node and its properties
+
+... and a work in progress more rubyish layer that's not quite ready for use yet.
+
+  Neography::Node.new                                              # Create an empty node
+  Neography::Node.new(:age => 31, :name => "Max")                  # Create a node with some properties
+  Neography::Node.load(id)                                         # Get a node and its properties
   Neography::Node.set_properties(3, {:age => 31, :name => "Max"} ) # Deletes any existing properties with the passed hash
-  Neography::Node.properties(3) # Returns a hash of a node's properties or nil
-  Neography::Node.remove_property(3, :age) # Deletes the existing property
-  Neography::Node.del(3) # Deletes the node
+  Neography::Node.properties(3)                                    # Returns a hash of a node's properties or nil
+  Neography::Node.remove_property(3, :age)                         # Deletes the existing property
+  Neography::Node.del(3)                                           # Deletes a node without any relationships
+  Neography::Node.del!(3)                                          # Deletes a node and all its relationships
 
 
 === License

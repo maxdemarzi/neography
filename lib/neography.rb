@@ -39,12 +39,13 @@ end
 require 'httparty'
 require 'json'
 require 'logger'
-require 'net-http-spy'
+#require 'net-http-spy'
 
 #Net::HTTP.http_logger_options = {:verbose => true}
 #Net::HTTP.http_logger_options = {:body => true}
 
 require 'neography/config'
+require 'neography/rest'
 require 'neography/neo'
 require 'neography/node'
 require 'neography/relationship'

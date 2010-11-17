@@ -19,6 +19,9 @@ module Neography
         end
       end
 
+      # create is the same as new
+      alias_method :create, :new
+
       def load(id)
          begin
            response = get("/node/#{id}")
@@ -62,6 +65,38 @@ module Neography
         response.parsed_response
       end
 
+      def del!(id)
+        relationships = rels(id)
+        relationships.each {|r| Relationship.del(r[:rel_id])}
+        response = delete("/node/#{id}")
+        evaluate_response(response)
+        response.parsed_response
+      end
+
+      def exists?(id)
+        load(id).nil? == false
+      end
+
+     def rels(id, dir=nil, types=nil)
+       case dir
+         when :incoming
+           dir = "in"
+         when :outgoing
+           dir = "out"
+         else
+           dir = "all"
+       end
+
+       if types.nil?
+         response = get("/node/#{id}/relationships/#{dir}")
+       else
+         response = get("/node/#{id}/relationships/#{dir}/#{types.to_a.join('&')}")
+       end
+        evaluate_response(response)
+        build_rels(response)
+     end
+
+
      private
 
      def build_node(response)
@@ -73,6 +108,21 @@ module Neography
        node[:neo_id] = response.parsed_response["self"].split('/').last
        node
      end
+
+     def build_rels(response)
+       begin
+         rels = response.parsed_response
+         rels.each do |r|       
+           r[:rel_id] = r["self"].split('/').last
+           r[:start_node] = r["start"].split('/').last
+           r[:end_node] = r["end"].split('/').last
+         end
+       rescue 
+         rels = Array.new
+       end
+       rels
+     end
+
 
     end
   end

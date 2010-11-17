@@ -2,7 +2,9 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Neography::Node do
   it "can create an empty node" do
-    Neography::Node.new.should include(:neo_id)
+    node1 = Neography::Node.new
+    node1.should include(:neo_id)
+    Neography::Node.exists?(node1[:neo_id]).should be_true
   end
 
   it "can create a node with one property" do
@@ -11,6 +13,10 @@ describe Neography::Node do
 
   it "can create a node with more than one property" do
     Neography::Node.new(:age => 31, :name => "Max").should include("age"=>31, "name"=>"Max")
+  end
+
+  it "can tell if a node does not exist" do
+    Neography::Node.exists?(999).should be_false
   end
 
   it "can find a node by its id" do
@@ -80,12 +86,35 @@ describe Neography::Node do
     Neography::Node.del(newnode[:neo_id]).should be_nil
   end
 
-  it "returns nil if it tries to delete a node that has existing relationships" do
+  it "does not delete a node that has existing relationships" do
     node1 = Neography::Node.new
     node2 = Neography::Node.new
     Neography::Relationship.new(:friends, node1, node2)
     Neography::Node.del(node1[:neo_id]).should be_nil
     Neography::Node.del(node2[:neo_id]).should be_nil
+    Neography::Node.exists?(node1[:neo_id]).should be_true
+    Neography::Node.exists?(node2[:neo_id]).should be_true
   end
+
+  it "does delete! a node that has existing relationships" do
+    node1 = Neography::Node.new
+    node2 = Neography::Node.new
+    Neography::Relationship.new(:friends, node1, node2)
+    Neography::Node.del!(node1[:neo_id]).should be_nil
+    Neography::Node.del!(node2[:neo_id]).should be_nil
+    Neography::Node.exists?(node1[:neo_id]).should be_false
+    Neography::Node.exists?(node2[:neo_id]).should be_false
+  end
+
+  it "can find get a node's existing relationships" do
+    node1 = Neography::Node.new
+    node2 = Neography::Node.new
+    Neography::Relationship.new(:friends, node1, node2)
+    Neography::Node.rels(node1[:neo_id]).to_s.should include("rel_id")
+    Neography::Node.rels(node1[:neo_id])[0][:rel_id].should_not be_nil
+
+  end
+
+
 
 end
