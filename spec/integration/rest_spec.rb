@@ -266,4 +266,125 @@ describe Neography::Rest do
     end
   end
 
+  describe "get_node_relationships" do
+    it "can get a node's relationship" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id])
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node1[:id]
+      relationships[0]["end"].split('/').last.should == new_node2[:id]
+      relationships[0]["type"].should == "friends"
+      relationships[0]["data"]["met"].should == "college"
+      relationships[0]["data"]["since"].should == '10-1-2005'
+    end
+
+    it "can get a node's multiple relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_node3 = Neography::Rest.create_node
+      new_node3[:id] = new_node3["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node1[:id], new_node3[:id], {"since" => '10-2-2010', "met" => "work"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id])
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node1[:id]
+      relationships[0]["end"].split('/').last.should == new_node2[:id]
+      relationships[0]["type"].should == "friends"
+      relationships[0]["data"]["met"].should == "college"
+      relationships[0]["data"]["since"].should == '10-1-2005'
+      relationships[1]["start"].split('/').last.should == new_node1[:id]
+      relationships[1]["end"].split('/').last.should == new_node3[:id]
+      relationships[1]["type"].should == "enemies"
+      relationships[1]["data"]["met"].should == "work"
+      relationships[1]["data"]["since"].should == '10-2-2010'
+    end
+
+    it "can get a node's outgoing relationship" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_node3 = Neography::Rest.create_node
+      new_node3[:id] = new_node3["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node3[:id], new_node1[:id], {"since" => '10-2-2010', "met" => "work"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "outgoing")
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node1[:id]
+      relationships[0]["end"].split('/').last.should == new_node2[:id]
+      relationships[0]["type"].should == "friends"
+      relationships[0]["data"]["met"].should == "college"
+      relationships[0]["data"]["since"].should == '10-1-2005'
+      relationships[1].should be_nil
+    end
+
+    it "can get a node's incoming relationship" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_node3 = Neography::Rest.create_node
+      new_node3[:id] = new_node3["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node3[:id], new_node1[:id], {"since" => '10-2-2010', "met" => "work"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "incoming")
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node3[:id]
+      relationships[0]["end"].split('/').last.should == new_node1[:id]
+      relationships[0]["type"].should == "enemies"
+      relationships[0]["data"]["met"].should == "work"
+      relationships[0]["data"]["since"].should == '10-2-2010'
+      relationships[1].should be_nil
+    end
+
+    it "can get a specific type of node relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_node3 = Neography::Rest.create_node
+      new_node3[:id] = new_node3["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node1[:id], new_node3[:id], {"since" => '10-2-2010', "met" => "work"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "all", "friends")
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node1[:id]
+      relationships[0]["end"].split('/').last.should == new_node2[:id]
+      relationships[0]["type"].should == "friends"
+      relationships[0]["data"]["met"].should == "college"
+      relationships[0]["data"]["since"].should == '10-1-2005'
+      relationships[1].should be_nil
+    end
+
+    it "can get a specific type and direction of a node relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_node3 = Neography::Rest.create_node
+      new_node3[:id] = new_node3["self"].split('/').last
+      new_node4 = Neography::Rest.create_node
+      new_node4[:id] = new_node4["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node1[:id], new_node3[:id], {"since" => '10-2-2010', "met" => "work"})
+      new_relationship = Neography::Rest.create_relationship("enemies", new_node4[:id], new_node1[:id], {"since" => '10-3-2010', "met" => "gym"})
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "incoming", "enemies")
+      relationships.should_not be_nil
+      relationships[0]["start"].split('/').last.should == new_node4[:id]
+      relationships[0]["end"].split('/').last.should == new_node1[:id]
+      relationships[0]["type"].should == "enemies"
+      relationships[0]["data"]["met"].should == "gym"
+      relationships[0]["data"]["since"].should == '10-3-2010'
+      relationships[1].should be_nil
+    end
+
+
+  end
+
 end

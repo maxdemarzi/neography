@@ -68,6 +68,23 @@ module Neography
          rescue_ij { post("/node/#{from}/relationships", options) }
       end
 
+      def get_node_relationships(id, dir=nil, types=nil)
+        case dir
+          when :incoming, "incoming"
+            dir = "in"
+          when :outgoing, "outgoing"
+            dir = "out"
+          else
+            dir = "all"
+        end
+
+        if types.nil?
+          rescue_ij { get("/node/#{id}/relationships/#{dir}") }
+        else
+          rescue_ij { get("/node/#{id}/relationships/#{dir}/#{types.to_a.join('&')}") }
+        end
+      end
+
      private
 
 # Rescue from Invalid JSON error thrown by Crack Gem
