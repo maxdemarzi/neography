@@ -43,6 +43,7 @@ A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and
   Neography::Rest.remove_node_properties(id)                   # Remove all properties of a node
   Neography::Rest.remove_node_properties(id, "weight")         # Remove one property of a node
   Neography::Rest.remove_node_properties(id, ["weight","age"]) # Remove multiple properties of a node
+  Neography::Rest.create_relationship("friends", node1, node2) # Create a relationship between node1 and node2
 
 ... and a work in progress more rubyish layer that's not quite ready for use yet.
 

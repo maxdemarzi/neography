@@ -164,6 +164,17 @@ describe Neography::Rest do
       existing_node.should be_nil
     end
 
+    it "cannot delete a node that has relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      Neography::Rest.delete_node(new_node1[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node1[:id])
+      existing_node.should_not be_nil
+    end
+
     it "returns nil if it tries to delete a node that does not exist" do
       new_node = Neography::Rest.create_node
       new_node[:id] = new_node["self"].split('/').last
@@ -181,6 +192,77 @@ describe Neography::Rest do
       Neography::Rest.delete_node(new_node[:id]).should be_nil
       existing_node = Neography::Rest.get_node(new_node[:id])
       existing_node.should be_nil
+    end
+  end
+
+  describe "delete_node!" do
+    it "can delete an unrelated node" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node!(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+    end
+
+    it "can delete a node that has relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      Neography::Rest.delete_node!(new_node1[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node1[:id])
+      existing_node.should be_nil
+    end
+
+    it "returns nil if it tries to delete a node that does not exist" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node!(new_node[:id].to_i + 1000).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id].to_i + 1000)
+      existing_node.should be_nil
+    end
+
+    it "returns nil if it tries to delete a node that has already been deleted" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node!(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+      Neography::Rest.delete_node!(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+    end
+  end
+
+  describe "create_relationship" do
+    it "can create an empty relationship" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      new_relationship["start"].should_not be_nil
+      new_relationship["end"].should_not be_nil
+    end
+
+    it "can create a relationship with one property" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2010'})
+      new_relationship["data"]["since"].should == '10-1-2010'
+    end
+
+    it "can create a relationship with more than one property" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2010', "met" => "college"})
+      new_relationship["data"]["since"].should == '10-1-2010'
+      new_relationship["data"]["met"].should == "college"
     end
   end
 

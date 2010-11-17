@@ -63,7 +63,10 @@ module Neography
         rescue_ij { delete("/node/#{id}") }
       end
 
-
+      def create_relationship(type, from, to, props = nil)
+         options = { :body => {:to => Neography::Config.to_s + "/node/#{to}", :data => props, :type => type }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         rescue_ij { post("/node/#{from}/relationships", options) }
+      end
 
      private
 
