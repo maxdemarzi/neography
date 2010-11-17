@@ -70,14 +70,48 @@ describe Neography::Rest do
     it "returns nil if it gets the properties on a node that does not have any" do
       new_node = Neography::Rest.create_node
       new_node[:id] = new_node["self"].split('/').last
-      Neography::Rest.get_node_properties(new_node[:id].to_i + 1).should be_nil
+      Neography::Rest.get_node_properties(new_node[:id].to_i + 10000).should be_nil
     end
 
     it "returns nil if it fails to get properties on a node that does not exist" do
       new_node = Neography::Rest.create_node
       new_node[:id] = new_node["self"].split('/').last
-      Neography::Rest.get_node_properties(new_node[:id].to_i + 1).should be_nil
+      Neography::Rest.get_node_properties(new_node[:id].to_i + 10000).should be_nil
     end
+  end
+
+  describe "remove_node_properties" do
+    it "can remove a node's properties" do
+      new_node = Neography::Rest.create_node("weight" => 200, "eyes" => "brown")
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.remove_node_properties(new_node[:id])
+      Neography::Rest.get_node_properties(new_node[:id]).should be_nil
+    end
+
+    it "returns nil if it fails to remove the properties of a node that does not exist" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.remove_node_properties(new_node[:id].to_i + 10000).should be_nil
+    end
+
+    it "can remove a specific node property" do
+      new_node = Neography::Rest.create_node("weight" => 200, "eyes" => "brown")
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.remove_node_properties(new_node[:id], "weight")
+      node_properties = Neography::Rest.get_node_properties(new_node[:id])
+      node_properties["weight"].should be_nil
+      node_properties["eyes"].should == "brown"
+    end
+
+    it "can remove more than one property" do
+      new_node = Neography::Rest.create_node("weight" => 200, "eyes" => "brown", "height" => "2m")
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.remove_node_properties(new_node[:id], ["weight", "eyes"])
+      node_properties = Neography::Rest.get_node_properties(new_node[:id])
+      node_properties["weight"].should be_nil
+      node_properties["eyes"].should be_nil
+    end
+
   end
 
 

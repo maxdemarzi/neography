@@ -32,6 +32,18 @@ module Neography
         rescue_ij { get("/node/#{id}/properties") }
       end
 
+      def remove_node_properties(id, properties = nil)
+        if properties.nil?
+          rescue_ij { delete("/node/#{id}/properties") }
+        else 
+          properties.to_a.each do |property| 
+            rescue_ij { delete("/node/#{id}/properties/#{property}") } 
+          end
+        end
+      end
+
+
+
      private
 
 # Rescue from Invalid JSON error thrown by Crack Gem
