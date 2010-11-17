@@ -7,23 +7,34 @@ module Neography
     class << self
 
     def get_root
-      rescue_404(get('/'))
+      rescue_ij { get('/') }
     end
 
       def create_node(*args)
         if args[0].respond_to?(:each_pair) && args[0] 
          options = { :body => args[0].to_json, :headers => {'Content-Type' => 'application/json'} } 
-         rescue_404(post("/node", options))
+         rescue_ij { post("/node", options) }
         else
-         rescue_404(post("/node"))
+         rescue_ij { post("/node") }
         end
       end
 
+     def get_node(id)
+       rescue_ij { get("/node/#{id}") }
+     end
+
+      def set_node_properties(id, properties)
+        options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        rescue_ij { put("/node/#{id}/properties", options) }
+      end
 
      private
 
-      def rescue_404(response)
+# Rescue from Invalid JSON error thrown by Crack Gem
+
+      def rescue_ij(&block) 
         begin
+          response = yield
           response = response.parsed_response
         rescue 
           response = nil
