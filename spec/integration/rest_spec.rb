@@ -51,10 +51,33 @@ describe Neography::Rest do
       existing_node["data"]["eyes"].should == "brown"
     end
 
-    it "returns nil if it fails to set properties on a node that does not exist" do
+    it "it fails to set properties on a node that does not exist" do
       new_node = Neography::Rest.create_node
       new_node[:id] = new_node["self"].split('/').last
-      Neography::Rest.set_node_properties(new_node[:id].to_i + 1, {"weight" => 200, "eyes" => "brown"}).should be_nil
+      Neography::Rest.set_node_properties(new_node[:id].to_i + 1000, {"weight" => 150, "hair" => "blonde"})
+      node_properties = Neography::Rest.get_node_properties(new_node[:id].to_i + 1000)
+      node_properties.should be_nil
+    end
+  end
+
+  describe "reset_node_properties" do
+    it "can reset a node's properties" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.set_node_properties(new_node[:id], {"weight" => 200, "eyes" => "brown", "hair" => "black"})
+      Neography::Rest.reset_node_properties(new_node[:id], {"weight" => 190, "eyes" => "blue"})
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node["data"]["weight"].should == 190
+      existing_node["data"]["eyes"].should == "blue"
+      existing_node["data"]["hair"].should be_nil
+    end
+
+    it "it fails to reset properties on a node that does not exist" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.reset_node_properties(new_node[:id].to_i + 1000, {"weight" => 170, "eyes" => "green"})
+      node_properties = Neography::Rest.get_node_properties(new_node[:id].to_i + 1000)
+      node_properties.should be_nil
     end
   end
 

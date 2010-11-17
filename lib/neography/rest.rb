@@ -23,7 +23,7 @@ module Neography
         rescue_ij { get("/node/#{id}") }
       end
 
-      def set_node_properties(id, properties)
+      def reset_node_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
         rescue_ij { put("/node/#{id}/properties", options) }
       end
@@ -42,7 +42,12 @@ module Neography
         end
       end
 
-
+      def set_node_properties(id, properties)
+          properties.each do |key, value| 
+            options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'} } 
+            rescue_ij { put("/node/#{id}/properties/#{key}", options) } 
+          end
+      end
 
      private
 
