@@ -19,13 +19,17 @@ module Neography
         end
       end
 
-     def get_node(id)
-       rescue_ij { get("/node/#{id}") }
-     end
+      def get_node(id)
+        rescue_ij { get("/node/#{id}") }
+      end
 
       def set_node_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
         rescue_ij { put("/node/#{id}/properties", options) }
+      end
+
+      def get_node_properties(id)
+        rescue_ij { get("/node/#{id}/properties") }
       end
 
      private

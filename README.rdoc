@@ -31,10 +31,12 @@ There are two ways to use Neography:
 
 A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and returns JSON or Nil:
 
-  Neography::Rest.get_root                                  # Get the root node
-  Neography::Rest.create_node                               # Create an empty node
-  Neography::Rest.create_node("age" => 31, "name" => "Max") # Create a node with some properties
-  Neography::Rest.get_node(id)                              # Get a node and its properties
+  Neography::Rest.get_root                                   # Get the root node
+  Neography::Rest.create_node                                # Create an empty node
+  Neography::Rest.create_node("age" => 31, "name" => "Max")  # Create a node with some properties
+  Neography::Rest.get_node(id)                               # Get a node and its properties
+  Neography::Rest.set_node_properties(id, {"weight" => 200}) # Set a node's properties
+  Neography::Rest.get_node_properties(id)                    # Get just the properties
 
 ... and a work in progress more rubyish layer that's not quite ready for use yet.
 

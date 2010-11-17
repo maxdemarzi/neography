@@ -58,5 +58,27 @@ describe Neography::Rest do
     end
   end
 
+  describe "get_node_properties" do
+    it "can get a node's properties" do
+      new_node = Neography::Rest.create_node("weight" => 200, "eyes" => "brown")
+      new_node[:id] = new_node["self"].split('/').last
+      node_properties = Neography::Rest.get_node_properties(new_node[:id])
+      node_properties["weight"].should == 200
+      node_properties["eyes"].should == "brown"
+    end
+
+    it "returns nil if it gets the properties on a node that does not have any" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.get_node_properties(new_node[:id].to_i + 1).should be_nil
+    end
+
+    it "returns nil if it fails to get properties on a node that does not exist" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.get_node_properties(new_node[:id].to_i + 1).should be_nil
+    end
+  end
+
 
 end
