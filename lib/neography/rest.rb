@@ -28,8 +28,18 @@ module Neography
         rescue_ij { put("/node/#{id}/properties", options) }
       end
 
-      def get_node_properties(id)
-        rescue_ij { get("/node/#{id}/properties") }
+      def get_node_properties(id, properties = nil)
+        if properties.nil?
+          rescue_ij { get("/node/#{id}/properties") }
+        else
+          node_properties = Hash.new 
+          properties.to_a.each do |property| 
+            value = rescue_ij { get("/node/#{id}/properties/#{property}") } 
+            node_properties[property] = value unless value.nil?
+          end
+          return nil if node_properties.empty?
+          node_properties
+        end
       end
 
       def remove_node_properties(id, properties = nil)
