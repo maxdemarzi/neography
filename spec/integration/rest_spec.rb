@@ -29,14 +29,18 @@ describe Neography::Rest do
 
   describe "get_node" do
     it "can get a node that exists" do
-      existing_node = Neography::Rest.get_node(1)
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      existing_node = Neography::Rest.get_node(new_node[:id])
       existing_node.should_not be_nil
       existing_node.should have_key("self")
-      existing_node["self"].split('/').last.should == "1"
+      existing_node["self"].split('/').last.should == new_node[:id]
     end
 
     it "returns nil if it tries to get a node that does not exist" do
-      existing_node = Neography::Rest.get_node(9999)
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      existing_node = Neography::Rest.get_node(new_node[:id].to_i + 1000)
       existing_node.should be_nil
     end
   end
@@ -149,8 +153,35 @@ describe Neography::Rest do
       node_properties["weight"].should be_nil
       node_properties["eyes"].should be_nil
     end
-
   end
 
+  describe "delete_node" do
+    it "can delete an unrelated node" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+    end
+
+    it "returns nil if it tries to delete a node that does not exist" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node(new_node[:id].to_i + 1000).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id].to_i + 1000)
+      existing_node.should be_nil
+    end
+
+    it "returns nil if it tries to delete a node that has already been deleted" do
+      new_node = Neography::Rest.create_node
+      new_node[:id] = new_node["self"].split('/').last
+      Neography::Rest.delete_node(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+      Neography::Rest.delete_node(new_node[:id]).should be_nil
+      existing_node = Neography::Rest.get_node(new_node[:id])
+      existing_node.should be_nil
+    end
+  end
 
 end

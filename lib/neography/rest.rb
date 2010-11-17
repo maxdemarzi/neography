@@ -59,6 +59,12 @@ module Neography
           end
       end
 
+      def delete_node(id)
+        rescue_ij { delete("/node/#{id}") }
+      end
+
+
+
      private
 
 # Rescue from Invalid JSON error thrown by Crack Gem
