@@ -266,6 +266,64 @@ describe Neography::Rest do
     end
   end
 
+  describe "set_relationship_properties" do
+    it "can set a relationship's properties" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      Neography::Rest.set_relationship_properties(new_relationship[:id], {"since" => '10-1-2010', "met" => "college"})
+      Neography::Rest.set_relationship_properties(new_relationship[:id], {"roommates" => "no"})
+      relationship_properties = Neography::Rest.get_relationship_properties(new_relationship[:id])
+      relationship_properties["since"].should == '10-1-2010'
+      relationship_properties["met"].should == "college"
+      relationship_properties["roommates"].should == "no"
+    end
+
+    it "it fails to set properties on a relationship that does not exist" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      Neography::Rest.set_relationship_properties(new_relationship[:id].to_i + 10000, {"since" => '10-1-2010', "met" => "college"})
+      relationship_properties = Neography::Rest.get_relationship_properties(new_relationship[:id].to_i + 10000)
+      relationship_properties.should be_nil
+    end
+  end
+
+  describe "reset_relationship_properties" do
+    it "can reset a relationship's properties" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      Neography::Rest.set_relationship_properties(new_relationship[:id], {"since" => '10-1-2010', "met" => "college"})
+      Neography::Rest.reset_relationship_properties(new_relationship[:id], {"roommates" => "no"})
+      relationship_properties = Neography::Rest.get_relationship_properties(new_relationship[:id])
+      relationship_properties["since"].should be_nil
+      relationship_properties["met"].should be_nil
+      relationship_properties["roommates"].should == "no"
+    end
+
+    it "it fails to reset properties on a relationship that does not exist" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id])
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      Neography::Rest.reset_relationship_properties(new_relationship[:id].to_i + 10000, {"since" => '10-1-2010', "met" => "college"})
+      relationship_properties = Neography::Rest.get_relationship_properties(new_relationship[:id].to_i + 10000)
+      relationship_properties.should be_nil
+    end
+  end
+
   describe "get_relationship_properties" do
     it "can get all of a relationship's properties" do
       new_node1 = Neography::Rest.create_node

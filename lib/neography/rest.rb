@@ -68,6 +68,11 @@ module Neography
          rescue_ij { post("/node/#{from}/relationships", options) }
       end
 
+      def reset_relationship_properties(id, properties)
+        options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        rescue_ij { put("/relationship/#{id}/properties", options) }
+      end
+
       def get_relationship_properties(id, properties = nil)
         if properties.nil?
           rescue_ij { get("/relationship/#{id}/properties") }
@@ -90,6 +95,13 @@ module Neography
             rescue_ij { delete("/relationship/#{id}/properties/#{property}") } 
           end
         end
+      end
+
+      def set_relationship_properties(id, properties)
+          properties.each do |key, value| 
+            options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'} } 
+            rescue_ij { put("/relationship/#{id}/properties/#{key}", options) } 
+          end
       end
 
       def delete_relationship(id)

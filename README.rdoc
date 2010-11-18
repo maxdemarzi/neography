@@ -53,6 +53,8 @@ A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and
   Neography::Rest.get_node_relationships(id, "incoming", "enemies")   # Get only incoming relationships of type enemies
   Neography::Rest.delete_relationship(id)                             # Delete a relationship
 
+  Neography::Rest.reset_relationship_properties(id, {"age" => 31})    # Reset a relationship's properties
+  Neography::Rest.set_relationship_properties(id, {"weight" => 200})  # Set a relationship's properties
   Neography::Rest.get_relationship_properties(id)                     # Get just the relationship properties
   Neography::Rest.get_relationship_properties(id, ["since","met"])    # Get some of the relationship properties
   Neography::Rest.remove_relationship_properties(id)                  # Remove all properties of a relationship
