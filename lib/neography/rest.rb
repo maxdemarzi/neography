@@ -109,14 +109,7 @@ module Neography
       end
 
       def get_node_relationships(id, dir=nil, types=nil)
-        case dir
-          when :incoming, "incoming"
-            dir = "in"
-          when :outgoing, "outgoing"
-            dir = "out"
-          else
-            dir = "all"
-        end
+        dir = get_dir(dir)
 
         if types.nil?
           node_relationships = rescue_ij { get("/node/#{id}/relationships/#{dir}") } || Array.new
@@ -152,9 +145,19 @@ module Neography
         index
       end
 
+      def get_path(from, to, relationships, depth=1, algorithm="allPaths")
+        options = { :body => {"to" => Neography::Config.to_s + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        path = rescue_ij { post("/node/#{from}/path", options) } || Hash.new
+      end
+
+      def get_paths(from, to, relationships, depth=1, algorithm="allPaths")
+        options = { :body => {"to" => Neography::Config.to_s + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        paths = rescue_ij { post("/node/#{from}/paths", options) } || Array.new
+      end
+
      private
 
-# Rescue from Invalid JSON error thrown by Crack Gem
+      # Rescue from Invalid JSON error thrown by Crack Gem
 
       def rescue_ij(&block) 
         begin
@@ -165,6 +168,29 @@ module Neography
         end
         response
       end
+
+      def get_dir(dir)
+        case dir
+          when :incoming, "incoming", :in, "in"
+            "in"
+          when :outgoing, "outgoing", :out, "out"
+            "out"
+          else
+            "all"
+        end
+      end
+
+      def get_algorithm(algorithm)
+        case algorithm
+          when :shortest, "shortest", :shortestPath, "shortestPath", :short, "short"
+            "shortestPath"
+          when :allSimplePaths, "allSimplePaths", :simple, "simple"
+            "allSimplePaths"
+          else
+            "allPaths"
+        end
+      end
+
 
     end
 

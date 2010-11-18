@@ -521,7 +521,7 @@ describe Neography::Rest do
       new_node3[:id] = new_node3["self"].split('/').last
       new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
       new_relationship = Neography::Rest.create_relationship("enemies", new_node3[:id], new_node1[:id], {"since" => '10-2-2010', "met" => "work"})
-      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "outgoing")
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "out")
       relationships.should_not be_nil
       relationships[0]["start"].split('/').last.should == new_node1[:id]
       relationships[0]["end"].split('/').last.should == new_node2[:id]
@@ -540,7 +540,7 @@ describe Neography::Rest do
       new_node3[:id] = new_node3["self"].split('/').last
       new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
       new_relationship = Neography::Rest.create_relationship("enemies", new_node3[:id], new_node1[:id], {"since" => '10-2-2010', "met" => "work"})
-      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "incoming")
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "in")
       relationships.should_not be_nil
       relationships[0]["start"].split('/').last.should == new_node3[:id]
       relationships[0]["end"].split('/').last.should == new_node1[:id]
@@ -581,7 +581,7 @@ describe Neography::Rest do
       new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
       new_relationship = Neography::Rest.create_relationship("enemies", new_node1[:id], new_node3[:id], {"since" => '10-2-2010', "met" => "work"})
       new_relationship = Neography::Rest.create_relationship("enemies", new_node4[:id], new_node1[:id], {"since" => '10-3-2010', "met" => "gym"})
-      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "incoming", "enemies")
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id], "in", "enemies")
       relationships.should_not be_nil
       relationships[0]["start"].split('/').last.should == new_node4[:id]
       relationships[0]["end"].split('/').last.should == new_node1[:id]
@@ -644,6 +644,59 @@ describe Neography::Rest do
       new_index.should_not be_nil
       Neography::Rest.remove_from_index(key, value, new_node[:id]) 
     end
+  end
+
+  describe "get path" do
+    it "can get a path between two nodes" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      path = Neography::Rest.get_path(new_node1[:id], new_node2[:id], {"type"=> "friends", "direction" => "out"})
+      path["start"].should == new_node1["self"]
+      path["end"].should == new_node2["self"]
+      path["nodes"].should == [new_node1["self"], new_node2["self"]]
+    end
+
+    it "can get the shortest path between two nodes" do
+      pending
+    end
+
+    it "can get a simple path between two nodes" do
+      pending
+    end
+
+    it "can get a path between two nodes of max depth 3" do
+      pending
+    end
+
+    it "can get a path between two nodes of a specific relationship" do
+      pending
+    end
+  end
+
+  describe "get paths" do
+    it "can get the shortest paths between two nodes" do
+      pending
+    end
+
+    it "can get all paths between two nodes" do
+      pending
+    end
+
+    it "can get all simple paths between two nodes" do
+      pending
+    end
+
+    it "can get paths between two nodes of max depth 3" do
+      pending
+    end
+
+    it "can get paths between two nodes of a specific relationship" do
+      pending
+    end
+
   end
 
 
