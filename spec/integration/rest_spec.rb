@@ -266,6 +266,44 @@ describe Neography::Rest do
     end
   end
 
+  describe "delete_relationship" do
+    it "can delete an existing relationship" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2010', "met" => "college"})
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      Neography::Rest.delete_relationship(new_relationship[:id])
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id])
+      relationships.should be_nil
+    end
+
+    it "returns nil if it tries to delete a relationship that does not exist" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2010', "met" => "college"})
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      existing_relationship = Neography::Rest.delete_relationship(new_relationship[:id].to_i + 1000)
+      existing_relationship.should be_nil
+    end
+
+    it "returns nil if it tries to delete a relationship that has already been deleted" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      new_node2 = Neography::Rest.create_node
+      new_node2[:id] = new_node2["self"].split('/').last
+      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2010', "met" => "college"})
+      new_relationship[:id] = new_relationship["self"].split('/').last
+      existing_relationship = Neography::Rest.delete_relationship(new_relationship[:id])
+      existing_relationship.should be_nil
+      existing_relationship = Neography::Rest.delete_relationship(new_relationship[:id])
+      existing_relationship.should be_nil
+    end
+  end
+
   describe "get_node_relationships" do
     it "can get a node's relationship" do
       new_node1 = Neography::Rest.create_node
@@ -384,7 +422,12 @@ describe Neography::Rest do
       relationships[1].should be_nil
     end
 
-
+    it "returns nil if there are no relationships" do
+      new_node1 = Neography::Rest.create_node
+      new_node1[:id] = new_node1["self"].split('/').last
+      relationships = Neography::Rest.get_node_relationships(new_node1[:id])
+      relationships.should be_nil
+    end
   end
 
 end

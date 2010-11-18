@@ -6,9 +6,9 @@ module Neography
 
     class << self
 
-    def get_root
-      rescue_ij { get('/') }
-    end
+      def get_root
+        rescue_ij { get('/') }
+      end
 
       def create_node(*args)
         if args[0].respond_to?(:each_pair) && args[0] 
@@ -68,6 +68,10 @@ module Neography
          rescue_ij { post("/node/#{from}/relationships", options) }
       end
 
+      def delete_relationship(id)
+        rescue_ij { delete("/relationship/#{id}") }
+      end
+
       def get_node_relationships(id, dir=nil, types=nil)
         case dir
           when :incoming, "incoming"
@@ -79,10 +83,18 @@ module Neography
         end
 
         if types.nil?
-          rescue_ij { get("/node/#{id}/relationships/#{dir}") }
+          node_relationships = rescue_ij { get("/node/#{id}/relationships/#{dir}") } || Array.new
         else
-          rescue_ij { get("/node/#{id}/relationships/#{dir}/#{types.to_a.join('&')}") }
+          node_relationships = rescue_ij { get("/node/#{id}/relationships/#{dir}/#{types.to_a.join('&')}") } || Array.new
         end
+        return nil if node_relationships.empty?
+        node_relationships
+      end
+
+      def delete_node!(id)
+        relationships = get_node_relationships(id)
+        relationships.each { |r| delete_relationship(r["self"].split('/').last) } unless relationships.nil?
+        rescue_ij { delete("/node/#{id}") }
       end
 
      private
