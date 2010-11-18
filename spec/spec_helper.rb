@@ -11,3 +11,9 @@ FakeWeb.allow_net_connect = false
 FakeWeb.clean_registry 
 FakeWeb.allow_net_connect = true
 
+def generate_text(length=8)
+  chars = 'abcdefghjkmnpqrstuvwxyz'
+  key = ''
+  length.times { |i| key << chars[rand(chars.length)] }
+  key
+end

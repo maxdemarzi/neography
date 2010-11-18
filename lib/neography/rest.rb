@@ -133,6 +133,25 @@ module Neography
         rescue_ij { delete("/node/#{id}") }
       end
 
+      def list_indexes
+        rescue_ij { get("/index") }
+      end
+
+      def add_to_index(key, value, id)
+        options = { :body => (Neography::Config.to_s + "/node/#{id}").to_json, :headers => {'Content-Type' => 'application/json'} } 
+        rescue_ij { post("/index/node/#{key}/#{value}", options) }
+      end
+
+      def remove_from_index(key, value, id)
+        rescue_ij { delete("/index/node/#{key}/#{value}/#{id}") }
+      end
+
+      def get_index(key, value)
+        index = rescue_ij { get("/index/node/#{key}/#{value}") } || Array.new
+        return nil if index.empty?
+        index
+      end
+
      private
 
 # Rescue from Invalid JSON error thrown by Crack Gem

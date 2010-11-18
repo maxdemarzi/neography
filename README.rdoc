@@ -61,6 +61,11 @@ A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and
   Neography::Rest.remove_relationship_properties(id, "since")         # Remove one property of a relationship
   Neography::Rest.remove_relationship_properties(id, ["since","met"]) # Remove multiple properties of a relationship
 
+  Neography::Rest.list_indexes                        # doesn't really seam to do what the api says it does
+  Neography::Rest.add_to_index(key, value, id)        # adds a node to an index with the given key/value pair
+  Neography::Rest.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
+  Neography::Rest.get_index(key, value)               # gets an index with the given key/value pair
+
 ... and a work in progress more rubyish layer that's not quite ready for use yet.
 
   Neography::Node.new                                              # Create an empty node
@@ -72,8 +77,8 @@ A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and
   Neography::Node.del(3)                                           # Deletes a node without any relationships
   Neography::Node.del!(3)                                          # Deletes a node and all its relationships
 
-
 === License
+
 * Neography - MIT, see the LICENSE file http://github.com/maxdemarzi/neography/tree/master/LICENSE.
 * Lucene -  Apache, see http://lucene.apache.org/java/docs/features.html
 * Neo4j - Dual free software/commercial license, see http://neo4j.org/
