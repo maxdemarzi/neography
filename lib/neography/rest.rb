@@ -68,6 +68,30 @@ module Neography
          rescue_ij { post("/node/#{from}/relationships", options) }
       end
 
+      def get_relationship_properties(id, properties = nil)
+        if properties.nil?
+          rescue_ij { get("/relationship/#{id}/properties") }
+        else
+          relationship_properties = Hash.new 
+          properties.to_a.each do |property| 
+            value = rescue_ij { get("/relationship/#{id}/properties/#{property}") } 
+            relationship_properties[property] = value unless value.nil?
+          end
+          return nil if relationship_properties.empty?
+          relationship_properties
+        end
+      end
+
+      def remove_relationship_properties(id, properties = nil)
+        if properties.nil?
+          rescue_ij { delete("/relationship/#{id}/properties") }
+        else 
+          properties.to_a.each do |property| 
+            rescue_ij { delete("/relationship/#{id}/properties/#{property}") } 
+          end
+        end
+      end
+
       def delete_relationship(id)
         rescue_ij { delete("/relationship/#{id}") }
       end
