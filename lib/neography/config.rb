@@ -9,7 +9,7 @@ module Neography
   # ==== Default Configurations
   # <tt>:protocol</tt>:: default <tt>http://</tt> protocol to use (can be https://)
   # <tt>:server</tt>::   default <tt>localhost</tt> where the database is stored on the network
-  # <tt>:port</tt>::     default <tt>9999</tt> what port is listening
+  # <tt>:port</tt>::     default <tt>7474</tt> what port is listening
   #
   class Config
     # This code is copied from merb-core/config.rb.
@@ -22,7 +22,7 @@ module Neography
         @defaults ||= {
           :protocol => 'http://',
           :server => 'localhost',
-          :port => '9999'
+          :port => '7474'
         }
       end
 

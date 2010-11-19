@@ -1,7 +1,7 @@
 == Welcome to Neography
 
 Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
-* {Getting Started with REST for Neo4j}[http://wiki.neo4j.org/content/Getting_Started_REST]
+* {Getting Started with Neo4j Server}[http://wiki.neo4j.org/content/Getting_Started_with_Neo4j_Server]
 * {Neo4j Rest API Reference}[http://components.neo4j.org/neo4j-rest/]
 
 
@@ -16,7 +16,7 @@ Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
   Neography::Config.use do |config|
     config[:protocol] = 'http://'
     config[:server] = 'localhost'
-    config[:port] = '9999'
+    config[:port] = '7474'
   end
 
 ==== Rails
@@ -66,7 +66,7 @@ A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and
   Neography::Rest.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
   Neography::Rest.get_index(key, value)               # gets an index with the given key/value pair
 
-... and a work in progress more rubyish layer that's not quite ready for use yet.
+... and a work in progress more rubyish layer is in the works.
 
   Neography::Node.new                                              # Create an empty node
   Neography::Node.new(:age => 31, :name => "Max")                  # Create a node with some properties
