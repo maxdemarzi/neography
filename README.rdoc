@@ -10,72 +10,71 @@ Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
   gem install 'neography'
   require 'neography'
 
+=== Dependencies
 
-==== Configuration
+  for use:
+  json
+  httparty 
+  logger
 
-  Neography::Config.use do |config|
-    config[:protocol] = 'http://'
-    config[:server] = 'localhost'
-    config[:port] = '7474'
-  end
+  for development:
+  rspec 
+  net-http-spy 
+  fakeweb 
 
 ==== Rails
 
 Just add gem 'neography' to your Gemfile and run bundle install
 
-Use the defaults (shown above) or create neography.rb in your config/initializers directory.
-
 === Documentation
-
-There are two ways to use Neography:
 
 A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and returns JSON or Nil:
 
-  Neography::Rest.get_root                                     # Get the root node
-  Neography::Rest.create_node                                  # Create an empty node
-  Neography::Rest.create_node("age" => 31, "name" => "Max")    # Create a node with some properties
-  Neography::Rest.get_node(id)                                 # Get a node and its properties
-  Neography::Rest.delete_node(id)                              # Delete an unrelated node
-  Neography::Rest.delete_node!(id)                             # Delete a node and all its relationships
+  #                            protocol,  server,        port,  log_file,           log_enabled
+  @neo = Neography::Rest.new ('http://', '192.168.10.1', 7479, 'log/neography.log', true)
 
-  Neography::Rest.reset_node_properties(id, {"age" => 31})     # Reset a node's properties
-  Neography::Rest.set_node_properties(id, {"weight" => 200})   # Set a node's properties
-  Neography::Rest.get_node_properties(id)                      # Get just the node properties
-  Neography::Rest.get_node_properties(id, ["weight","age"])    # Get some of the node properties
-  Neography::Rest.remove_node_properties(id)                   # Remove all properties of a node
-  Neography::Rest.remove_node_properties(id, "weight")         # Remove one property of a node
-  Neography::Rest.remove_node_properties(id, ["weight","age"]) # Remove multiple properties of a node
+Default Parameters are:   
 
-  Neography::Rest.create_relationship("friends", node1, node2)        # Create a relationship between node1 and node2
-  Neography::Rest.get_node_relationships(id)                          # Get all relationships
-  Neography::Rest.get_node_relationships(id, "in")                    # Get only incoming relationships
-  Neography::Rest.get_node_relationships(id, "all", "enemies")        # Get all relationships of type enemies
-  Neography::Rest.get_node_relationships(id, "in", "enemies")         # Get only incoming relationships of type enemies
-  Neography::Rest.delete_relationship(id)                             # Delete a relationship
+  @neo = Neography::Rest.new ('http://', 'localhost', 7474, '/neography.log', false)
 
-  Neography::Rest.reset_relationship_properties(id, {"age" => 31})    # Reset a relationship's properties
-  Neography::Rest.set_relationship_properties(id, {"weight" => 200})  # Set a relationship's properties
-  Neography::Rest.get_relationship_properties(id)                     # Get just the relationship properties
-  Neography::Rest.get_relationship_properties(id, ["since","met"])    # Get some of the relationship properties
-  Neography::Rest.remove_relationship_properties(id)                  # Remove all properties of a relationship
-  Neography::Rest.remove_relationship_properties(id, "since")         # Remove one property of a relationship
-  Neography::Rest.remove_relationship_properties(id, ["since","met"]) # Remove multiple properties of a relationship
+To Use:
 
-  Neography::Rest.list_indexes                        # doesn't really seam to do what the api says it does
-  Neography::Rest.add_to_index(key, value, id)        # adds a node to an index with the given key/value pair
-  Neography::Rest.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
-  Neography::Rest.get_index(key, value)               # gets an index with the given key/value pair
+  @neo = Neography::Rest.new 
 
-... and a work in progress more rubyish layer is in the works.
+  @neo.get_root                                     # Get the root node
+  @neo.create_node                                  # Create an empty node
+  @neo.create_node("age" => 31, "name" => "Max")    # Create a node with some properties
+  @neo.get_node(id)                                 # Get a node and its properties
+  @neo.delete_node(id)                              # Delete an unrelated node
+  @neo.delete_node!(id)                             # Delete a node and all its relationships
 
-  Neography::Node.new                                              # Create an empty node
-  Neography::Node.new(:age => 31, :name => "Max")                  # Create a node with some properties
-  Neography::Node.load(id)                                         # Get a node and its properties
-  Neography::Node.set_properties(3, {:age => 31, :name => "Max"} ) # Deletes any existing properties with the passed hash
-  Neography::Node.properties(3)                                    # Returns a hash of a node's properties or nil
-  Neography::Node.remove_property(3, :age)                         # Deletes the existing property
-  Neography::Node.del(3)                                           # Deletes a node without any relationships
-  Neography::Node.del!(3)                                          # Deletes a node and all its relationships
+  @neo.reset_node_properties(id, {"age" => 31})     # Reset a node's properties
+  @neo.set_node_properties(id, {"weight" => 200})   # Set a node's properties
+  @neo.get_node_properties(id)                      # Get just the node properties
+  @neo.get_node_properties(id, ["weight","age"])    # Get some of the node properties
+  @neo.remove_node_properties(id)                   # Remove all properties of a node
+  @neo.remove_node_properties(id, "weight")         # Remove one property of a node
+  @neo.remove_node_properties(id, ["weight","age"]) # Remove multiple properties of a node
+
+  @neo.create_relationship("friends", node1, node2)        # Create a relationship between node1 and node2
+  @neo.get_node_relationships(id)                          # Get all relationships
+  @neo.get_node_relationships(id, "in")                    # Get only incoming relationships
+  @neo.get_node_relationships(id, "all", "enemies")        # Get all relationships of type enemies
+  @neo.get_node_relationships(id, "in", "enemies")         # Get only incoming relationships of type enemies
+  @neo.delete_relationship(id)                             # Delete a relationship
+
+  @neo.reset_relationship_properties(id, {"age" => 31})    # Reset a relationship's properties
+  @neo.set_relationship_properties(id, {"weight" => 200})  # Set a relationship's properties
+  @neo.get_relationship_properties(id)                     # Get just the relationship properties
+  @neo.get_relationship_properties(id, ["since","met"])    # Get some of the relationship properties
+  @neo.remove_relationship_properties(id)                  # Remove all properties of a relationship
+  @neo.remove_relationship_properties(id, "since")         # Remove one property of a relationship
+  @neo.remove_relationship_properties(id, ["since","met"]) # Remove multiple properties of a relationship
+
+  @neo.list_indexes                        # doesn't really seam to do what the api says it does
+  @neo.add_to_index(key, value, id)        # adds a node to an index with the given key/value pair
+  @neo.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
+  @neo.get_index(key, value)               # gets an index with the given key/value pair
 
 === License
 

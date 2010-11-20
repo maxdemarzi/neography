@@ -1,15 +1,18 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Neography::Rest do
+  before(:each) do
+    @neo = Neography::Rest.new
+  end
 
   describe "get path" do
     it "can get a path between two nodes" do
-      new_node1 = Neography::Rest.create_node
+      new_node1 = @neo.create_node
       new_node1[:id] = new_node1["self"].split('/').last
-      new_node2 = Neography::Rest.create_node
+      new_node2 = @neo.create_node
       new_node2[:id] = new_node2["self"].split('/').last
-      new_relationship = Neography::Rest.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
-      path = Neography::Rest.get_path(new_node1[:id], new_node2[:id], {"type"=> "friends", "direction" => "out"})
+      new_relationship = @neo.create_relationship("friends", new_node1[:id], new_node2[:id], {"since" => '10-1-2005', "met" => "college"})
+      path = @neo.get_path(new_node1[:id], new_node2[:id], {"type"=> "friends", "direction" => "out"})
       path["start"].should == new_node1["self"]
       path["end"].should == new_node2["self"]
       path["nodes"].should == [new_node1["self"], new_node2["self"]]

@@ -18,8 +18,9 @@ end
 
 require 'httparty'
 require 'json'
+require 'logger'
 
-require 'neography/config'
 require 'neography/rest'
 
 find_and_require_user_defined_code
+

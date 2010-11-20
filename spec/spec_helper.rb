@@ -16,9 +16,6 @@ FakeWeb.allow_net_connect = true
 # Net::HTTP.http_logger_options = {:body => true}    # just the body
 # Net::HTTP.http_logger_options = {:verbose => true} # see everything
 
-
-
-
 def generate_text(length=8)
   chars = 'abcdefghjkmnpqrstuvwxyz'
   key = ''
