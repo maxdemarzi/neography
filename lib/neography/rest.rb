@@ -161,7 +161,7 @@ module Neography
         index
       end
 
-      def get_path(from, to, relationships, depth=1, algorithm="allPaths")
+      def get_path(from, to, relationships, depth=1, algorithm="shortestPath")
         options = { :body => {"to" => self.configuration + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         path = post("/node/#{from}/path", options) || Hash.new
       end

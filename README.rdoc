@@ -76,6 +76,16 @@ To Use:
   @neo.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
   @neo.get_index(key, value)               # gets an index with the given key/value pair
 
+  @neo.get_path(from, to, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
+  @neo.get_paths(from, to, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
+
+=== To Do
+
+Path tests
+Traverse tests
+@neo.traverse()
+examples
+
 === License
 
 * Neography - MIT, see the LICENSE file http://github.com/maxdemarzi/neography/tree/master/LICENSE.
