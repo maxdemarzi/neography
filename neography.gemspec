@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "fakeweb", "~> 1.3.0"
   s.add_dependency "httparty", "~> 0.6.1"
   s.add_dependency "json"
+  s.add_dependency "logger"
 end
