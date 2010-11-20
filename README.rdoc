@@ -80,10 +80,10 @@ To Use:
 
 === To Do
 
-Path tests
-Traverse tests
-@neo.traverse()
-examples
+* Traverse tests
+* @neo.traverse()
+* examples
+* batch import with typhoeus ?
 
 === License
 
