@@ -15,7 +15,6 @@ Neography is a thin ruby wrapper to the Neo4j Rest API, for more information:
   for use:
   json
   httparty 
-  logger
 
   for development:
   rspec 
