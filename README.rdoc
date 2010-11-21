@@ -85,7 +85,7 @@ To Use:
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
 
   nodes = @neo.traverse(node1,                                              # the node where the traversal starts
-                        "nodes",                                            # return_type (can be "nodes", "relationships" or "paths"
+                        "nodes",                                            # return_type "nodes", "relationships" or "paths"
                         {"order" => "breadth first",                        # "breadth first" or "depth first" traversal order
                          "uniqueness" => "node global",                     # See Uniqueness in API documentation for options.
                          "relationships" => [{"type"=> "roommates",         # A hash containg a description of the traversal
