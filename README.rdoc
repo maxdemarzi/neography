@@ -88,7 +88,7 @@ To Use:
                                              {"type"=> "friends",           # 
                                               "direction" => "out"}],       # 
                          "prune evaluator" => {"language" => "javascript",  # A prune evaluator (when to stop traversing)
-                                               "body" => "position.endNode().getProperty('age') < 21;"
+                                               "body" => "position.endNode().getProperty('age') < 21;"},
                          "return filter" => {"language" => "builtin",       # "all" or "all but start node"
                                              "name" => "all"},
                          "depth" => 4})  
