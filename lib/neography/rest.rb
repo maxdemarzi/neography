@@ -161,6 +161,16 @@ module Neography
         index
       end
 
+      def traverse(id, return_type, description)
+        options = { :body => {"order" => get_order(description["order"]), 
+                              "uniqueness" => get_uniqueness(description["uniqueness"]), 
+                              "relationships" => description["relationships"], 
+                              "prune evaluator" => description["prune evaluator"], 
+                              "return filter" => description["return filter"], 
+                              "max depth" => get_depth(description["depth"]), }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        traversal = post("/node/#{id}/traverse/#{get_type(return_type)}", options) || Array.new
+      end
+
       def get_path(from, to, relationships, depth=1, algorithm="shortestPath")
         options = { :body => {"to" => self.configuration + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         path = post("/node/#{from}/path", options) || Hash.new
@@ -235,6 +245,50 @@ module Neography
           else
             "allPaths"
         end
+      end
+
+      def get_order(order)
+        case order
+          when :breadth, "breadth", "breadth first", "breadthFirst", :wide, "wide"
+            "breadth first"
+          else
+            "depth first"
+        end
+      end
+
+      def get_type(type)
+        case type
+          when :node, "nodes", :nodes, "nodes"
+            "node"
+          when :relationship, "relationship", :relationships, "relationships"
+            "relationship"
+          else
+            "path"
+        end
+      end
+
+      def get_uniqueness(uniqueness)
+        case uniqueness
+          when :nodeglobal, "node global", "nodeglobal", "node_global"
+            "node global"
+          when :nodepath, "node path", "nodepath", "node_path"
+            "node path"
+          when :noderecent, "node recent", "noderecent", "node_recent"
+            "node recent"
+          when :relationshipglobal, "relationship global", "relationshipglobal", "relationship_global"
+            "relationship global"
+          when :relationshippath, "relationship path", "relationshippath", "relationship_path"
+            "relationship path"
+          when :relationshiprecent, "relationship recent", "relationshiprecent", "relationship_recent"
+            "relationship recent"
+          else
+            "none"
+        end
+      end
+
+      def get_depth(depth)
+        return 1 if depth.to_i == 0
+        depth.to_i
       end
 
   end
