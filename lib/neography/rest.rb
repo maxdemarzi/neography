@@ -36,21 +36,21 @@ module Neography
       end
 
       def get_node(id)
-        get("/node/#{id}")
+        get("/node/#{get_id(id)}")
       end
 
       def reset_node_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        put("/node/#{id}/properties", options)
+        put("/node/#{get_id(id)}/properties", options)
       end
 
       def get_node_properties(id, properties = nil)
         if properties.nil?
-          get("/node/#{id}/properties")
+          get("/node/#{get_id(id)}/properties")
         else
           node_properties = Hash.new 
           properties.to_a.each do |property| 
-            value = get("/node/#{id}/properties/#{property}")
+            value = get("/node/#{get_id(id)}/properties/#{property}")
             node_properties[property] = value unless value.nil?
           end
           return nil if node_properties.empty?
@@ -60,10 +60,10 @@ module Neography
 
       def remove_node_properties(id, properties = nil)
         if properties.nil?
-          delete("/node/#{id}/properties")
+          delete("/node/#{get_id(id)}/properties")
         else 
           properties.to_a.each do |property| 
-            delete("/node/#{id}/properties/#{property}") 
+            delete("/node/#{get_id(id)}/properties/#{property}") 
           end
         end
       end
@@ -71,31 +71,31 @@ module Neography
       def set_node_properties(id, properties)
           properties.each do |key, value| 
             options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'} } 
-            put("/node/#{id}/properties/#{key}", options) 
+            put("/node/#{get_id(id)}/properties/#{key}", options) 
           end
       end
 
       def delete_node(id)
-        delete("/node/#{id}")
+        delete("/node/#{get_id(id)}")
       end
 
       def create_relationship(type, from, to, props = nil)
-         options = { :body => {:to => self.configuration + "/node/#{to}", :data => props, :type => type }.to_json, :headers => {'Content-Type' => 'application/json'} } 
-         post("/node/#{from}/relationships", options)
+         options = { :body => {:to => self.configuration + "/node/#{get_id(to)}", :data => props, :type => type }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/node/#{get_id(from)}/relationships", options)
       end
 
       def reset_relationship_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        put("/relationship/#{id}/properties", options)
+        put("/relationship/#{get_id(id)}/properties", options)
       end
 
       def get_relationship_properties(id, properties = nil)
         if properties.nil?
-          get("/relationship/#{id}/properties")
+          get("/relationship/#{get_id(id)}/properties")
         else
           relationship_properties = Hash.new 
           properties.to_a.each do |property| 
-            value = get("/relationship/#{id}/properties/#{property}")
+            value = get("/relationship/#{get_id(id)}/properties/#{property}")
             relationship_properties[property] = value unless value.nil?
           end
           return nil if relationship_properties.empty?
@@ -105,10 +105,10 @@ module Neography
 
       def remove_relationship_properties(id, properties = nil)
         if properties.nil?
-          delete("/relationship/#{id}/properties")
+          delete("/relationship/#{get_id(id)}/properties")
         else 
           properties.to_a.each do |property| 
-            delete("/relationship/#{id}/properties/#{property}")
+            delete("/relationship/#{get_id(id)}/properties/#{property}")
           end
         end
       end
@@ -116,30 +116,30 @@ module Neography
       def set_relationship_properties(id, properties)
           properties.each do |key, value| 
             options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'} } 
-            put("/relationship/#{id}/properties/#{key}", options)
+            put("/relationship/#{get_id(id)}/properties/#{key}", options)
           end
       end
 
       def delete_relationship(id)
-        delete("/relationship/#{id}")
+        delete("/relationship/#{get_id(id)}")
       end
 
       def get_node_relationships(id, dir=nil, types=nil)
         dir = get_dir(dir)
 
         if types.nil?
-          node_relationships = get("/node/#{id}/relationships/#{dir}") || Array.new
+          node_relationships = get("/node/#{get_id(id)}/relationships/#{dir}") || Array.new
         else
-          node_relationships = get("/node/#{id}/relationships/#{dir}/#{types.to_a.join('&')}") || Array.new
+          node_relationships = get("/node/#{get_id(id)}/relationships/#{dir}/#{types.to_a.join('&')}") || Array.new
         end
         return nil if node_relationships.empty?
         node_relationships
       end
 
       def delete_node!(id)
-        relationships = get_node_relationships(id)
+        relationships = get_node_relationships(get_id(id))
         relationships.each { |r| delete_relationship(r["self"].split('/').last) } unless relationships.nil?
-        delete("/node/#{id}")
+        delete("/node/#{get_id(id)}")
       end
 
       def list_indexes
@@ -147,12 +147,12 @@ module Neography
       end
 
       def add_to_index(key, value, id)
-        options = { :body => (self.configuration + "/node/#{id}").to_json, :headers => {'Content-Type' => 'application/json'} } 
+        options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/node/#{key}/#{value}", options)
       end
 
       def remove_from_index(key, value, id)
-        delete("/index/node/#{key}/#{value}/#{id}")
+        delete("/index/node/#{key}/#{value}/#{get_id(id)}")
       end
 
       def get_index(key, value)
@@ -168,17 +168,17 @@ module Neography
                               "prune evaluator" => description["prune evaluator"], 
                               "return filter" => description["return filter"], 
                               "max depth" => get_depth(description["depth"]), }.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        traversal = post("/node/#{id}/traverse/#{get_type(return_type)}", options) || Array.new
+        traversal = post("/node/#{get_id(id)}/traverse/#{get_type(return_type)}", options) || Array.new
       end
 
       def get_path(from, to, relationships, depth=1, algorithm="shortestPath")
-        options = { :body => {"to" => self.configuration + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        path = post("/node/#{from}/path", options) || Hash.new
+        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        path = post("/node/#{get_id(from)}/path", options) || Hash.new
       end
 
       def get_paths(from, to, relationships, depth=1, algorithm="allPaths")
-        options = { :body => {"to" => self.configuration + "/node/#{to}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
-        paths = post("/node/#{from}/paths", options) || Array.new
+        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
       private
@@ -190,10 +190,10 @@ module Neography
         case code 
           when 200 
             @logger.debug "OK" if @log_enabled
-            response
+            response.parsed_response
           when 201
             @logger.debug "OK, created #{body}" if @log_enabled
-            response
+            response.parsed_response
           when 204  
             @logger.debug "OK, no content returned" if @log_enabled
             nil
@@ -224,6 +224,17 @@ module Neography
        def delete(path,options={})
           evaluate_response(HTTParty.delete(configuration + path, options))
        end
+
+      def get_id(id)
+        case id
+          when Hash
+            id["self"].split('/').last
+          when String
+            id.split('/').last
+          else
+            id
+          end 
+      end
 
       def get_dir(dir)
         case dir

@@ -46,45 +46,45 @@ To Use:
 
   @neo = Neography::Rest.new 
 
-  @neo.get_root                                     # Get the root node
-  @neo.create_node                                  # Create an empty node
-  @neo.create_node("age" => 31, "name" => "Max")    # Create a node with some properties
-  @neo.get_node(id)                                 # Get a node and its properties
-  @neo.delete_node(id)                              # Delete an unrelated node
-  @neo.delete_node!(id)                             # Delete a node and all its relationships
+  @neo.get_root                                              # Get the root node
+  node1 = @neo.create_node                                   # Create an empty node
+  node2 = @neo.create_node("age" => 31, "name" => "Max")     # Create a node with some properties
+  @neo.get_node(node2)                                       # Get a node and its properties
+  @neo.delete_node(node2)                                    # Delete an unrelated node
+  @neo.delete_node!(node2)                                   # Delete a node and all its relationships
 
-  @neo.reset_node_properties(id, {"age" => 31})     # Reset a node's properties
-  @neo.set_node_properties(id, {"weight" => 200})   # Set a node's properties
-  @neo.get_node_properties(id)                      # Get just the node properties
-  @neo.get_node_properties(id, ["weight","age"])    # Get some of the node properties
-  @neo.remove_node_properties(id)                   # Remove all properties of a node
-  @neo.remove_node_properties(id, "weight")         # Remove one property of a node
-  @neo.remove_node_properties(id, ["weight","age"]) # Remove multiple properties of a node
+  @neo.reset_node_properties(node1, {"age" => 31})           # Reset a node's properties
+  @neo.set_node_properties(node1, {"weight" => 200})         # Set a node's properties
+  @neo.get_node_properties(node1)                            # Get just the node properties
+  @neo.get_node_properties(node1, ["weight","age"])          # Get some of the node properties
+  @neo.remove_node_properties(node1)                         # Remove all properties of a node
+  @neo.remove_node_properties(node1, "weight")               # Remove one property of a node
+  @neo.remove_node_properties(node1, ["weight","age"])       # Remove multiple properties of a node
 
-  @neo.create_relationship("friends", node1, node2)        # Create a relationship between node1 and node2
-  @neo.get_node_relationships(id)                          # Get all relationships
-  @neo.get_node_relationships(id, "in")                    # Get only incoming relationships
-  @neo.get_node_relationships(id, "all", "enemies")        # Get all relationships of type enemies
-  @neo.get_node_relationships(id, "in", "enemies")         # Get only incoming relationships of type enemies
-  @neo.delete_relationship(id)                             # Delete a relationship
+  rel1 = @neo.create_relationship("friends", node1, node2)   # Create a relationship between node1 and node2
+  @neo.get_node_relationships(node1)                         # Get all relationships
+  @neo.get_node_relationships(node1, "in")                   # Get only incoming relationships
+  @neo.get_node_relationships(node1, "all", "enemies")       # Get all relationships of type enemies
+  @neo.get_node_relationships(node1, "in", "enemies")        # Get only incoming relationships of type enemies
+  @neo.delete_relationship(rel1)                             # Delete a relationship
 
-  @neo.reset_relationship_properties(id, {"age" => 31})    # Reset a relationship's properties
-  @neo.set_relationship_properties(id, {"weight" => 200})  # Set a relationship's properties
-  @neo.get_relationship_properties(id)                     # Get just the relationship properties
-  @neo.get_relationship_properties(id, ["since","met"])    # Get some of the relationship properties
-  @neo.remove_relationship_properties(id)                  # Remove all properties of a relationship
-  @neo.remove_relationship_properties(id, "since")         # Remove one property of a relationship
-  @neo.remove_relationship_properties(id, ["since","met"]) # Remove multiple properties of a relationship
+  @neo.reset_relationship_properties(rel1, {"age" => 31})    # Reset a relationship's properties
+  @neo.set_relationship_properties(rel1, {"weight" => 200})  # Set a relationship's properties
+  @neo.get_relationship_properties(rel1)                     # Get just the relationship properties
+  @neo.get_relationship_properties(rel1, ["since","met"])    # Get some of the relationship properties
+  @neo.remove_relationship_properties(rel1)                  # Remove all properties of a relationship
+  @neo.remove_relationship_properties(rel1, "since")         # Remove one property of a relationship
+  @neo.remove_relationship_properties(rel1, ["since","met"]) # Remove multiple properties of a relationship
 
-  @neo.list_indexes                        # doesn't really seam to do what the api says it does
-  @neo.add_to_index(key, value, id)        # adds a node to an index with the given key/value pair
-  @neo.remove_from_index(key, value, id)   # removes a node to an index with the given key/value pair
-  @neo.get_index(key, value)               # gets an index with the given key/value pair
+  @neo.list_indexes                                          # doesn't really seam to do what the api says it does
+  @neo.add_to_index(key, value, node1)                       # adds a node to an index with the given key/value pair
+  @neo.remove_from_index(key, value, node1)                  # removes a node to an index with the given key/value pair
+  @neo.get_index(key, value)                                 # gets an index with the given key/value pair
 
-  @neo.get_path(from, to, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
-  @neo.get_paths(from, to, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
+  @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
+  @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
 
-  nodes = @neo.traverse(id,                                                 # the id of the node where the traversal starts
+  nodes = @neo.traverse(node1,                                              # the node where the traversal starts
                         "nodes",                                            # return_type (can be "nodes", "relationships" or "paths"
                         {"order" => "breadth first",                        # "breadth first" or "depth first" traversal order
                          "uniqueness" => "node global",                     # See Uniqueness in API documentation for options.
