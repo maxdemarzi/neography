@@ -9,8 +9,13 @@ If you want to the full power of Neo4j, you will want to use JRuby and the excel
 === Installation
 
   gem install 'neography'
+
+After that, in your ruby script, do
+
+  require 'rubygems'
   require 'neography'
 
+in order to access the functionality.
 === Dependencies
 
   for use:
