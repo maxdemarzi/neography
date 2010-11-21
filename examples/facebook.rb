@@ -13,16 +13,13 @@ def make_mutual_friends(node1, node2)
 end
 
 def suggestions_for(node)
-  existing_friends = @neo.traverse(node,"nodes", {"order" => "breadth first", 
-                                                  "uniqueness" => "node global", 
-                                                  "relationships" => {"type"=> "friends", "direction" => "in"}, 
-                                                  "depth" => 1})
-
-  possible_friends = @neo.traverse(node,"nodes", {"order" => "breadth first", 
-                                                  "uniqueness" => "node global", 
-                                                  "relationships" => {"type"=> "friends", "direction" => "in"}, 
-                                                  "depth" => 2})
-  possible_friends - existing_friends
+  @neo.traverse(node,"nodes", {"order" => "breadth first", 
+                                          "uniqueness" => "node global", 
+                                          "relationships" => {"type"=> "friends", "direction" => "in"}, 
+                                          "return filter" => {
+                                            "language" => "javascript",
+                                            "body" => "position.length() == 2;"},
+                                          "depth" => 2})
 end
 
 johnathan = create_person('Johnathan')
