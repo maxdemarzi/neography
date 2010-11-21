@@ -3,7 +3,7 @@ module Neography
     include HTTParty
     attr_accessor :protocol, :server, :port, :log_file, :log_enabled, :logger
 
-      def initialize(protocol='http://', server='localhost', port=7474, log_file='neography.log', log_enabled=true)
+      def initialize(protocol='http://', server='localhost', port=7474, log_file='neography.log', log_enabled=false)
         @protocol = protocol
         @server = server
         @port = port 
@@ -82,6 +82,10 @@ module Neography
       def create_relationship(type, from, to, props = nil)
          options = { :body => {:to => self.configuration + "/node/#{get_id(to)}", :data => props, :type => type }.to_json, :headers => {'Content-Type' => 'application/json'} } 
          post("/node/#{get_id(from)}/relationships", options)
+      end
+
+      def get_relationship(id)
+        get("/relationship/#{get_id(id)}")
       end
 
       def reset_relationship_properties(id, properties)

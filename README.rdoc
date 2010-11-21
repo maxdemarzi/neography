@@ -62,6 +62,7 @@ To Use:
   @neo.remove_node_properties(node1, ["weight","age"])       # Remove multiple properties of a node
 
   rel1 = @neo.create_relationship("friends", node1, node2)   # Create a relationship between node1 and node2
+  rel2 = @neo.get_relationship(rel1)                         # Get a relationship
   @neo.get_node_relationships(node1)                         # Get all relationships
   @neo.get_node_relationships(node1, "in")                   # Get only incoming relationships
   @neo.get_node_relationships(node1, "all", "enemies")       # Get all relationships of type enemies
@@ -109,10 +110,17 @@ See Neo4j API for:
 * {Prune Evaluator}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/StopEvaluator.html]
 * {Return Filter}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/ReturnableEvaluator.html]
 
+=== Examples
+
+A couple of examples borrowed from Matthew Deiters's Neo4jr-social 
+
+*  {Facebook}[https://github.com/maxdemarzi/neography/blob/master/examples/facebook.rb]
+*  {Linked In}[https://github.com/maxdemarzi/neography/blob/master/examples/linkedin.rb]
+
 === To Do
 
 * More tests
-* examples
+* More examples
 * batch import with typhoeus ?
 * create proper objects for Node and Relationship
 

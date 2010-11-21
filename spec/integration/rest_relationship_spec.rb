@@ -32,6 +32,27 @@ describe Neography::Rest do
     end
   end
 
+  describe "get_relationship" do
+    it "can get a relationship that exists" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      existing_relationship = @neo.get_relationship(new_relationship)
+      existing_relationship.should_not be_nil
+      existing_relationship.should have_key("self")
+      existing_relationship["self"].should == new_relationship["self"]
+    end
+
+    it "returns nil if it tries to get a relationship that does not exist" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
+      existing_relationship = @neo.get_relationship(fake_relationship)
+      existing_relationship.should be_nil
+    end
+  end
+
   describe "set_relationship_properties" do
     it "can set a relationship's properties" do
       new_node1 = @neo.create_node
