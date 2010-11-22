@@ -302,6 +302,7 @@ module Neography
       end
 
       def get_depth(depth)
+        return nil if depth.nil?
         return 1 if depth.to_i == 0
         depth.to_i
       end
