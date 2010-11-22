@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'neography'
 
-@neo = Neography::Rest.new()
+@neo = Neography::Rest.new
 
 def create_person(name)
   @neo.create_node("name" => name)
