@@ -1,15 +1,16 @@
 module Neography
   class Rest
     include HTTParty
-    attr_accessor :protocol, :server, :port, :log_file, :log_enabled, :logger
+    attr_accessor :protocol, :server, :port, :log_file, :log_enabled, :logger, :max_threads
 
-      def initialize(protocol='http://', server='localhost', port=7474, log_file='neography.log', log_enabled=false)
+      def initialize(protocol='http://', server='localhost', port=7474, log_file='neography.log', log_enabled=false, max_threads=20)
         @protocol = protocol
         @server = server
         @port = port 
         @log_file = log_file
         @log_enabled = log_enabled
         @logger = Logger.new(@log_file) if @log_enabled
+        @max_threads = max_threads
       end
 
       def configure(protocol, server, port)
@@ -35,8 +36,58 @@ module Neography
         end
       end
 
+      def create_nodes(nodes)
+        nodes = Array.new(nodes) if nodes.kind_of? Fixnum
+        created_nodes = Array.new
+        nodes.each do |node|
+            created_nodes <<  create_node(node)
+        end
+        created_nodes
+      end
+
+      def create_nodes_threaded(nodes)
+        nodes = Array.new(nodes) if nodes.kind_of? Fixnum
+
+        node_queue = Queue.new
+        thread_pool = []
+        responses = Queue.new
+
+        nodes.each do |node|
+          node_queue.push node
+        end
+
+        [nodes.size, @max_threads].min.times do
+          thread_pool << Thread.new do
+            until node_queue.empty? do
+              node = node_queue.pop
+              if node.respond_to?(:each_pair) 
+                responses.push( post("/node", { :body => node.to_json, :headers => {'Content-Type' => 'application/json'} } ) )
+              else
+                responses.push( post("/node") )
+              end
+            end 
+            self.join
+          end
+        end
+
+        created_nodes = Array.new
+
+        while created_nodes.size < nodes.size 
+          created_nodes << responses.pop
+        end
+        created_nodes
+      end
+
       def get_node(id)
         get("/node/#{get_id(id)}")
+      end
+
+      def get_nodes(*nodes)
+        gotten_nodes = Array.new
+        nodes.to_a.flatten.each do |node|
+            gotten_nodes <<  get_node(node)
+        end
+        gotten_nodes
       end
 
       def reset_node_properties(id, properties)

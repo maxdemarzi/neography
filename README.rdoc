@@ -104,6 +104,21 @@ To Use:
 
 Please see the specs for more examples.
 
+Experimental:
+
+  nodes = @neo.create_nodes(5)                                              # Create 5 empty nodes
+  nodes = @neo.create_nodes_threaded(5)                                     # Create 5 empty nodes using threads
+  nodes = @neo.create_node_nodes([{"age" => 31, "name" => "Max"},
+                                  {"age" => 24, "name" => "Alex"})          # Create two nodes with properties
+  nodes = @neo.create_node_nodes_threaded([{"age" => 31, "name" => "Max"},
+                                           {"age" => 24, "name" => "Alex"}) # Create two nodes with properties threaded
+  nodes = @neo.get_nodes([17,86,397,33])                                    # Get four nodes by their id
+
+  one_set_nodes = @neo.create_nodes(3) 
+  another_node = @neo.create_node("age" => 31, "name" => "Max")
+  nodes = @neo.get_nodes([one_set_nodes, another_node])                     # Get four nodes
+
+
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]
 * {Uniqueness}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/kernel/Uniqueness.html]
