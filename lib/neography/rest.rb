@@ -3,7 +3,12 @@ module Neography
     include HTTParty
     attr_accessor :protocol, :server, :port, :log_file, :log_enabled, :logger, :max_threads
 
-      def initialize(protocol='http://', server='localhost', port=7474, log_file='neography.log', log_enabled=false, max_threads=20)
+      def initialize(protocol=Neography::Config.protocol, 
+                     server=Neography::Config.server, 
+                     port=Neography::Config.port, 
+                     log_file=Neography::Config.log_file, 
+                     log_enabled=Neography::Config.log_enabled, 
+                     max_threads=Neography::Config.max_threads)
         @protocol = protocol
         @server = server
         @port = port 
@@ -77,6 +82,13 @@ module Neography
         end
         created_nodes
       end
+
+#  This is not yet implemented in the REST API
+#
+#      def get_all_node
+#        puts "get all nodes"
+#        get("/nodes/")
+#      end
 
       def get_node(id)
         get("/node/#{get_id(id)}")
@@ -286,6 +298,8 @@ module Neography
             id["self"].split('/').last
           when String
             id.split('/').last
+          when Neography::Node
+            id.neo_id
           else
             id
           end 

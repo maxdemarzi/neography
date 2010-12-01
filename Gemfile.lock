@@ -13,6 +13,7 @@ GEM
     fakeweb (1.3.0)
     httparty (0.6.1)
       crack (= 0.1.8)
+    json (1.4.6)
     json (1.4.6-java)
     net-http-spy (0.2.1)
     rspec (2.0.1)
@@ -28,6 +29,7 @@ GEM
 
 PLATFORMS
   java
+  ruby
 
 DEPENDENCIES
   fakeweb (~> 1.3.0)
