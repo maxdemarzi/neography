@@ -23,19 +23,14 @@ require 'ostruct'
 
 require 'neography/config'
 require 'neography/rest'
+require 'neography/neography'
+
 require 'neography/property_container'
+require 'neography/node_relationship'
+require 'neography/equal'
+
 require 'neography/node'
 require 'neography/relationship'
 
 find_and_require_user_defined_code
 
-module Neography
-
-  class << self
-
-    def ref_node(this_db = Neography::Rest.new)
-      this_db.get_root
-    end
-
-  end
-end
