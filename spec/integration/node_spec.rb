@@ -111,9 +111,50 @@ describe Neography::Node do
       another_node = Neography::Node.load(new_node)
       (new_node == another_node).should be_true 
     end
-
-
   end
 
+  describe "set properties" do
+    it "can change a node's properties that already exist using []=" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
 
+      new_node[:weight] = 200
+      new_node[:eyes] = "brown"
+
+      existing_node = Neography::Node.load(new_node)
+      existing_node.weight.should == 200
+      existing_node.eyes.should == "brown"
+    end
+
+    it "can change a node's properties that already exist" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+
+      new_node.weight = 200
+      new_node.eyes = "brown"
+
+      existing_node = Neography::Node.load(new_node)
+      existing_node.weight.should == 200
+      existing_node.eyes.should == "brown"
+    end
+
+    it "can change a node's properties that does not already exist" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+
+      new_node.weight = 200
+      new_node.eyes = "brown"
+      new_node[:hair] = "black"
+
+      existing_node = Neography::Node.load(new_node)
+      existing_node.weight.should == 200
+      existing_node.eyes.should == "brown"
+      existing_node.hair.should == "black"
+    end
+  end
+
+  describe "get node properties" do
+    it "can get node properties using []" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+      new_node[:weight].should == 150
+      new_node[:eyes].should == "green"
+    end
+  end
 end

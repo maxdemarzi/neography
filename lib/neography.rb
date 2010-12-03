@@ -26,8 +26,10 @@ require 'neography/rest'
 require 'neography/neography'
 
 require 'neography/property_container'
+require 'neography/property'
 require 'neography/node_relationship'
 require 'neography/equal'
+
 
 require 'neography/node'
 require 'neography/relationship'

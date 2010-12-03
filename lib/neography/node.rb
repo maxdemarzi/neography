@@ -2,6 +2,7 @@ module Neography
   class Node < PropertyContainer
     include Neography::NodeRelationship
     include Neography::Equal
+    include Neography::Property
 
     attr_accessor :neo_server
 

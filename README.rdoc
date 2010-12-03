@@ -137,6 +137,16 @@ The Neo4j ID is available by using node.neo_id .
   Neography::Node.load(@neo2, 5)                                            # Get a node on the server defined in @neo2
   Neography::Node.load(5, @neo2)                                            # Same as above, but different order
 
+  my_node = Node.create
+  my_node.del                                                               # Deletes the node
+  my_node.exist?                                                            # returns true/false if node exists in Neo4j
+
+  my_node = Node.create("age" => 31, "name" => "Max")
+  my_node[:age] #returns 31                                                 # Get a node's property using [:key]
+  my_node.name  #returns "Max"                                              # Get a node's property as a method
+  my_node[:age] = 24     #changes age to 24                                 # Set a node's property using [:key] =
+  my_node.name = "Alex"  #changes name to "Alex"                            # Set a node's property as a method
+
 
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]
