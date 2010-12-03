@@ -142,11 +142,13 @@ The Neo4j ID is available by using node.neo_id .
   my_node.exist?                                                            # returns true/false if node exists in Neo4j
 
   my_node = Node.create("age" => 31, "name" => "Max")
-  my_node[:age] #returns 31                                                 # Get a node's property using [:key]
-  my_node.name  #returns "Max"                                              # Get a node's property as a method
-  my_node[:age] = 24     #changes age to 24                                 # Set a node's property using [:key] =
-  my_node.name = "Alex"  #changes name to "Alex"                            # Set a node's property as a method
-
+  my_node[:age] #returns 31                                                 # Get a node property using [:key]
+  my_node.name  #returns "Max"                                              # Get a node property as a method
+  my_node[:age] = 24     #changes age to 24                                 # Set a node property using [:key] =
+  my_node.name = "Alex"  #changes name to "Alex"                            # Set a node property as a method
+  my_node[:name] = nil                                                      # Delete a node property using [:key] = nil
+  my_node.name = nil                                                        # Delete a node property by setting it to nil
+ 
 
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]

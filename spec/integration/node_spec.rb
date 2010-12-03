@@ -156,5 +156,43 @@ describe Neography::Node do
       new_node[:weight].should == 150
       new_node[:eyes].should == "green"
     end
+
+    it "can get node properties" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+      new_node.weight.should == 150
+      new_node.eyes.should == "green"
+    end
   end
+
+  describe "delete node properties" do
+    it "can delete node properties using []" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+
+      new_node[:weight] = nil
+      new_node[:eyes] = nil
+
+      new_node[:weight].should be_nil
+      new_node[:eyes].should be_nil
+
+      existing_node = Neography::Node.load(new_node)
+      existing_node.weight.should be_nil
+      existing_node.eyes.should be_nil
+    end
+
+    it "can delete node properties" do
+      new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
+
+      new_node.weight = nil
+      new_node.eyes = nil
+
+      new_node.weight.should be_nil
+      new_node.eyes.should be_nil
+
+      existing_node = Neography::Node.load(new_node)
+      existing_node.weight.should be_nil
+      existing_node.eyes.should be_nil
+    end
+  end
+
+
 end

@@ -11,9 +11,11 @@ module Neography
       k = key.to_s
       if value.nil?
         if self.is_a? Neography::Node
-          neo_server.remove_node_properties(self.neo_id, {k => value})
+          neo_server.remove_node_properties(self.neo_id, [key])
+          @table[key] = nil
         else
-          neo_server.remove_relationship_properties(self.neo_id, {k => value})
+          neo_server.remove_relationship_properties(self.neo_id, [key])
+          @table[key] = nil
         end
       else
         if self.is_a? Neography::Node
