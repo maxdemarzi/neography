@@ -118,7 +118,7 @@ Experimental:
   another_node = @neo.create_node("age" => 31, "name" => "Max")
   nodes = @neo.get_nodes([one_set_nodes, another_node])                     # Get four nodes
 
-Phase 2 (work in progress):
+=== Phase 2 (work in progress):
 
 Now we are returning full objects.  The properties of the node or relationship can be accessed directly (node.name).
 The Neo4j ID is available by using node.neo_id .
@@ -144,8 +144,10 @@ The Neo4j ID is available by using node.neo_id .
   my_node = Node.create("age" => 31, "name" => "Max")
   my_node[:age] #returns 31                                                 # Get a node property using [:key]
   my_node.name  #returns "Max"                                              # Get a node property as a method
-  my_node[:age] = 24     #changes age to 24                                 # Set a node property using [:key] =
-  my_node.name = "Alex"  #changes name to "Alex"                            # Set a node property as a method
+  my_node[:age] = 24                                                        # Set a node property using [:key] =
+  my_node.name = "Alex"                                                     # Set a node property as a method
+  my_node[:hair] = "black"                                                  # Add a node property using [:key] =
+  my_node.weight = 190                                                      # Add a node property as a method
   my_node[:name] = nil                                                      # Delete a node property using [:key] = nil
   my_node.name = nil                                                        # Delete a node property by setting it to nil
  
