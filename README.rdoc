@@ -151,6 +151,9 @@ The Neo4j ID is available by using node.neo_id .
   my_node[:name] = nil                                                      # Delete a node property using [:key] = nil
   my_node.name = nil                                                        # Delete a node property by setting it to nil
  
+  node2 = Neography::Node.create
+  new_rel = Neography::Relationship.create(:family, my_node, node2)         # Create a relationship from my_node to node2
+
 
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]

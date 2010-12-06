@@ -298,7 +298,7 @@ module Neography
             id["self"].split('/').last
           when String
             id.split('/').last
-          when Neography::Node
+          when Neography::Node || Neography::Relationship
             id.neo_id
           else
             id
