@@ -15,6 +15,8 @@ def find_and_require_user_defined_code
   end
 end
 
+DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
+
 
 require 'httparty'
 require 'json'
@@ -28,6 +30,8 @@ require 'neography/neography'
 require 'neography/property_container'
 require 'neography/property'
 require 'neography/node_relationship'
+require 'neography/relationship_traverser'
+require 'neography/node_traverser'
 require 'neography/equal'
 
 

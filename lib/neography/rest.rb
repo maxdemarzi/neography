@@ -96,7 +96,7 @@ module Neography
 
       def get_nodes(*nodes)
         gotten_nodes = Array.new
-        nodes.to_a.flatten.each do |node|
+        Array(nodes).flatten.each do |node|
             gotten_nodes <<  get_node(node)
         end
         gotten_nodes
@@ -112,7 +112,7 @@ module Neography
           get("/node/#{get_id(id)}/properties")
         else
           node_properties = Hash.new 
-          properties.to_a.each do |property| 
+          Array(properties).each do |property| 
             value = get("/node/#{get_id(id)}/properties/#{property}")
             node_properties[property] = value unless value.nil?
           end
@@ -125,7 +125,7 @@ module Neography
         if properties.nil?
           delete("/node/#{get_id(id)}/properties")
         else 
-          properties.to_a.each do |property| 
+          Array(properties).each do |property| 
             delete("/node/#{get_id(id)}/properties/#{property}") 
           end
         end
@@ -161,7 +161,7 @@ module Neography
           get("/relationship/#{get_id(id)}/properties")
         else
           relationship_properties = Hash.new 
-          properties.to_a.each do |property| 
+          Array(properties).each do |property| 
             value = get("/relationship/#{get_id(id)}/properties/#{property}")
             relationship_properties[property] = value unless value.nil?
           end
@@ -174,7 +174,7 @@ module Neography
         if properties.nil?
           delete("/relationship/#{get_id(id)}/properties")
         else 
-          properties.to_a.each do |property| 
+          Array(properties).each do |property| 
             delete("/relationship/#{get_id(id)}/properties/#{property}")
           end
         end
@@ -197,7 +197,7 @@ module Neography
         if types.nil?
           node_relationships = get("/node/#{get_id(id)}/relationships/#{dir}") || Array.new
         else
-          node_relationships = get("/node/#{get_id(id)}/relationships/#{dir}/#{types.to_a.join('&')}") || Array.new
+          node_relationships = get("/node/#{get_id(id)}/relationships/#{dir}/#{Array(types).join('&')}") || Array.new
         end
         return nil if node_relationships.empty?
         node_relationships
@@ -298,7 +298,7 @@ module Neography
             id["self"].split('/').last
           when String
             id.split('/').last
-          when Neography::Node || Neography::Relationship
+          when Neography::Node, Neography::Relationship
             id.neo_id
           else
             id

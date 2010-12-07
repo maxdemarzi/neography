@@ -120,39 +120,54 @@ Experimental:
 
 === Phase 2 (work in progress):
 
+Trying to mimic the Neo4j.rb API.
+
 Now we are returning full objects.  The properties of the node or relationship can be accessed directly (node.name).
 The Neo4j ID is available by using node.neo_id .
 
   @neo2 = Neography::Rest.new ('http://', '192.168.10.1')
 
-  Neography::Node.create                                                    # Create an empty node
-  Neography::Node.create("age" => 31, "name" => "Max")                      # Create a node with some properties
-  Neography::Node.create(@neo2, {"age" => 31, "name" => "Max"})             # Create a node on the server defined in @neo2
-  Neography::Node.create({"age" => 31, "name" => "Max"}, @neo2)             # Same as above, but different order
+  Neography::Node.create                                               # Create an empty node
+  Neography::Node.create("age" => 31, "name" => "Max")                 # Create a node with some properties
+  Neography::Node.create(@neo2, {"age" => 31, "name" => "Max"})        # Create a node on the server defined in @neo2
+  Neography::Node.create({"age" => 31, "name" => "Max"}, @neo2)        # Same as above, but different order
 
-  Neography::Node.load(5)                                                   # Get a node and its properties by id
-  Neography::Node.load(existing_node)                                       # Get a node and its properties by Node
-  Neography::Node.load("http://localhost:7474/db/data/node/2")              # Get a node and its properties by String
+  Neography::Node.load(5)                                              # Get a node and its properties by id
+  Neography::Node.load(existing_node)                                  # Get a node and its properties by Node
+  Neography::Node.load("http://localhost:7474/db/data/node/2")         # Get a node and its properties by String
 
-  Neography::Node.load(@neo2, 5)                                            # Get a node on the server defined in @neo2
-  Neography::Node.load(5, @neo2)                                            # Same as above, but different order
+  Neography::Node.load(@neo2, 5)                                       # Get a node on the server defined in @neo2
+  Neography::Node.load(5, @neo2)                                       # Same as above, but different order
 
-  my_node = Node.create
-  my_node.del                                                               # Deletes the node
-  my_node.exist?                                                            # returns true/false if node exists in Neo4j
+  n1 = Node.create
+  n1.del                                                               # Deletes the node
+  n1.exist?                                                            # returns true/false if node exists in Neo4j
 
-  my_node = Node.create("age" => 31, "name" => "Max")
-  my_node[:age] #returns 31                                                 # Get a node property using [:key]
-  my_node.name  #returns "Max"                                              # Get a node property as a method
-  my_node[:age] = 24                                                        # Set a node property using [:key] =
-  my_node.name = "Alex"                                                     # Set a node property as a method
-  my_node[:hair] = "black"                                                  # Add a node property using [:key] =
-  my_node.weight = 190                                                      # Add a node property as a method
-  my_node[:name] = nil                                                      # Delete a node property using [:key] = nil
-  my_node.name = nil                                                        # Delete a node property by setting it to nil
+  n1 = Node.create("age" => 31, "name" => "Max")
+  n1[:age] #returns 31                                                 # Get a node property using [:key]
+  n1.name  #returns "Max"                                              # Get a node property as a method
+  n1[:age] = 24                                                        # Set a node property using [:key] =
+  n1.name = "Alex"                                                     # Set a node property as a method
+  n1[:hair] = "black"                                                  # Add a node property using [:key] =
+  n1.weight = 190                                                      # Add a node property as a method
+  n1[:name] = nil                                                      # Delete a node property using [:key] = nil
+  n1.name = nil                                                        # Delete a node property by setting it to nil
  
-  node2 = Neography::Node.create
-  new_rel = Neography::Relationship.create(:family, my_node, node2)         # Create a relationship from my_node to node2
+  n2 = Neography::Node.create
+  new_rel = Neography::Relationship.create(:family, n1, n2)            # Create a relationship from my_node to node2
+  new_rel.start_node                                                   # Get the start/from node of a relationship
+  new_rel.end_node                                                     # Get the end/to node of a relationship
+  existing_rel = Neography::Relationship.load(12)                      # Get an existing relationship by id
+  existing_rel.del                                                     # Delete a relationship
+
+  Neography::Relationship.create(:friends, n1, n2)
+  n1.rel?(:friends)                                                    # Has a friends relationship
+  n1.rel?(:outgoing, :friends)                                         # Has outgoing friends relationship
+  n1.rel?(:friends, :outgoing)                                         # same, just the other way
+  n1.rel?(:outgoing)                                                   # Has any outgoing relationships
+  n1.rel?(:both)                                                       # Has any relationships
+  n1.rel?(:all)                                                        # same as above
+  n1.rel?                                                              # same as above
 
 
 See Neo4j API for:

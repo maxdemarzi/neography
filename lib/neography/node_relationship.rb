@@ -1,16 +1,44 @@
 module Neography
   module NodeRelationship
 
-    def rels(*type)
-      RelationshipTraverser.new(self, type, :both)
+    def outgoing(types=nil)
+      if types
+        NodeTraverser.new(self).outgoing(types)
+      else
+        NodeTraverser.new(self).outgoing
+      end
+    end
+
+    def incoming(types=nil)
+      if types
+        NodeTraverser.new(self).incoming(types)
+      else
+        NodeTraverser.new(self).incoming
+      end
+    end
+
+    def both(types=nil)
+      if types
+        NodeTraverser.new(self).both(types)
+      else
+        NodeTraverser.new(self) # default is both
+      end
+    end
+
+    def rels(*types)
+      Neography::RelationshipTraverser.new(self, types, :both)
     end
 
     def rel(dir, type)
-      RelationshipTraverser.new(self, type, dir)
+      Neography::RelationshipTraverser.new(self, type, dir).first
     end
 
-    def rel? (type=nil, dir=:both)
-      self.neo_server.get_node_relationships(self, dir, type).empty? 
+    def rel?(dir=nil, type=nil)
+      if DIRECTIONS.include?(dir.to_s)
+        !self.neo_server.get_node_relationships(self, dir, type).nil? 
+      else
+        !self.neo_server.get_node_relationships(self, type, dir).nil? 
+      end
     end
 
   end

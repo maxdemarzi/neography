@@ -39,7 +39,7 @@ module Neography
     end
 
     def del
-      self.start_node.delete_relationship(self.neo_id)
+      self.start_node.neo_server.delete_relationship(self.neo_id)
     end
 
     def other_node(node)

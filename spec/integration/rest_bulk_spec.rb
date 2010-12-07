@@ -14,9 +14,9 @@ describe Neography::Rest do
 
     it "is faster than non-threaded?" do
       Benchmark.bm do |x|
-        x.report("create 5000 nodes         ") { @not_threaded = @neo.create_nodes(5000) }
-        x.report("create 5000 nodes threaded") { @threaded     = @neo.create_nodes_threaded(5000) }
-        x.report("create 100000 nodes threaded") { @threaded2c   = @neo.create_nodes_threaded(10000) }
+        x.report("create 500 nodes         ") { @not_threaded = @neo.create_nodes(500) }
+        x.report("create 500 nodes threaded") { @threaded     = @neo.create_nodes_threaded(500) }
+        x.report("create 1000 nodes threaded") { @threaded2c   = @neo.create_nodes_threaded(1000) }
       end
 
       @not_threaded[99].should_not be_nil
