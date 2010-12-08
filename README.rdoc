@@ -35,12 +35,12 @@ Just add gem 'neography' to your Gemfile and run bundle install
 
 A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and returns JSON or Nil:
 
-  #                            protocol,  server,        port,  log_file,           log_enabled
-  @neo = Neography::Rest.new ('http://', '192.168.10.1', 7479, 'log/neography.log', true)
+  #                            protocol,  server,        port,  log_file,           log_enabled, max_threads
+  @neo = Neography::Rest.new ('http://', '192.168.10.1', 7479, 'log/neography.log', true,        50)
 
 Default Parameters are:   
 
-  @neo = Neography::Rest.new ('http://', 'localhost', 7474, '/neography.log', false)
+  @neo = Neography::Rest.new ('http://', 'localhost', 7474, '/neography.log', false, 20)
 
 To Use:
 
