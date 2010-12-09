@@ -5,7 +5,7 @@ module Neography
       if types
         NodeTraverser.new(self).outgoing(types)
       else
-        NodeTraverser.new(self).outgoing
+        NodeTraverser.new(self).outgoing(types).collect {|n| n}
       end
     end
 
@@ -13,7 +13,7 @@ module Neography
       if types
         NodeTraverser.new(self).incoming(types)
       else
-        NodeTraverser.new(self).incoming
+        NodeTraverser.new(self).incoming(types).collect {|n| n}
       end
     end
 
@@ -21,7 +21,7 @@ module Neography
       if types
         NodeTraverser.new(self).both(types)
       else
-        NodeTraverser.new(self) # default is both
+        NodeTraverser.new(self).both(types).collect {|n| n}
       end
     end
 

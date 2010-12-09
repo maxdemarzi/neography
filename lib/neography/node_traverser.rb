@@ -26,8 +26,9 @@ module Neography
         when "incoming", "in"
           rel = Neography::Relationship.new(@from.neo_server.create_relationship(@relationships.first["type"], other_node, @from))
         else
-          rel << @from.neo_server.create_relationship(@relationships.first["type"], @from, other_node)
-          rel << @from.neo_server.create_relationship(@relationships.first["type"], other_node, @from)
+          rel = Array.new
+          rel << Neography::Relationship.new(@from.neo_server.create_relationship(@relationships.first["type"], @from, other_node))
+          rel << Neography::Relationship.new(@from.neo_server.create_relationship(@relationships.first["type"], other_node, @from))
       end
       rel       
     end
@@ -104,7 +105,27 @@ module Neography
       options["prune evaluator"] = @prune unless @prune.nil?
       options["return filter"] = @filter unless @filter.nil?
       options["depth"] = @depth unless @depth.nil?
-      @from.neo_server.traverse(@from, "nodes", options)
+
+      if @relationships[0]["type"].blank?
+        rels = @from.neo_server.get_node_relationships(@from, @relationships[0]["direction"])
+        case @relationships[0]["direction"]
+          when "in"
+#            rels.collect { |r| r["start"]}.uniq.collect{ |r| @from.neo_server.get_node(r) }
+            rels.collect { |r| @from.neo_server.get_node(r["start"]) }.uniq
+          when "out"
+            rels.collect { |r| @from.neo_server.get_node(r["end"]) }.uniq
+          else
+            rels.collect { |r| 
+            if @from.neo_id == r["start"].split('/').last
+              @from.neo_server.get_node(r["end"]) 
+            else
+              @from.neo_server.get_node(r["start"]) 
+            end
+            }.uniq
+        end
+      else
+        @from.neo_server.traverse(@from, "nodes", options)
+      end
     end
 
   end
