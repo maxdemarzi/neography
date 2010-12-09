@@ -110,7 +110,6 @@ module Neography
         rels = @from.neo_server.get_node_relationships(@from, @relationships[0]["direction"])
         case @relationships[0]["direction"]
           when "in"
-#            rels.collect { |r| r["start"]}.uniq.collect{ |r| @from.neo_server.get_node(r) }
             rels.collect { |r| @from.neo_server.get_node(r["start"]) }.uniq
           when "out"
             rels.collect { |r| @from.neo_server.get_node(r["end"]) }.uniq
