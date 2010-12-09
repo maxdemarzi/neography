@@ -161,6 +161,18 @@ The Neo4j ID is available by using node.neo_id .
   existing_rel.del                                                     # Delete a relationship
 
   Neography::Relationship.create(:friends, n1, n2)
+  n1.outgoing(:friends) << n2                                          # Create outgoing relationship
+  n1.incoming(:friends) << n2                                          # Create incoming relationship
+  n1.both(:friends) << n2                                              # Create both relationships
+
+  n1.outgoing                                                          # Get nodes related by outgoing relationships
+  n1.incoming                                                          # Get nodes related by incoming relationships
+  n1.both                                                              # Get nodes related by any relationships
+
+  n1.outgoing(:friends)                                                # Get nodes related by outgoing friends relationship
+  n1.incoming(:friends)                                                # Get nodes related by incoming friends relationship
+  n1.both(:friends)                                                    # Get nodes related by friends relationship
+
   n1.rel?(:friends)                                                    # Has a friends relationship
   n1.rel?(:outgoing, :friends)                                         # Has outgoing friends relationship
   n1.rel?(:friends, :outgoing)                                         # same, just the other way
@@ -168,6 +180,8 @@ The Neo4j ID is available by using node.neo_id .
   n1.rel?(:both)                                                       # Has any relationships
   n1.rel?(:all)                                                        # same as above
   n1.rel?                                                              # same as above
+
+  
 
 
 See Neo4j API for:
