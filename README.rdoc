@@ -10,12 +10,23 @@ If you want to the full power of Neo4j, you will want to use JRuby and the excel
 
   gem install 'neography'
 
-After that, in your ruby script, do
+After that, in your ruby script:
 
   require 'rubygems'
   require 'neography'
 
 in order to access the functionality.
+
+=== Try it now!
+
+I am hosting an instance of Neo4j (1.2 M5) at neography.org for you to try out.
+
+You can see the administration at: {Neo4j Web Admin}[http://neography.org]
+
+  # Add this to your ruby file to use it
+  Neography::Config.server = 'neography.org'
+
+
 === Dependencies
 
   for use:

@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'neography'
 
+Neography::Config.server = 'neography.org'
 @neo = Neography::Rest.new
 
 def create_person(name)
