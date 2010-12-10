@@ -42,8 +42,12 @@ module Neography
       self.start_node.neo_server.delete_relationship(self.neo_id)
     end
 
+    def exist?
+      !self.start_node.neo_server.get_relationship(self.neo_id).nil?
+    end
+
     def other_node(node)
-      if node = @start_node
+      if node == @start_node
         @end_node
       else
         @start_node

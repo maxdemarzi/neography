@@ -2,27 +2,15 @@ module Neography
   module NodeRelationship
 
     def outgoing(types=nil)
-      if types
-        NodeTraverser.new(self).outgoing(types)
-      else
-        NodeTraverser.new(self).outgoing(types).collect {|n| n}
-      end
+      NodeTraverser.new(self).outgoing(types)
     end
 
     def incoming(types=nil)
-      if types
-        NodeTraverser.new(self).incoming(types)
-      else
-        NodeTraverser.new(self).incoming(types).collect {|n| n}
-      end
+      NodeTraverser.new(self).incoming(types)
     end
 
     def both(types=nil)
-      if types
-        NodeTraverser.new(self).both(types)
-      else
-        NodeTraverser.new(self).both(types).collect {|n| n}
-      end
+      NodeTraverser.new(self).both(types)
     end
 
     def rels(*types)
@@ -30,7 +18,9 @@ module Neography
     end
 
     def rel(dir, type)
-      Neography::RelationshipTraverser.new(self, type, dir).first
+      rel = Neography::RelationshipTraverser.new(self, type, dir)
+      rel = rel.first unless rel.nil?
+      rel
     end
 
     def rel?(dir=nil, type=nil)

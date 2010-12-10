@@ -157,6 +157,8 @@ The Neo4j ID is available by using node.neo_id .
   new_rel = Neography::Relationship.create(:family, n1, n2)            # Create a relationship from my_node to node2
   new_rel.start_node                                                   # Get the start/from node of a relationship
   new_rel.end_node                                                     # Get the end/to node of a relationship
+  new_rel.other_node(n2)                                               # Get the other node of a relationship
+
   existing_rel = Neography::Relationship.load(12)                      # Get an existing relationship by id
   existing_rel.del                                                     # Delete a relationship
 
@@ -173,6 +175,14 @@ The Neo4j ID is available by using node.neo_id .
   n1.incoming(:friends)                                                # Get nodes related by incoming friends relationship
   n1.both(:friends)                                                    # Get nodes related by friends relationship
 
+  n1.outgoing(:friends).incoming(:enemies)                             # Get nodes related by one of multiple relationships
+  n1.outgoing(:friends).depth(2)                                       # Get nodes related by friends and friends of friends
+  n1.outgoing(:friends).depth(:all)                                    # Get nodes related by friends until the end of the graph
+  n1.outgoing(:friends).depth(2).include_start_node                    # Get n1 and nodes related by friends and friends of friends
+
+  n1.outgoing(:friends).prune("position.endNode().getProperty('name') == 'Tom';")
+  n1.outgoing(:friends).filter("position.length() == 2;")
+
   n1.rel?(:friends)                                                    # Has a friends relationship
   n1.rel?(:outgoing, :friends)                                         # Has outgoing friends relationship
   n1.rel?(:friends, :outgoing)                                         # same, just the other way
@@ -181,8 +191,12 @@ The Neo4j ID is available by using node.neo_id .
   n1.rel?(:all)                                                        # same as above
   n1.rel?                                                              # same as above
 
-  
-
+  n1.rels                                                              # Get node relationships
+  n1.rels(:friends)                                                    # Get friends relationships
+  n1.rels(:friends).outgoing                                           # Get outgoing friends relationships
+  n1.rels(:friends).incoming                                           # Get incoming friends relationships
+  n1.rels(:friends,:work)                                              # Get friends and work relationships
+  n1.rels(:friends,:work).outgoing                                     # Get outgoing friends and work relationships          
 
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]
@@ -199,12 +213,11 @@ A couple of examples borrowed from Matthew Deiters's Neo4jr-social
 
 === To Do
 
-* More tests
-* More examples
-* batch import with typhoeus ?
-* create proper objects for Node and Relationship
+* More Tests
+* More Examples
+* Mixins ?
 
-=== License
+=== Licenses
 
 * Neography - MIT, see the LICENSE file http://github.com/maxdemarzi/neography/tree/master/LICENSE.
 * Lucene -  Apache, see http://lucene.apache.org/java/docs/features.html

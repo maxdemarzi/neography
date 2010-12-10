@@ -57,7 +57,39 @@ describe Neography::NodeRelationship do
       a,b,c,d,e,f = create_nodes
 
       b.outgoing.should include(c,f,d)
-      [*b.outgoing].size.should == 3
+      [*b.outgoing].size.should == 4 #c is related by both work and friends
+    end
+
+    it "#outgoing(type) should only return outgoing nodes of the given type of depth one" do
+      a,b,c,d = create_nodes
+      b.outgoing(:work).should include(c,d)
+      [*b.outgoing(:work)].size.should == 2
+    end
+
+    it "#outgoing(type1).outgoing(type2) should return outgoing nodes of the given types" do
+      a,b,c,d,e,f = create_nodes
+      nodes = b.outgoing(:work).outgoing(:friends)
+     
+      nodes.should include(c,d,f)
+      nodes.size.should == 4 #c is related by both work and friends
+    end
+
+    it "#outgoing(type).depth(4) should only return outgoing nodes of the given type and depth" do
+      a,b,c,d,e = create_nodes
+      [*b.outgoing(:work).depth(4)].size.should == 3
+      b.outgoing(:work).depth(4).should include(c,d,e)
+    end
+
+    it "#outgoing(type).depth(4).include_start_node should also include the start node" do
+      a,b,c,d,e = create_nodes
+      [*b.outgoing(:work).depth(4).include_start_node].size.should == 4
+      b.outgoing(:work).depth(4).include_start_node.should include(b,c,d,e)
+    end
+
+    it "#outgoing(type).depth(:all) should traverse at any depth" do
+      a,b,c,d,e = create_nodes
+      [*b.outgoing(:work).depth(:all)].size.should == 3
+      b.outgoing(:work).depth(:all).should include(c,d,e)
     end
   end
 
@@ -91,6 +123,18 @@ describe Neography::NodeRelationship do
       b.incoming.should include(a)
       [*b.incoming].size.should == 1
     end
+
+    it "#incoming(type).depth(2) should only return outgoing nodes of the given type and depth" do
+      a,b,c,d,e = create_nodes
+      [*e.incoming(:work).depth(2)].size.should == 2
+      e.incoming(:work).depth(2).should include(b,d)
+    end
+
+    it "#incoming(type) should only return incoming nodes of the given type of depth one" do
+      a,b,c,d = create_nodes
+      c.incoming(:work).should include(b)
+      [*c.incoming(:work)].size.should == 1
+    end
   end
 
   describe "both" do
@@ -108,29 +152,192 @@ describe Neography::NodeRelationship do
       a,b,c,d,e,f = create_nodes
 
       b.both.should include(a,c,d,f)
-
-      [*b.both].size.should == 4 
+      [*b.both].size.should == 5 #c is related by both work and friends
       b.incoming.should include(a)
       b.outgoing.should include(c)
     end
 
+    it "#both(type) should return both incoming and outgoing nodes of the given type of depth one" do
+      a,b,c,d,e,f = create_nodes
+
+      b.both(:friends).should include(a,c,f)
+      [*b.both(:friends)].size.should == 3
+    end
+
+    it "#outgoing and #incoming can be combined to traverse several relationship types" do
+      a,b,c,d,e = create_nodes
+      nodes = [*b.incoming(:friends).outgoing(:work)]
+
+      nodes.should include(a,c,d)
+      nodes.should_not include(b,e)
+    end
   end
 
-#      b.both.each { |n| puts n.inspect }
 
+  describe "prune" do
+    it "#prune, if it returns true the traversal will be stop for that path" do
+      a, b, c, d, e = create_nodes
+      [*b.outgoing(:work).depth(4)].size.should == 3
+      b.outgoing(:work).depth(4).should include(c,d,e)
+
+      [*b.outgoing(:work).prune("position.endNode().getProperty('name') == 'd';")].size.should == 2
+      b.outgoing(:work).prune("position.endNode().getProperty('name') == 'd';").should include(c,d)
+    end
+  end
+
+  describe "filter" do
+    it "#filter, if it returns true the node will be included in the return results" do
+      a, b, c, d, e = create_nodes
+      [*b.outgoing(:work).depth(4)].size.should == 3
+      b.outgoing(:work).depth(4).should include(c,d,e)
+
+      [*b.outgoing(:work).depth(4).filter("position.length() == 2;")].size.should == 1
+      b.outgoing(:work).depth(4).filter("position.length() == 2;").should include(e)
+    end
+  end
 
   describe "rels" do
-    it "" do
-      pending
+    it "#rels returns a RelationshipTraverser which can filter which relationship it should return by specifying #to_other" do
+      a = Neography::Node.create      
+      b = Neography::Node.create
+      c = Neography::Node.create
+      r1 = Neography::Relationship.create(:friend, a, b)
+      Neography::Relationship.create(:friend, a, c)
+
+      a.rels.to_other(b).size.should == 1
+      a.rels.to_other(b).should include(r1)
+    end
+
+    it "#rels returns an RelationshipTraverser which provides a method for deleting all the relationships" do
+      a = Neography::Node.create
+      b = Neography::Node.create
+      c = Neography::Node.create
+      r1 = Neography::Relationship.create(:friend, a, b)
+      r2 = Neography::Relationship.create(:friend, a, c)
+
+      a.rel?(:friend).should be_true
+      a.rels.del
+      a.rel?(:friend).should be_false
+      r1.exist?.should be_false
+      r2.exist?.should be_false
+    end
+
+    it "#rels returns an RelationshipTraverser with methods #del and #to_other which can be combined to only delete a subset of the relationships" do
+      a = Neography::Node.create
+      b = Neography::Node.create
+      c = Neography::Node.create
+      r1 = Neography::Relationship.create(:friend, a, b)
+      r2 = Neography::Relationship.create(:friend, a, c)
+      r1.exist?.should be_true
+      r2.exist?.should be_true
+      a.rels.to_other(c).del
+      r1.exist?.should be_true
+      r2.exist?.should be_false
+    end
+
+ it "#rels should return both incoming and outgoing relationship of any type of depth one" do
+      a,b,c,d,e,f = create_nodes
+      b.rels.size.should == 5
+      nodes = b.rels.collect{|r| r.other_node(b)}
+      nodes.should include(a,c,d,f)
+      nodes.should_not include(e)
+    end
+
+    it "#rels(:friends) should return both incoming and outgoing relationships of given type of depth one" do
+      # given
+      a,b,c,d,e,f = create_nodes
+
+      # when
+      rels = [*b.rels(:friends)]
+
+      # then
+      rels.size.should == 3
+      nodes = rels.collect{|r| r.end_node}
+      nodes.should include(b,c,f)
+      nodes.should_not include(a,d,e)
+    end
+
+    it "#rels(:friends).outgoing should return only outgoing relationships of given type of depth one" do
+      # given
+      a,b,c,d,e,f = create_nodes
+
+      # when
+      rels = [*b.rels(:friends).outgoing]
+
+      # then
+      rels.size.should == 2
+      nodes = rels.collect{|r| r.end_node}
+      nodes.should include(c,f)
+      nodes.should_not include(a,b,d,e)
+    end
+
+
+    it "#rels(:friends).incoming should return only outgoing relationships of given type of depth one" do
+      # given
+      a,b,c,d,e = create_nodes
+
+      # when
+      rels = [*b.rels(:friends).incoming]
+
+      # then
+      rels.size.should == 1
+      nodes = rels.collect{|r| r.start_node}
+      nodes.should include(a)
+      nodes.should_not include(b,c,d,e)
+    end
+
+    it "#rels(:friends,:work) should return both incoming and outgoing relationships of given types of depth one" do
+      # given
+      a,b,c,d,e,f = create_nodes
+
+      # when
+      rels = [*b.rels(:friends,:work)]
+
+      # then
+      rels.size.should == 5
+      nodes = rels.collect{|r| r.other_node(b)}
+      nodes.should include(a,c,d,f)
+      nodes.should_not include(b,e)
+    end
+
+    it "#rels(:friends,:work).outgoing should return outgoing relationships of given types of depth one" do
+      # given
+      a,b,c,d,e,f = create_nodes
+
+      # when
+      rels = [*b.rels(:friends,:work).outgoing]
+
+      # then
+      rels.size.should == 4
+      nodes = rels.collect{|r| r.other_node(b)}
+      nodes.should include(c,d,f)
+      nodes.should_not include(a,b,e)
     end
   end
 
   describe "rel" do
-    it "" do
-      pending
+    it "#rel returns a single relationship if there is only one relationship" do
+      a = Neography::Node.create
+      b = Neography::Node.create
+      rel = Neography::Relationship.create(:friend, a, b)
+      a.rel(:outgoing, :friend).should == rel
+    end
+
+    it "#rel returns nil if there is no relationship" do
+      a = Neography::Node.create
+      b = Neography::Node.create
+      a.rel(:outgoing, :friend).should be_nil
+    end
+
+    it "#rel should only return one relationship even if there are more" do
+      a = Neography::Node.create
+      b = Neography::Node.create
+      c = Neography::Node.create
+      Neography::Relationship.create(:friend, a, b)
+      Neography::Relationship.create(:friend, a, c)
+      [*a.rel(:outgoing, :friend)].size == 1
     end
   end
-
 
   describe "rel?" do
     it "#rel? returns true if there are any relationships" do

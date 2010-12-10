@@ -48,28 +48,28 @@ module Neography
       self
     end
 
-    def filter(language, name)
-      @filter["language"] = language
-      if language == "builtin"
-        @filter["name"] = name
-      else
-        @filter["body"] = name
-      end 
+    def filter(body)
+      @filter = Hash.new
+      @filter["language"] = "javascript"
+      @filter["body"] = body
       self
     end
 
-    def prune(language, body)
-      @prune["language"] = language
+    def prune(body)
+      @prune = Hash.new
+      @prune["language"] = "javascript"
       @prune["body"] = body
       self
     end
 
     def depth(d)
+      d = 2147483647 if d == :all
       @depth = d
       self
     end
 
     def include_start_node
+      @filter = Hash.new
       @filter["language"] = "builtin"
       @filter["name"] = "all"
       self
@@ -110,9 +110,9 @@ module Neography
         rels = @from.neo_server.get_node_relationships(@from, @relationships[0]["direction"])
         case @relationships[0]["direction"]
           when "in"
-            rels.collect { |r| @from.neo_server.get_node(r["start"]) }.uniq
+            rels.collect { |r| @from.neo_server.get_node(r["start"]) } #.uniq
           when "out"
-            rels.collect { |r| @from.neo_server.get_node(r["end"]) }.uniq
+            rels.collect { |r| @from.neo_server.get_node(r["end"]) } #.uniq
           else
             rels.collect { |r| 
             if @from.neo_id == r["start"].split('/').last
@@ -120,7 +120,7 @@ module Neography
             else
               @from.neo_server.get_node(r["start"]) 
             end
-            }.uniq
+            } #.uniq
         end
       else
         @from.neo_server.traverse(@from, "nodes", options)

@@ -19,15 +19,38 @@ module Neography
     end
 
     def each
-      iterator.each { |i| yield Neography::Relationship.new(i, @node.neo_server) }
+      iterator.each do |i| 
+        rel = Neography::Relationship.new(i, @node.neo_server)
+        rel.start_node = Neography::Node.load(rel.start_node)
+        rel.end_node = Neography::Node.load(rel.end_node)
+
+        yield rel if match_to_other?(rel)
+      end
     end
 
     def empty?
       first == nil
     end
-    
+
     def iterator
-      @node.neo_server.get_node_relationships(@node, @direction, @types)
+      Array(@node.neo_server.get_node_relationships(@node, @direction, @types))
+    end
+
+    def match_to_other?(rel)
+      if @to_other.nil?
+        true
+      elsif @direction == :outgoing
+        rel.end_node == @to_other
+      elsif @direction == :incoming
+        rel.start_node == @to_other
+      else
+        rel.start_node == @to_other || rel.end_node == @to_other
+      end
+    end
+
+    def to_other(to_other)
+      @to_other = to_other
+      self
     end
 
     def del
@@ -44,13 +67,11 @@ module Neography
     end
 
     def incoming
-      raise "Not allowed calling incoming when finding several relationships types" if @types
       @direction = :incoming
       self
     end
 
     def outgoing
-      raise "Not allowed calling outgoing when finding several relationships types" if @types
       @direction = :outgoing
       self
     end
