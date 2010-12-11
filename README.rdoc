@@ -208,6 +208,17 @@ The Neo4j ID is available by using node.neo_id .
   n1.rels(:friends).incoming                                           # Get incoming friends relationships
   n1.rels(:friends,:work)                                              # Get friends and work relationships
   n1.rels(:friends,:work).outgoing                                     # Get outgoing friends and work relationships          
+  
+  n1.all_paths_to(n2).incoming(:friends).depth(4)                      # Gets all paths of a specified type
+  n1.all_simple_paths_to(n2).incoming(:friends).depth(4)               # for the relationships defined
+  n1.all_shortest_paths_to(n2).incoming(:friends).depth(4)             # at a maximum depth 
+  n1.path_to(n2).incoming(:friends).depth(4)                           # Same as above, but just one path.
+  n1.simple_path_to(n2).incoming(:friends).depth(4)                    
+  n1.shortest_path_to(n2).incoming(:friends).depth(4)
+
+  n1.shortest_path_to(n2).incoming(:friends).depth(4).rels             # Gets just relationships in path
+  n1.shortest_path_to(n2).incoming(:friends).depth(4).nodes            # Gets just nodes in path
+
 
 See Neo4j API for:
 * {Order}[http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html]

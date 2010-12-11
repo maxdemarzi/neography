@@ -7,6 +7,7 @@ module Neography
     def initialize(from, to, algorithm, all=false, types = nil, dir = "all" )
       @from  = from
       @to = to
+      @algorithm = algorithm
       @all = all
       @relationships = Array.new
       types.each do |type|
