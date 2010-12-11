@@ -1,6 +1,7 @@
 module Neography
   class Node < PropertyContainer
     include Neography::NodeRelationship
+    include Neography::NodePath
     include Neography::Equal
     include Neography::Property
 

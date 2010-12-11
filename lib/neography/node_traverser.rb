@@ -48,6 +48,16 @@ module Neography
       self
     end
 
+    def uniqueness(u)
+      @uniqueness = u
+      self
+    end
+
+    def order(o)
+      @order = o
+      self
+    end
+
     def filter(body)
       @filter = Hash.new
       @filter["language"] = "javascript"

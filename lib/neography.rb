@@ -29,10 +29,11 @@ require 'neography/neography'
 require 'neography/property_container'
 require 'neography/property'
 require 'neography/node_relationship'
+require 'neography/node_path'
 require 'neography/relationship_traverser'
 require 'neography/node_traverser'
+require 'neography/path_traverser'
 require 'neography/equal'
-
 
 require 'neography/node'
 require 'neography/relationship'
