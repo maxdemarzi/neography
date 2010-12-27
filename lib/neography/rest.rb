@@ -210,20 +210,20 @@ module Neography
       end
 
       def list_indexes
-        get("/index")
+        get("/index/node")
       end
 
-      def add_to_index(key, value, id)
+      def add_to_index(index, key, value, id)
         options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
-        post("/index/node/#{key}/#{value}", options)
+        post("/index/node/#{index}/#{key}/#{value}", options)
       end
 
-      def remove_from_index(key, value, id)
-        delete("/index/node/#{key}/#{value}/#{get_id(id)}")
+      def remove_from_index(index, key, value, id)
+        delete("/index/node/#{index}/#{key}/#{value}/#{get_id(id)}")
       end
 
-      def get_index(key, value)
-        index = get("/index/node/#{key}/#{value}") || Array.new
+      def get_index(index, key, value)
+        index = get("/index/node/#{index}/#{key}/#{value}") || Array.new
         return nil if index.empty?
         index
       end

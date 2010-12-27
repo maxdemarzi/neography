@@ -88,10 +88,10 @@ To Use:
   @neo.remove_relationship_properties(rel1, "since")         # Remove one property of a relationship
   @neo.remove_relationship_properties(rel1, ["since","met"]) # Remove multiple properties of a relationship
 
-  @neo.list_indexes                                          # doesn't really seam to do what the api says it does
-  @neo.add_to_index(key, value, node1)                       # adds a node to an index with the given key/value pair
-  @neo.remove_from_index(key, value, node1)                  # removes a node to an index with the given key/value pair
-  @neo.get_index(key, value)                                 # gets an index with the given key/value pair
+  @neo.list_indexes                                          # gives names and query templates for all defined indices
+  @neo.add_to_index(index, key, value, node1)                # adds a node to the specified index with the given key/value pair
+  @neo.remove_from_index(index, key, value, node1)           # removes a node from the specified index with the given key/value pair
+  @neo.get_index(index, key, value)                          # queries the specified index with the given key/value pair
 
   @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
