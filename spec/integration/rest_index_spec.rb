@@ -7,6 +7,10 @@ describe Neography::Rest do
 
   describe "list indexes" do
     it "can get a listing of indexes" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_to_index("test_index", key, value, new_node) 
       @neo.list_indexes.should_not be_nil
     end
   end
@@ -16,10 +20,10 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_to_index(key, value, new_node) 
-      new_index = @neo.get_index(key, value) 
+      @neo.add_to_index("test_index", key, value, new_node) 
+      new_index = @neo.get_index("test_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_from_index(key, value, new_node) 
+      @neo.remove_from_index("test_index", key, value, new_node) 
     end
   end
 
@@ -28,11 +32,11 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_to_index(key, value, new_node) 
-      new_index = @neo.get_index(key, value) 
+      @neo.add_to_index("test_index", key, value, new_node) 
+      new_index = @neo.get_index("test_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_from_index(key, value, new_node) 
-      new_index = @neo.get_index(key, value) 
+      @neo.remove_from_index("test_index", key, value, new_node) 
+      new_index = @neo.get_index("test_index", key, value) 
       new_index.should be_nil
     end
   end
@@ -42,10 +46,10 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_to_index(key, value, new_node) 
-      new_index = @neo.get_index(key, value) 
+      @neo.add_to_index("test_index", key, value, new_node) 
+      new_index = @neo.get_index("test_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_from_index(key, value, new_node) 
+      @neo.remove_from_index("test_index", key, value, new_node) 
     end
   end
 

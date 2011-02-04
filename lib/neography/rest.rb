@@ -1,31 +1,41 @@
 module Neography
   class Rest
     include HTTParty
-    attr_accessor :protocol, :server, :port, :log_file, :log_enabled, :logger, :max_threads
 
-      def initialize(protocol=Neography::Config.protocol, 
-                     server=Neography::Config.server, 
-                     port=Neography::Config.port, 
-                     log_file=Neography::Config.log_file, 
-                     log_enabled=Neography::Config.log_enabled, 
-                     max_threads=Neography::Config.max_threads)
-        @protocol = protocol
-        @server = server
-        @port = port 
-        @log_file = log_file
-        @log_enabled = log_enabled
-        @logger = Logger.new(@log_file) if @log_enabled
-        @max_threads = max_threads
+    attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
+
+      def initialize(options={})
+        init = {:protocol => Neography::Config.protocol, 
+                :server => Neography::Config.server, 
+                :port => Neography::Config.port, 
+                :directory => Neography::Config.directory, 
+                :log_file => Neography::Config.log_file, 
+                :log_enabled => Neography::Config.log_enabled, 
+                :max_threads => Neography::Config.max_threads,
+                :authentication => Neography::Config.authentication}
+        init.merge!(options)
+
+        @protocol       = init[:protocol]
+        @server         = init[:server]
+        @port           = init[:port]
+        @directory      = init[:directory]
+        @log_file       = init[:log_file]
+        @log_enabled    = init[:log_enabled]
+        @logger         = Logger.new(@log_file) if @log_enabled
+        @max_threads    = init[:max_threads]
+        @authentication = Hash.new
+        @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
       end
 
-      def configure(protocol, server, port)
+      def configure(protocol, server, port, directory)
         @protocol = protocol
         @server = server
         @port = port 
+        @directory = directory
       end
 
       def configuration
-        @protocol + @server + ':' + @port.to_s + "/db/data"
+        @protocol + @server + ':' + @port.to_s + @directory + "/db/data"
       end
 
       def get_root
@@ -277,19 +287,19 @@ module Neography
       end
 
        def get(path,options={})
-          evaluate_response(HTTParty.get(configuration + path, options))
+          evaluate_response(HTTParty.get(configuration + path, options.merge!(@authentication)))
        end
 
        def post(path,options={})
-          evaluate_response(HTTParty.post(configuration + path, options))
+          evaluate_response(HTTParty.post(configuration + path, options.merge!(@authentication)))
        end
 
        def put(path,options={})
-          evaluate_response(HTTParty.put(configuration + path, options))
+          evaluate_response(HTTParty.put(configuration + path, options.merge!(@authentication)))
        end
 
        def delete(path,options={})
-          evaluate_response(HTTParty.delete(configuration + path, options))
+          evaluate_response(HTTParty.delete(configuration + path, options.merge!(@authentication)))
        end
 
       def get_id(id)

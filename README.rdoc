@@ -46,12 +46,16 @@ Just add gem 'neography' to your Gemfile and run bundle install
 
 A thin ruby wrapper Neography::Rest which tries to mirror the Neo4j Rest API and returns JSON or Nil:
 
-  #                            protocol,  server,        port,  log_file,           log_enabled, max_threads
-  @neo = Neography::Rest.new ('http://', '192.168.10.1', 7479, 'log/neography.log', true,        50)
-
-Default Parameters are:   
-
-  @neo = Neography::Rest.new ('http://', 'localhost', 7474, '/neography.log', false, 20)
+  @neo = Neography::Rest.new({:protocol => 'http://', 
+                              :server => 'localhost', 
+                              :port => 7474, 
+                              :directory => '',  # use '/<my directory>' or leave out for default 
+                              :authentication => 'basic', # 'basic', 'digest' or leave out for default 
+                              :username => 'your username', #leave out for default  
+                              :password => 'your password',  #leave out for default 
+                              :log_file => 'neography.log',
+                              :log_enabled => false,
+                              :max_threads => 20})
 
 To Use:
 
@@ -136,7 +140,7 @@ Trying to mimic the Neo4j.rb API.
 Now we are returning full objects.  The properties of the node or relationship can be accessed directly (node.name).
 The Neo4j ID is available by using node.neo_id .
 
-  @neo2 = Neography::Rest.new ('http://', '192.168.10.1')
+  @neo2 = Neography::Rest.new ({:server => '192.168.10.1'})
 
   Neography::Node.create                                               # Create an empty node
   Neography::Node.create("age" => 31, "name" => "Max")                 # Create a node with some properties
@@ -228,13 +232,20 @@ See Neo4j API for:
 
 === Examples
 
-A couple of examples borrowed from Matthew Deiters's Neo4jr-social 
+A couple of examples borrowed from Matthew Deiters's Neo4jr-social:
 
 *  {Facebook}[https://github.com/maxdemarzi/neography/blob/master/examples/facebook.rb]
 *  {Linked In}[https://github.com/maxdemarzi/neography/blob/master/examples/linkedin.rb]
 
+Phase 2 way of doing these:
+
+*  {Facebook}[https://github.com/maxdemarzi/neography/blob/master/examples/facebook_v2.rb]
+*  {Linked In}[https://github.com/maxdemarzi/neography/blob/master/examples/linkedin_v2.rb]
+
+
 === To Do
 
+* Phase 2 Index functionality
 * More Tests
 * More Examples
 * Mixins ?
