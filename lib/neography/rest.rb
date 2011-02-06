@@ -261,7 +261,7 @@ module Neography
       end
 
       def add_relationship_to_index(index, key, value, id)
-        options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
+        options = { :body => (self.configuration + "/relationship/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/relationship/#{index}/#{key}/#{value}", options)
       end
 
