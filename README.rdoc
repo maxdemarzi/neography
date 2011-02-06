@@ -92,10 +92,15 @@ To Use:
   @neo.remove_relationship_properties(rel1, "since")         # Remove one property of a relationship
   @neo.remove_relationship_properties(rel1, ["since","met"]) # Remove multiple properties of a relationship
 
-  @neo.list_indexes                                          # gives names and query templates for all defined indices
-  @neo.add_to_index(index, key, value, node1)                # adds a node to the specified index with the given key/value pair
-  @neo.remove_from_index(index, key, value, node1)           # removes a node from the specified index with the given key/value pair
-  @neo.get_index(index, key, value)                          # queries the specified index with the given key/value pair
+  @neo.list_node_indexes                                     # gives names and query templates for all defined indices
+  @neo.add_node_to_index(index, key, value, node1)           # adds a node to the index with the given key/value pair
+  @neo.remove_node_from_index(index, key, value, node1)      # removes a node from the index with the given key/value pair
+  @neo.get_node_index(index, key, value)                     # queries the index with the given key/value pair
+  @neo.list_relationship_indexes                             # gives names and query templates for relationship indices
+  @neo.add_relationship_to_index(index, key, value, rel1)    # adds a relationship to the index with the given key/value pair
+  @neo.remove_relationship_from_index(index, key, value, rel1) # removes a relationship from the index with the given key/value pair
+  @neo.get_relationship_index(index, key, value)             # queries the relationship index with the given key/value pair
+
 
   @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes

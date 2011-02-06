@@ -219,25 +219,48 @@ module Neography
         delete("/node/#{get_id(id)}")
       end
 
-      def list_indexes
+      def list_node_indexes
         get("/index/node")
       end
 
-      def add_to_index(index, key, value, id)
+      def add_node_to_index(index, key, value, id)
         options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/node/#{index}/#{key}/#{value}", options)
       end
 
-      def remove_from_index(index, key, value, id)
+      def remove_node_from_index(index, key, value, id)
         delete("/index/node/#{index}/#{key}/#{value}/#{get_id(id)}")
       end
 
-      def get_index(index, key, value)
+      def get_node_index(index, key, value)
         index = get("/index/node/#{index}/#{key}/#{value}") || Array.new
         return nil if index.empty?
         index
       end
 
+      alias_method :list_indexes, :list_node_indexes
+      alias_method :add_to_index, :add_node_to_index
+      alias_method :remove_from_index, :remove_node_from_index
+      alias_method :get_index, :get_node_index
+
+      def list_relationship_indexes
+        get("/index/relationship")
+      end
+
+      def add_relationship_to_index(index, key, value, id)
+        options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/relationship/#{index}/#{key}/#{value}", options)
+      end
+
+      def remove_relationship_from_index(index, key, value, id)
+        delete("/index/relationship/#{index}/#{key}/#{value}/#{get_id(id)}")
+      end
+
+      def get_relationship_index(index, key, value)
+        index = get("/index/relationship/#{index}/#{key}/#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
       def traverse(id, return_type, description)
         options = { :body => {"order" => get_order(description["order"]), 
                               "uniqueness" => get_uniqueness(description["uniqueness"]), 
