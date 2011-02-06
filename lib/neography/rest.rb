@@ -13,6 +13,19 @@ module Neography
                 :log_enabled => Neography::Config.log_enabled, 
                 :max_threads => Neography::Config.max_threads,
                 :authentication => Neography::Config.authentication}
+
+        unless options.respond_to?(:each_pair)
+          url = URI.parse(options)
+          options = Hash.new
+          options[:protocol] = url.scheme + "://"
+          options[:server] = url.host
+          options[:port] = url.port
+          options[:directory] = url.path
+          options[:user] = url.user
+          options[:password] = url.password
+          options[:authentication] = 'basic' unless url.user.nil?
+        end
+
         init.merge!(options)
 
         @protocol       = init[:protocol]
