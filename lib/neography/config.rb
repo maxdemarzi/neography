@@ -1,6 +1,6 @@
 module Neography
   class Config 
-    class << self; attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication end
+    class << self; attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password end
 
     @protocol = 'http://'
     @server = 'localhost'
@@ -11,5 +11,7 @@ module Neography
     @logger = Logger.new(@log_file) if @log_enabled
     @max_threads = 20
     @authentication = {}
+    @username = nil
+    @password = nil
   end
 end

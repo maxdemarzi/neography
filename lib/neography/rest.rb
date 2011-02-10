@@ -5,14 +5,16 @@ module Neography
     attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
 
       def initialize(options={})
-        init = {:protocol => Neography::Config.protocol, 
-                :server => Neography::Config.server, 
-                :port => Neography::Config.port, 
-                :directory => Neography::Config.directory, 
-                :log_file => Neography::Config.log_file, 
-                :log_enabled => Neography::Config.log_enabled, 
-                :max_threads => Neography::Config.max_threads,
-                :authentication => Neography::Config.authentication}
+        init = {:protocol       => Neography::Config.protocol, 
+                :server         => Neography::Config.server, 
+                :port           => Neography::Config.port, 
+                :directory      => Neography::Config.directory, 
+                :log_file       => Neography::Config.log_file, 
+                :log_enabled    => Neography::Config.log_enabled, 
+                :max_threads    => Neography::Config.max_threads,
+                :authentication => Neography::Config.authentication,
+                :username       => Neography::Config.username,
+                :password       => Neography::Config.password}
 
         unless options.respond_to?(:each_pair)
           url = URI.parse(options)
@@ -21,12 +23,13 @@ module Neography
           options[:server] = url.host
           options[:port] = url.port
           options[:directory] = url.path
-          options[:user] = url.user
+          options[:username] = url.user
           options[:password] = url.password
           options[:authentication] = 'basic' unless url.user.nil?
         end
 
         init.merge!(options)
+        puts init.inspect
 
         @protocol       = init[:protocol]
         @server         = init[:server]
@@ -38,6 +41,7 @@ module Neography
         @max_threads    = init[:max_threads]
         @authentication = Hash.new
         @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
+        puts "Authentication: #{@authentication.inspect}"
       end
 
       def configure(protocol, server, port, directory)
