@@ -388,12 +388,14 @@ module Neography
 
       def get_type(type)
         case type
-          when :node, "nodes", :nodes, "nodes"
-            "node"
           when :relationship, "relationship", :relationships, "relationships"
             "relationship"
-          else
+          when :path, "path", :paths, "paths"
             "path"
+          when :fullpath, "fullpath", :fullpaths, "fullpaths"
+            "fullpath"
+          else
+            "node"
         end
       end
 
