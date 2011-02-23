@@ -25,6 +25,46 @@ describe Neography::Rest do
     end
   end
 
+  describe "create an index" do
+    it "can create a node index" do
+      name = generate_text(6)
+      new_index = @neo.create_node_index(name)
+      new_index.should_not be_nil
+      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["provider"].should == "lucene"
+      new_index["type"].should == "exact"
+    end
+
+    it "can create a node index with options" do
+      name = generate_text(6)
+      new_index = @neo.create_node_index(name, "fulltext","lucene")
+      new_index.should_not be_nil
+      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["provider"].should == "lucene"
+      new_index["type"].should == "fulltext"
+    end
+
+    it "can create a relationship index" do
+      name = generate_text(6)
+      new_index = @neo.create_relationship_index(name)
+      new_index.should_not be_nil
+      new_index["template"].should == "#{@neo.configuration}/index/relationship/#{name}/{key}/{value}"
+      new_index["provider"].should == "lucene"
+      new_index["type"].should == "exact"
+    end
+
+    it "can create a relationship index with options" do
+      name = generate_text(6)
+      new_index = @neo.create_relationship_index(name, "fulltext","lucene")
+      new_index.should_not be_nil
+      new_index["template"].should == "#{@neo.configuration}/index/relationship/#{name}/{key}/{value}"
+      new_index["provider"].should == "lucene"
+      new_index["type"].should == "fulltext"
+    end
+
+
+  end
+
   describe "add to index" do
     it "can add a node to an index" do
       new_node = @neo.create_node

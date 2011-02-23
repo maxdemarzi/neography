@@ -29,7 +29,6 @@ module Neography
         end
 
         init.merge!(options)
-        puts init.inspect
 
         @protocol       = init[:protocol]
         @server         = init[:server]
@@ -41,7 +40,6 @@ module Neography
         @max_threads    = init[:max_threads]
         @authentication = Hash.new
         @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
-        puts "Authentication: #{@authentication.inspect}"
       end
 
       def configure(protocol, server, port, directory)
@@ -240,6 +238,11 @@ module Neography
         get("/index/node")
       end
 
+      def create_node_index(name, type = "exact", provider = "lucene")
+        options = { :body => ({:name => name, :config => {:type => type, :provider => provider}}).to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/node", options)
+      end
+
       def add_node_to_index(index, key, value, id)
         options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/node/#{index}/#{key}/#{value}", options)
@@ -262,6 +265,11 @@ module Neography
 
       def list_relationship_indexes
         get("/index/relationship")
+      end
+
+      def create_relationship_index(name, type = "exact", provider = "lucene")
+        options = { :body => ({:name => name, :config => {:type => type, :provider => provider}}).to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/relationship", options)
       end
 
       def add_relationship_to_index(index, key, value, id)
