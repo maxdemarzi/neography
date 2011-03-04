@@ -12,7 +12,7 @@ describe Neography::Rest do
       new_nodes.size.should == 2
     end
 
-    it "is faster than non-threaded?" do
+    it "is faster than non-threaded?" , :slow => true do
       Benchmark.bm do |x|
         x.report("create 500 nodes         ") { @not_threaded = @neo.create_nodes(500) }
         x.report("create 500 nodes threaded") { @threaded     = @neo.create_nodes_threaded(500) }
@@ -61,7 +61,7 @@ describe Neography::Rest do
       new_nodes[1]["data"]["weight"].should == 215
     end
 
-    it "is not super slow?" do
+    it "is not super slow?" , :slow => true do
       Benchmark.bm do |x|
         x.report(  "create 1 node" ) { @neo.create_nodes(  1) }
         x.report( "create 10 nodes") { @neo.create_nodes( 10) }
@@ -89,7 +89,7 @@ describe Neography::Rest do
       existing_nodes[1]["self"] == new_node2["self"]
     end
 
-    it "is not super slow?" do
+    it "is not super slow?" , :slow => true do
                one_node  = @neo.create_nodes(  1)
               ten_nodes =  @neo.create_nodes( 10)
       one_hundred_nodes =  @neo.create_nodes(100)

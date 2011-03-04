@@ -1,9 +1,9 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Neography::Rest do
-  describe "basic authentication" do
+describe Neography::Rest, :slow => true do
+  describe "basic authentication"  do
     describe "get_root" do
-      it "can get the root node" do
+      it "can get the root node"do
         @neo = Neography::Rest.new({:server => '4c36b641.neo4j.atns.de', :port => 7474, :directory => '/9dc1fda5be8b5cde29621e21cae5adece3de0f37', :authentication => 'basic', :username => "abbe3c012", :password => "34d7b22eb"})
         root_node = @neo.get_root
         root_node.should have_key("reference_node")
@@ -18,7 +18,7 @@ describe Neography::Rest do
       end
     end
 
-    describe "quick initalizer" do
+    describe "quick initializer" do
       it "can get the root node" do
         @neo = Neography::Rest.new("http://abbe3c012:34d7b22eb@4c36b641.neo4j.atns.de:7474/9dc1fda5be8b5cde29621e21cae5adece3de0f37")
         root_node = @neo.get_root
@@ -27,7 +27,7 @@ describe Neography::Rest do
     end
   end
 
-  describe "digest authentication" do
+  describe "digest authentication"  do
     describe "get_root" do
       it "can get the root node" do
         @neo = Neography::Rest.new({:server => '4c36b641.neo4j.atns.de', :port => 7474, :directory => '/9dc1fda5be8b5cde29621e21cae5adece3de0f37', :authentication => 'digest', :username => "abbe3c012", :password => "34d7b22eb"})

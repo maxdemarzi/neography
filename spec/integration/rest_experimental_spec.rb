@@ -6,11 +6,10 @@ describe Neography::Rest do
   end
 
 
-  describe "get_nodes" do
+  describe "get_nodes", :slow => true do
     it "can get nodes that exists" do
       existing_nodes = @neo.get_nodes
       existing_nodes.should_not be_nil
-      puts existing_nodes.inspect
     end
 
     it "can get all nodes that exists the ugly way" do

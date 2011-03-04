@@ -23,3 +23,7 @@ def generate_text(length=8)
   length.times { |i| key << chars[rand(chars.length)] }
   key
 end
+
+RSpec.configure do |c|
+  c.filter_run_excluding :slow => true
+end
