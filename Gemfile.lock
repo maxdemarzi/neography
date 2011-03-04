@@ -16,6 +16,7 @@ GEM
     json (1.4.6)
     json (1.4.6-java)
     net-http-spy (0.2.1)
+    rake (0.8.7)
     rspec (2.0.1)
       rspec-core (~> 2.0.1)
       rspec-expectations (~> 2.0.1)
@@ -37,4 +38,5 @@ DEPENDENCIES
   json
   neography!
   net-http-spy (~> 0.2.1)
+  rake (~> 0.8.7)
   rspec (~> 2.0.0.beta.22)

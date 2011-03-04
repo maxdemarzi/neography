@@ -1,5 +1,5 @@
 require 'neography'
-require 'fakeweb'
+require 'fake_web'
 require 'benchmark'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
