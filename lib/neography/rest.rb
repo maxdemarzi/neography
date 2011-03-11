@@ -248,8 +248,12 @@ module Neography
         post("/index/node/#{index}/#{key}/#{value}", options)
       end
 
-      def remove_node_from_index(index, key, value, id)
-        delete("/index/node/#{index}/#{key}/#{value}/#{get_id(id)}")
+      def remove_node_from_index(*args)
+        case args.size
+          when 4 then delete("/index/node/#{args[0]}/#{args[1]}/#{args[2]}/#{get_id(args[3])}")
+          when 3 then delete("/index/node/#{args[0]}/#{args[1]}/#{get_id(args[2])}")
+          when 2 then delete("/index/node/#{args[0]}/#{get_id(args[1])}")
+        end
       end
 
       def get_node_index(index, key, value)
@@ -277,8 +281,12 @@ module Neography
         post("/index/relationship/#{index}/#{key}/#{value}", options)
       end
 
-      def remove_relationship_from_index(index, key, value, id)
-        delete("/index/relationship/#{index}/#{key}/#{value}/#{get_id(id)}")
+      def remove_relationship_from_index(*args)
+        case args.size
+          when 4 then delete("/index/relationship/#{args[0]}/#{args[1]}/#{args[2]}/#{get_id(args[3])}")
+          when 3 then delete("/index/relationship/#{args[0]}/#{args[1]}/#{get_id(args[2])}")
+          when 2 then delete("/index/relationship/#{args[0]}/#{get_id(args[1])}")
+        end
       end
 
       def get_relationship_index(index, key, value)

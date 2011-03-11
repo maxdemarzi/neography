@@ -102,6 +102,30 @@ describe Neography::Rest do
       new_index.should be_nil
     end
 
+    it "can remove a node from an index without supplying value" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_index", key, value) 
+      new_index.should_not be_nil
+      @neo.remove_node_from_index("test_index", key, new_node) 
+      new_index = @neo.get_node_index("test_index", key, value) 
+      new_index.should be_nil
+    end
+
+    it "can remove a node from an index without supplying key nor value" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_index", key, value) 
+      new_index.should_not be_nil
+      @neo.remove_node_from_index("test_index", new_node) 
+      new_index = @neo.get_node_index("test_index", key, value) 
+      new_index.should be_nil
+    end
+
     it "can remove a relationshp from an index" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
@@ -112,6 +136,34 @@ describe Neography::Rest do
       new_index = @neo.get_relationship_index("test_index", key, value) 
       new_index.should_not be_nil
       @neo.remove_relationship_from_index("test_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_index", key, value) 
+      new_index.should be_nil
+    end
+
+    it "can remove a relationshp from an index without supplying value" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_index", key, value) 
+      new_index.should_not be_nil
+      @neo.remove_relationship_from_index("test_index", key, new_relationship) 
+      new_index = @neo.get_relationship_index("test_index", key, value) 
+      new_index.should be_nil
+    end
+
+    it "can remove a relationshp from an index without supplying key nor value" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_index", key, value) 
+      new_index.should_not be_nil
+      @neo.remove_relationship_from_index("test_index", new_relationship) 
       new_index = @neo.get_relationship_index("test_index", key, value) 
       new_index.should be_nil
     end

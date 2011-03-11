@@ -19,7 +19,7 @@ in order to access the functionality.
 
 === Try it now!
 
-I am hosting an instance of Neo4j (1.2) at neography.org for you to try out.
+I am hosting an instance of Neo4j (1.3M04) at neography.org for you to try out.
 
 You can see the administration at: {Neo4j Web Admin}[http://neography.org]
 
@@ -99,11 +99,15 @@ To Use:
   @neo.create_node_index(name, type, provider)               # creates an index, defaults are "exact" and "lucene"
   @neo.add_node_to_index(index, key, value, node1)           # adds a node to the index with the given key/value pair
   @neo.remove_node_from_index(index, key, value, node1)      # removes a node from the index with the given key/value pair
+  @neo.remove_node_from_index(index, key, node1)             # removes a node from the index with the given key
+  @neo.remove_node_from_index(index, node1)                  # removes a node from the index
   @neo.get_node_index(index, key, value)                     # queries the index with the given key/value pair
   @neo.list_relationship_indexes                             # gives names and query templates for relationship indices
   @neo.create_relationship_index(name, "fulltext", provider) # creates a relationship index with "fulltext" option
   @neo.add_relationship_to_index(index, key, value, rel1)    # adds a relationship to the index with the given key/value pair
   @neo.remove_relationship_from_index(index, key, value, rel1) # removes a relationship from the index with the given key/value pair
+  @neo.remove_relationship_from_index(index, key, rel1)      # removes a relationship from the index with the given key
+  @neo.remove_relationship_from_index(index, rel1)           # removes a relationship from the index
   @neo.get_relationship_index(index, key, value)             # queries the relationship index with the given key/value pair
 
 
