@@ -262,6 +262,12 @@ module Neography
         index
       end
 
+      def find_node_index(index, key, value)
+        index = get("/index/node/#{index}/#{key}?query=#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
       alias_method :list_indexes, :list_node_indexes
       alias_method :add_to_index, :add_node_to_index
       alias_method :remove_from_index, :remove_node_from_index
@@ -294,6 +300,13 @@ module Neography
         return nil if index.empty?
         index
       end
+
+      def find_relationship_index(index, key, value)
+        index = get("/index/relationship/#{index}/#{key}?query=#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
       def traverse(id, return_type, description)
         options = { :body => {"order" => get_order(description["order"]), 
                               "uniqueness" => get_uniqueness(description["uniqueness"]), 
@@ -343,19 +356,19 @@ module Neography
       end
 
        def get(path,options={})
-          evaluate_response(HTTParty.get(configuration + path, options.merge!(@authentication)))
+          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def post(path,options={})
-          evaluate_response(HTTParty.post(configuration + path, options.merge!(@authentication)))
+          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def put(path,options={})
-          evaluate_response(HTTParty.put(configuration + path, options.merge!(@authentication)))
+          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def delete(path,options={})
-          evaluate_response(HTTParty.delete(configuration + path, options.merge!(@authentication)))
+          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
       def get_id(id)
