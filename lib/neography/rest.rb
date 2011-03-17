@@ -377,6 +377,8 @@ module Neography
             id["self"].split('/').last
           when String
             id.split('/').last
+          when Array # get id for nodes created from get_node_index() function
+            id[0]["self"].to_s.split('/').last
           when Neography::Node, Neography::Relationship
             id.neo_id
           else
