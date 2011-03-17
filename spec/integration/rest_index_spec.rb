@@ -250,6 +250,25 @@ describe Neography::Rest do
       @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
     end
 
+    it "can find use the results of a node index" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      key = generate_text(6)
+      value1 = generate_text
+      value2 = generate_text
+      @neo.add_node_to_index("test_index", key, value1, new_node1) 
+      @neo.add_node_to_index("test_index", key, value2, new_node2) 
+      existing_node1 = @neo.get_node_index("test_index", key, value1)
+      existing_node2 = @neo.get_node_index("test_index", key, value2)
+      new_relationship = @neo.create_relationship("friends", existing_node1, existing_node2)
+      new_relationship["start"].should_not be_nil
+      new_relationship["start"].should == new_node1["self"]
+      new_relationship["end"].should_not be_nil
+      new_relationship["end"].should == new_node2["self"]
+      @neo.remove_node_from_index("test_index", new_node1) 
+      @neo.remove_node_from_index("test_index", new_node2) 
+    end
+
   end
 
 

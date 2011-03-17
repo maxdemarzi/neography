@@ -373,6 +373,8 @@ module Neography
 
       def get_id(id)
         case id
+          when Array
+            get_id(id.first)
           when Hash
             id["self"].split('/').last
           when String
