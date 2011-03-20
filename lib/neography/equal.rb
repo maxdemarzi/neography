@@ -15,7 +15,5 @@ module Neography
     def ==(o)
       eql?(o)
     end
-
   end
-
 end

@@ -273,3 +273,19 @@ Phase 2 way of doing these:
 * Neo4j - Dual free software/commercial license, see http://neo4j.org
 
 
+====
+Neography/rails integration
+
+Neography should be also easily integratable with any Rails application.
+For that matter, it's used and initialized as Railtie.
+
+Any model may include Neography module. 
+Please note that in that case neo4j should not be used as your primary source of information. Rather, it should be used for traversing relationships between nodes.
+
+#Let's say it's a model
+class User
+  graph_model :id
+end
+
+a) when user is saved, it's node is automatically saved to neo4j (it's ID is taken)
+

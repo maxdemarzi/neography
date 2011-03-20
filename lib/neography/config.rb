@@ -1,17 +1,41 @@
-module Neography
-  class Config 
-    class << self; attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password end
+module Neography #:nodoc
+  module Config #:nodoc
+    extend self
+    @settings = {}
 
-    @protocol = 'http://'
-    @server = 'localhost'
-    @port = 7474 
-    @directory = ''
-    @log_file = 'neography.log'
-    @log_enabled = false
-    @logger = Logger.new(@log_file) if @log_enabled
-    @max_threads = 20
-    @authentication = {}
-    @username = nil
-    @password = nil
+    def settings
+      @settings
+    end
+
+    def option(name, options = {})
+      define_method(name) do
+        settings.has_key?(name) ? settings[name] : options[:default]
+      end
+      define_method("#{name}=") { |value| settings[name] = value }
+      define_method("#{name}?") { send(name) }
+    end
+
+    option :protocol, :default => 'http://'
+    option :server, :default => 'localhost'
+    option :port, :default => 7474
+    option :directory, :default => ''
+    option :log_file, :default => 'neograpy.log'
+    option :log_enabled, :default => false
+    option :logger, :default => defined?(Rails) ? Rails.logger : ::Logger.new($stdout)
+    option :max_threads, :default => 20
+    option :authentication, :default => {}
+    option :username, :default => nil
+    option :password, :default => nil
+
+    def parse_config(options = {})
+      options.each_pair do |name, value|
+        send("#{name}=", value) if respond_to?("#{name}=")
+      end
+    end
+
+    def reset
+      settings.clear
+    end
   end
 end
+

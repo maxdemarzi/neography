@@ -37,6 +37,7 @@ require 'neography/equal'
 
 require 'neography/node'
 require 'neography/relationship'
+require 'neography/graph'
 
 find_and_require_user_defined_code
 

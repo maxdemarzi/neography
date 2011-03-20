@@ -116,7 +116,14 @@ module Neography
 #      end
 
       def get_node(id)
-        get("/node/#{get_id(id)}")
+        result = get("/node/#{get_id(id)}")
+        if result.nil?
+          nil
+        else
+          node = Neography::Node.new(result)
+          node.neo_server = self
+          node
+        end
       end
 
       def get_nodes(*nodes)
@@ -230,7 +237,9 @@ module Neography
 
       def delete_node!(id)
         relationships = get_node_relationships(get_id(id))
-        relationships.each { |r| delete_relationship(r["self"].split('/').last) } unless relationships.nil?
+        relationships.each { |r| 
+          delete_relationship(r["self"].split('/').last) 
+        } unless relationships.nil?
         delete("/node/#{get_id(id)}")
       end
 
