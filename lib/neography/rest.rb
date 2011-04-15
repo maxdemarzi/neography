@@ -54,7 +54,7 @@ module Neography
       end
 
       def get_root
-        get('/') 
+        get("/node/#{get_id(get('/')["reference_node"])}") 
       end
 
       def create_node(*args)

@@ -8,7 +8,8 @@ describe Neography::Rest do
   describe "get_root" do
     it "can get the root node" do
       root_node = @neo.get_root
-      root_node.should have_key("reference_node")
+      root_node.should have_key("self")
+      root_node["self"].split('/').last.should == "0"
     end
   end
 
