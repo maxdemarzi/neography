@@ -31,11 +31,20 @@ module Neography
       end
     end
 
-    def initialize(hash=nil, neo_server=nil)
+    def initialize(hash=nil, server=nil)
       super(hash)
       @start_node = hash["start"].split('/').last
       @end_node = hash["end"].split('/').last
       @rel_type = hash["type"]
+      neo_server = server
+    end
+    
+    def neo_server
+      @neo_server ||= self.start_node.neo_server
+    end
+    
+    def neo_server=(server)
+      @neo_server = server
     end
 
     def del
