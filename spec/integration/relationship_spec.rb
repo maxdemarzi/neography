@@ -19,7 +19,7 @@ describe Neography::Relationship do
       rel[:since].should == 1998
       rel[:colour].should == 'blue'
       rel.since.should == 1998
-      rel.colourshould == 'blue'
+      rel.colour.should == 'blue'
     end
 
     it "#outgoing(:friends).create(other) creates a new relationship between self and other node" do
