@@ -10,8 +10,6 @@ def find_and_require_user_defined_code
         end
       end
     end
-  else
-    puts "No Extensions Found: #{extensions_path}"
   end
 end
 
