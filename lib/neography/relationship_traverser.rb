@@ -21,8 +21,8 @@ module Neography
     def each
       iterator.each do |i| 
         rel = Neography::Relationship.new(i, @node.neo_server)
-        rel.start_node = Neography::Node.load(rel.start_node)
-        rel.end_node = Neography::Node.load(rel.end_node)
+        rel.start_node = Neography::Node.load(rel.start_node, @node.neo_server)
+        rel.end_node = Neography::Node.load(rel.end_node, @node.neo_server)
 
         yield rel if match_to_other?(rel)
       end

@@ -311,19 +311,19 @@ module Neography
         options = { :body => {"order" => get_order(description["order"]), 
                               "uniqueness" => get_uniqueness(description["uniqueness"]), 
                               "relationships" => description["relationships"], 
-                              "prune evaluator" => description["prune evaluator"], 
-                              "return filter" => description["return filter"], 
-                              "max depth" => get_depth(description["depth"]), }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+                              "prune_evaluator" => description["prune evaluator"], 
+                              "return_filter" => description["return filter"], 
+                              "max_depth" => get_depth(description["depth"]), }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         traversal = post("/node/#{get_id(id)}/traverse/#{get_type(return_type)}", options) || Array.new
       end
 
       def get_path(from, to, relationships, depth=1, algorithm="shortestPath")
-        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max_depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         path = post("/node/#{get_id(from)}/path", options) || Hash.new
       end
 
       def get_paths(from, to, relationships, depth=1, algorithm="allPaths")
-        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max_depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
