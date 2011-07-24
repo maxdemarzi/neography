@@ -34,6 +34,7 @@ require 'neography/relationship_traverser'
 require 'neography/node_traverser'
 require 'neography/path_traverser'
 require 'neography/equal'
+require 'neography/index'
 
 require 'neography/node'
 require 'neography/relationship'
