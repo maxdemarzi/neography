@@ -8,7 +8,11 @@ If you want to the full power of Neo4j, you will want to use JRuby and the excel
 
 === Installation
 
-  gem install 'neography'
+  gem install 'neography', '0.0.14' # for version 1.4 of Neo4j
+
+or 
+
+  gem install 'neography', '0.0.15' # for version 1.5 of Neo4j
 
 After that, in your ruby script:
 
@@ -16,15 +20,6 @@ After that, in your ruby script:
   require 'neography'
 
 in order to access the functionality.
-
-=== Try it now!
-
-I am hosting an instance of Neo4j (1.3M04) at neography.org for you to try out.
-
-You can see the administration at: {Neo4j Web Admin}[http://neography.org]
-
-  # Add this to your ruby file to use it
-  Neography::Config.server = 'neography.org'
 
 
 === Dependencies
