@@ -244,8 +244,9 @@ module Neography
       end
 
       def add_node_to_index(index, key, value, id)
-        options = { :body => (self.configuration + "/node/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
-        post("/index/node/#{index}/#{key}/#{value}", options)
+        options = { :body => ({:uri =>  self.configuration + "/node/#{get_id(id)}", :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
+        #post("/index/node/#{index}/#{key}/#{value}", options)
+        post("/index/node/#{index}", options)
       end
 
       def remove_node_from_index(*args)
@@ -283,8 +284,8 @@ module Neography
       end
 
       def add_relationship_to_index(index, key, value, id)
-        options = { :body => (self.configuration + "/relationship/#{get_id(id)}").to_json, :headers => {'Content-Type' => 'application/json'} } 
-        post("/index/relationship/#{index}/#{key}/#{value}", options)
+        options = { :body => ({:uri => self.configuration + "/relationship/#{get_id(id)}", :key => key, :value => value}).to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/relationship/#{index}", options)
       end
 
       def remove_relationship_from_index(*args)
