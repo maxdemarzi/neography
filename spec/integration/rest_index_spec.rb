@@ -214,6 +214,16 @@ describe Neography::Rest do
       @neo.remove_node_from_index("test_index", key, value, new_node) 
     end
 
+    it "can find a node index using generic query" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_index", key, value, new_node)
+      new_index = @neo.find_node_index("test_index", "#{key}: #{value}")
+      new_index.first["self"].should == new_node["self"]
+      @neo.remove_node_from_index("test_index", key, value, new_node)
+    end
+
     it "can get a relationship index" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
@@ -246,6 +256,18 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
       new_index = @neo.find_relationship_index("test_index", key, value) 
+      new_index.first["self"].should == new_relationship["self"]
+      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+    end
+
+    it "can find a relationship index using generic query" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_relationship_to_index("test_index", key, value, new_relationship)
+      new_index = @neo.find_relationship_index("test_index", "#{key}: #{value}")
       new_index.first["self"].should == new_relationship["self"]
       @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
     end
