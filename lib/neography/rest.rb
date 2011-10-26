@@ -263,8 +263,11 @@ module Neography
         index
       end
 
-      def find_node_index(index, key, value)
-        index = get("/index/node/#{index}/#{key}?query=#{value}") || Array.new
+      def find_node_index(*args)
+        case args.size
+          when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
+          when 2 then index = get("/index/node/#{args[0]}?query=#{args[1]}") || Array.new
+        end
         return nil if index.empty?
         index
       end
@@ -302,8 +305,11 @@ module Neography
         index
       end
 
-      def find_relationship_index(index, key, value)
-        index = get("/index/relationship/#{index}/#{key}?query=#{value}") || Array.new
+      def find_relationship_index(*args)
+        case args.size
+          when 3 then index = get("/index/relationship/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
+          when 2 then index = get("/index/relationship/#{args[0]}?query=#{args[1]}") || Array.new
+        end
         return nil if index.empty?
         index
       end
@@ -328,6 +334,11 @@ module Neography
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
+      def execute_script(script)
+        options = { :body => { :script => script } }
+        post("/ext/GremlinPlugin/graphdb/execute_script", options)
+      end
+      
       private
 
       def evaluate_response(response)
