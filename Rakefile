@@ -8,4 +8,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.pattern = "spec/integration/*_spec.rb"
 end
 
+desc "Run Tests"
 task :default => :spec
+
+

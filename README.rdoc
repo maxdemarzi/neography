@@ -4,7 +4,12 @@ Neography is a thin Ruby wrapper to the Neo4j Rest API, for more information:
 * {Getting Started with Neo4j Server}[http://wiki.neo4j.org/content/Getting_Started_with_Neo4j_Server]
 * {Neo4j Rest API Reference}[http://components.neo4j.org/neo4j-server/milestone/rest.html]
 
-If you want to the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j
+If you want to the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j by Andreas Ronge
+
+A complement to Neography is the Neology Gem at https://github.com/lordkada/neology by Carlo Alberto Degli Atti
+
+An alternative is the Architect4r Gem at https://github.com/namxam/architect4r by Maximilian Schulz 
+
 
 === Installation
 
@@ -36,6 +41,20 @@ in order to access the functionality.
 ==== Rails
 
 Just add gem 'neography' to your Gemfile and run bundle install
+
+=== Tasks
+
+In your Rakefile or "lib/tasks/neography.rake", add:
+
+  require 'neography/tasks'
+
+It will add the following rake tasks to your project:
+  
+  rake neo4j:install                           # Install Neo4j to the neo4j directory under your project 
+  rake neo4j:start                             # Start Neo4j
+  rake neo4j:stop                              # Stop Neo4j
+  rake neo4j:restart                           # Restart Neo4j
+  rake neo4j:reset_yes_i_am_sure               # Wipe your Neo4j Database 
 
 === Documentation
 
