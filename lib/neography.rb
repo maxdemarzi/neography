@@ -21,6 +21,8 @@ require 'httparty'
 require 'json'
 require 'logger'
 require 'ostruct'
+require 'os'
+require 'zip/zipfilesystem'
 
 require 'neography/config'
 require 'neography/rest'

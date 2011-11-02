@@ -56,6 +56,9 @@ It will add the following rake tasks to your project:
   rake neo4j:restart                           # Restart Neo4j
   rake neo4j:reset_yes_i_am_sure               # Wipe your Neo4j Database 
 
+Windows users will need to run in a command prompt with Administrative Privileges
+in order to install Neo4j as a Service. 
+
 === Documentation
 
   @neo = Neography::Rest.new({:protocol => 'http://', 

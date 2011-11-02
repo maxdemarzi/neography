@@ -25,4 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", "~> 0.8.7"
   s.add_dependency "httparty", "~> 0.7.3"
   s.add_dependency "json"
+  s.add_dependency "os"
+  s.add_dependency "rubyzip"
 end
