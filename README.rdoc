@@ -40,15 +40,9 @@ in order to access the functionality.
 
 ==== Rails
 
-Just add gem 'neography' to your Gemfile and run bundle install
+Just add gem 'neography' to your Gemfile and run bundle install.
 
-=== Tasks
-
-In your Rakefile or "lib/tasks/neography.rake", add:
-
-  require 'neography/tasks'
-
-It will add the following rake tasks to your project:
+The following tasks will be available to you:
   
   rake neo4j:install                           # Install Neo4j to the neo4j directory under your project 
   rake neo4j:start                             # Start Neo4j
@@ -58,6 +52,13 @@ It will add the following rake tasks to your project:
 
 Windows users will need to run in a command prompt with Administrative Privileges
 in order to install Neo4j as a Service. 
+
+If you are not using Rails, then add:
+
+  require 'neography/tasks'
+
+to your Rakefile to have access to these tasks.
+
 
 === Documentation
 

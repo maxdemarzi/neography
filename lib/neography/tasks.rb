@@ -84,7 +84,7 @@ namespace :neo4j do
       if %x[reg query "HKU\\S-1-5-19"].size > 0
          %x[neo4j/bin/Neo4j.bat restart] 
       else
-        puts "You do not have administrative rights to stop the Neo4j Service"   
+        puts "You do not have administrative rights to restart the Neo4j Service"   
       end
     else  
       %x[neo4j/bin/neo4j restart]
