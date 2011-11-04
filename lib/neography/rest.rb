@@ -334,17 +334,22 @@ module Neography
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
-      def execute_script(script)
-        options = { :body => { :script => script } }
-        post("/ext/GremlinPlugin/graphdb/execute_script", options)
+      def execute_query(query)
+          options = { :body => {:query => query}.to_json, :headers => {'Content-Type' => 'application/json'} }
+          result = post("/ext/CypherPlugin/graphdb/execute_query", options)
       end
       
+      def execute_script(script)
+        options = { :body => "script=" + CGI::escape(script), :headers => {'Content-Type' => 'application/x-www-form-urlencoded'} }
+        result = post("/ext/GremlinPlugin/graphdb/execute_script", options)
+        result == "null" ? nil : result
+      end
+            
       private
 
       def evaluate_response(response)
         code = response.code
         body = response.body
-     
         case code 
           when 200 
             @logger.debug "OK" if @log_enabled

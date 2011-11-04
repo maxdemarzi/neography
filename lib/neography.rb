@@ -17,6 +17,7 @@ end
 
 DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
 
+require 'cgi'
 require 'httparty'
 require 'json'
 require 'logger'

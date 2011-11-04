@@ -131,8 +131,8 @@ To Use:
   @neo.get_relationship_index(index, key, value)             # exact query of the relationship index with the given key/value pair
   @neo.find_relationship_index(index, key, value)            # advanced query of the relationship index with the given key/value pair
   @neo.find_relationship_index(index, query)                 # advanced query of the relationship index with the given query
-  @neo.execute_script(script)                                # sends an arbitrary Groovy script (through the Gremlin plugin)
-
+  @neo.execute_script("g.v(0)")                              # sends a Groovy script(through the Gremlin plugin)
+  @neo.execute_query("start n=node(0) return n")             # sends a Cypher query (through the Cypher plugin)
 
   @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
