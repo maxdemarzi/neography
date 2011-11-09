@@ -17,7 +17,7 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 
 or 
 
-  gem install 'neography', '0.0.15' # for version 1.5 of Neo4j
+  gem install 'neography'           # for version 1.5M02 of Neo4j or higher
 
 After that, in your ruby script:
 
