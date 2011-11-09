@@ -1,4 +1,5 @@
 # borrowed from architect4r
+require 'os'
 
 namespace :neo4j do
   desc "Install Neo4j"

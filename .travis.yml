@@ -1,1 +1,1 @@
-script: "bundle exec rake neo4j:install neo4j:start spec"
+script: "bundle exec rake neo4j:install neo4j:start spec --trace"
