@@ -36,7 +36,6 @@ in order to access the functionality.
   for development:
   rspec 
   net-http-spy 
-  fakeweb 
 
 ==== Rails
 
