@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'neography'
 
-Neography::Config.server = 'neography.org'
 @neo = Neography::Rest.new
 
 johnathan = Neography::Node.create("name" =>'Johnathan')
