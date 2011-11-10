@@ -1,11 +1,11 @@
 module Neography
   module Index
 
-    def index
+    def index(*args)
 
     end
 
-    def find
+    def find(*args)
 
     end
 

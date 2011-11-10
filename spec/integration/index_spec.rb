@@ -2,6 +2,7 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Neography::Relationship, "find" do
   before(:each) do
+    pending "Phase 2 - Index part is not done."
     Neography::Relationship.index(:strength)
   end
 

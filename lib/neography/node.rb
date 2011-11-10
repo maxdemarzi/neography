@@ -1,6 +1,6 @@
 module Neography
   class Node < PropertyContainer
-    include Neography::Index
+    extend  Neography::Index
     include Neography::NodeRelationship
     include Neography::NodePath
     include Neography::Equal

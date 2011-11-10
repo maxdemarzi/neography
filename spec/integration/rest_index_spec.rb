@@ -10,7 +10,7 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
       @neo.list_indexes.should_not be_nil
     end
 
@@ -20,7 +20,7 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       @neo.list_relationship_indexes.should_not be_nil
     end
   end
@@ -70,10 +70,10 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_node_from_index("test_index", key, value, new_node) 
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
   
     it "can add a relationship to an index" do
@@ -82,10 +82,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship) 
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship) 
     end
   end
 
@@ -94,11 +94,11 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_node_from_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should be_nil
     end
 
@@ -106,11 +106,11 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_node_from_index("test_index", key, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.remove_node_from_index("test_node_index", key, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should be_nil
     end
 
@@ -118,11 +118,11 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_node_from_index("test_index", new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.remove_node_from_index("test_node_index", new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should be_nil
     end
 
@@ -132,11 +132,11 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should be_nil
     end
 
@@ -146,11 +146,11 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_relationship_from_index("test_index", key, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.remove_relationship_from_index("test_relationship_index", key, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should be_nil
     end
 
@@ -160,11 +160,11 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_relationship_from_index("test_index", new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.remove_relationship_from_index("test_relationship_index", new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should be_nil
     end
   end
@@ -174,10 +174,10 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_node_from_index("test_index", key, value, new_node) 
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
     it "can get a relationship index" do
@@ -186,10 +186,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should_not be_nil
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
   end
 
@@ -198,30 +198,30 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.get_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.first["self"].should == new_node["self"]
-      @neo.remove_node_from_index("test_index", key, value, new_node) 
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
     it "can find a node index" do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node) 
-      new_index = @neo.find_node_index("test_index", key, value) 
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.find_node_index("test_node_index", key, value) 
       new_index.first["self"].should == new_node["self"]
-      @neo.remove_node_from_index("test_index", key, value, new_node) 
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
     it "can find a node index using generic query" do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      @neo.add_node_to_index("test_index", key, value, new_node)
-      new_index = @neo.find_node_index("test_index", "#{key}: #{value}")
+      @neo.add_node_to_index("test_node_index", key, value, new_node)
+      new_index = @neo.find_node_index("test_node_index", "#{key}: #{value}")
       new_index.first["self"].should == new_node["self"]
-      @neo.remove_node_from_index("test_index", key, value, new_node)
+      @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
     it "can get a relationship index" do
@@ -230,10 +230,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.first["self"].should == new_relationship["self"]
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
     it "can get a relationship index with empty spaces" do
@@ -242,10 +242,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text + " " + generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.get_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.first["self"].should == new_relationship["self"]
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
     it "can find a relationship index" do
@@ -254,10 +254,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship) 
-      new_index = @neo.find_relationship_index("test_index", key, value) 
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.find_relationship_index("test_relationship_index", key, value) 
       new_index.first["self"].should == new_relationship["self"]
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
     it "can find a relationship index using generic query" do
@@ -266,10 +266,10 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       key = generate_text(6)
       value = generate_text
-      @neo.add_relationship_to_index("test_index", key, value, new_relationship)
-      new_index = @neo.find_relationship_index("test_index", "#{key}: #{value}")
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship)
+      new_index = @neo.find_relationship_index("test_relationship_index", "#{key}: #{value}")
       new_index.first["self"].should == new_relationship["self"]
-      @neo.remove_relationship_from_index("test_index", key, value, new_relationship)
+      @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
     it "can find use the results of a node index" do
@@ -278,17 +278,17 @@ describe Neography::Rest do
       key = generate_text(6)
       value1 = generate_text
       value2 = generate_text
-      @neo.add_node_to_index("test_index", key, value1, new_node1) 
-      @neo.add_node_to_index("test_index", key, value2, new_node2) 
-      existing_node1 = @neo.get_node_index("test_index", key, value1)
-      existing_node2 = @neo.get_node_index("test_index", key, value2)
+      @neo.add_node_to_index("test_node_index", key, value1, new_node1) 
+      @neo.add_node_to_index("test_node_index", key, value2, new_node2) 
+      existing_node1 = @neo.get_node_index("test_node_index", key, value1)
+      existing_node2 = @neo.get_node_index("test_node_index", key, value2)
       new_relationship = @neo.create_relationship("friends", existing_node1, existing_node2)
       new_relationship["start"].should_not be_nil
       new_relationship["start"].should == new_node1["self"]
       new_relationship["end"].should_not be_nil
       new_relationship["end"].should == new_node2["self"]
-      @neo.remove_node_from_index("test_index", new_node1) 
-      @neo.remove_node_from_index("test_index", new_node2) 
+      @neo.remove_node_from_index("test_node_index", new_node1) 
+      @neo.remove_node_from_index("test_node_index", new_node2) 
     end
 
   end

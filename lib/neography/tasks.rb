@@ -11,7 +11,7 @@ namespace :neo4j do
       unless File.exist?('neo4j.zip')
         df = File.open('neo4j.zip', 'wb')
         begin
-          df << HTTParty.get("http://dist.neo4j.org/neo4j-community-1.5.M02-windows.zip")
+          df << HTTParty.get("http://dist.neo4j.org/neo4j-community-1.5-windows.zip")
         ensure
           df.close()
         end
@@ -30,7 +30,7 @@ namespace :neo4j do
            end
           end
         end
-        FileUtils.mv "neo4j-community-1.5.M02", "neo4j"
+        FileUtils.mv "neo4j-community-1.5", "neo4j"
      end
 
       # Install if running with Admin Privileges
@@ -40,10 +40,10 @@ namespace :neo4j do
       end
 
     else    
-      %x[wget http://dist.neo4j.org/neo4j-community-1.5.M02-unix.tar.gz]
-      %x[tar -xvzf neo4j-community-1.5.M02-unix.tar.gz]
-      %x[mv neo4j-community-1.5.M02 neo4j]
-      %x[rm neo4j-community-1.5.M02-unix.tar.gz]
+      %x[wget http://dist.neo4j.org/neo4j-community-1.5-unix.tar.gz]
+      %x[tar -xvzf neo4j-community-1.5-unix.tar.gz]
+      %x[mv neo4j-community-1.5 neo4j]
+      %x[rm neo4j-community-1.5-unix.tar.gz]
       puts "Neo4j Installed in to neo4j directory."
     end
     puts "Type 'rake neo4j:start' to start it"
