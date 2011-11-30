@@ -43,7 +43,10 @@ Just add gem 'neography' to your Gemfile and run bundle install.
 
 The following tasks will be available to you:
   
-  rake neo4j:install                           # Install Neo4j to the neo4j directory under your project 
+  rake neo4j:install                           # Install Neo4j to the neo4j directory under your project
+  rake neo4j:install[community,1.6.M01]        # Install Neo4j Community edition, version 1.6.M01
+  rake neo4j:install[advanced,1.5]             # Install Neo4j Advanced edition, version 1.5 
+  rake neo4j:install[enterprise,1.5]           # Install Neo4j Enterprise edition, version 1.5
   rake neo4j:start                             # Start Neo4j
   rake neo4j:stop                              # Stop Neo4j
   rake neo4j:restart                           # Restart Neo4j

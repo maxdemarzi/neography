@@ -3,15 +3,16 @@ require 'os'
 
 namespace :neo4j do
   desc "Install Neo4j"
-  task :install do
-    puts 'Installing Neo4j...'
+  task :install, :edition, :version do |t, args|
+    args.with_defaults(:edition => "community", :version => "1.6.M01")
+    puts "Installing Neo4j-#{args[:edition]}-#{args[:version]}"
     
     if OS::Underlying.windows?
       # Download Neo4j    
       unless File.exist?('neo4j.zip')
         df = File.open('neo4j.zip', 'wb')
         begin
-          df << HTTParty.get("http://dist.neo4j.org/neo4j-community-1.5-windows.zip")
+          df << HTTParty.get("http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-windows.zip")
         ensure
           df.close()
         end
@@ -30,7 +31,7 @@ namespace :neo4j do
            end
           end
         end
-        FileUtils.mv "neo4j-community-1.5", "neo4j"
+        FileUtils.mv "neo4j-#{args[:edition]}-#{args[:version]}", "neo4j"
      end
 
       # Install if running with Admin Privileges
@@ -40,10 +41,10 @@ namespace :neo4j do
       end
 
     else    
-      %x[wget http://dist.neo4j.org/neo4j-community-1.5-unix.tar.gz]
-      %x[tar -xvzf neo4j-community-1.5-unix.tar.gz]
-      %x[mv neo4j-community-1.5 neo4j]
-      %x[rm neo4j-community-1.5-unix.tar.gz]
+      %x[wget http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
+      %x[tar -xvzf neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
+      %x[mv neo4j-#{args[:edition]}-#{args[:version]} neo4j]
+      %x[rm neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
       puts "Neo4j Installed in to neo4j directory."
     end
     puts "Type 'rake neo4j:start' to start it"
