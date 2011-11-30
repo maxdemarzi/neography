@@ -176,6 +176,14 @@ module Neography
         get("/relationship/#{get_id(id)}")
       end
 
+      def get_relationship_start_node(rel)
+        get_node(rel["start"])
+      end
+      
+      def get_relationship_end_node(rel)
+        get_node(rel["end"])
+      end
+      
       def reset_relationship_properties(id, properties)
         options = { :body => properties.to_json, :headers => {'Content-Type' => 'application/json'} } 
         put("/relationship/#{get_id(id)}/properties", options)
