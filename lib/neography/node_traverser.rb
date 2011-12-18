@@ -101,7 +101,7 @@ module Neography
 
     def each
       iterator.each do |i| 
-        node = Neography::Node.new(i)
+        node = @from.class.new(i)
         node.neo_server = @from.neo_server
         yield node
       end
