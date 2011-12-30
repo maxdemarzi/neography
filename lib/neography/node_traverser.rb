@@ -116,7 +116,7 @@ module Neography
       options["return filter"] = @filter unless @filter.nil?
       options["depth"] = @depth unless @depth.nil?
 
-      if @relationships[0]["type"].blank?
+      if @relationships[0]["type"].nil?
         rels = @from.neo_server.get_node_relationships(@from, @relationships[0]["direction"])
         case @relationships[0]["direction"]
           when "in"
