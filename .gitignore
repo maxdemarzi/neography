@@ -1,3 +1,4 @@
+neo4j
 pkg/*
 *.gem
 .bundle
