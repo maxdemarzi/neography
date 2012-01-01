@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     neography (0.0.17)
-      httparty
+      httparty (= 0.7.8)
       json
       os
       rubyzip
@@ -10,16 +10,13 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    crack (0.1.8)
     diff-lcs (1.1.2)
-    httparty (0.8.1)
-      multi_json
-      multi_xml
-    json (1.6.3)
-    json (1.6.3-java)
-    multi_json (1.0.4)
-    multi_xml (0.4.1)
+    httparty (0.7.8)
+      crack (= 0.1.8)
+    json (1.6.4)
     net-http-spy (0.2.1)
-    os (0.9.4)
+    os (0.9.5)
     rake (0.8.7)
     rspec (2.0.1)
       rspec-core (~> 2.0.1)
@@ -31,7 +28,7 @@ GEM
     rspec-mocks (2.0.1)
       rspec-core (~> 2.0.1)
       rspec-expectations (~> 2.0.1)
-    rubyzip (0.9.4)
+    rubyzip (0.9.5)
 
 PLATFORMS
   java
