@@ -15,4 +15,5 @@ end
 
 RSpec.configure do |c|
   c.filter_run_excluding :slow => true
+  c.filter_run_excluding :break_gremlin => true
 end

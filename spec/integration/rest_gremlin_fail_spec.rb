@@ -25,7 +25,7 @@ describe Neography::Rest do
 
 
   describe "break gremlin" do
-    it "can can't handle node and relationship indexes with the same name" do
+    it "can can't handle node and relationship indexes with the same name", :break_gremlin => true do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
