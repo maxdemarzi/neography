@@ -12,10 +12,8 @@ module Neography
       if value.nil?
         if self.is_a? Neography::Node
           neo_server.remove_node_properties(self.neo_id, [key])
-          @table[key] = nil
         else
           neo_server.remove_relationship_properties(self.neo_id, [key])
-          @table[key] = nil
         end
       else
         if self.is_a? Neography::Node
@@ -23,10 +21,9 @@ module Neography
         else
           neo_server.set_relationship_properties(self.neo_id, {k => value})
         end
-       
         new_ostruct_member(k) unless self.respond_to?(key)
-
       end
+      @table[key] = value
     end
 
 
@@ -40,6 +37,7 @@ module Neography
         self[name.to_sym] = x        
       end
     end
+   name
   end
 
 

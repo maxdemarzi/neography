@@ -148,6 +148,23 @@ describe Neography::Node do
       existing_node.eyes.should == "brown"
       existing_node.hair.should == "black"
     end
+
+    it "can pass issue 18" do
+      n = Neography::Node.create("name" => "Test")
+      n.prop = 1
+      n.prop.should == 1           
+      n.prop = 1                   
+      n.prop.should == 1           
+      n[:prop].should == 1         
+      n[:prop2] = 2                  
+      n[:prop2].should == 2          
+      n[:prop2] = 2                  
+      n[:prop2].should == 2          
+      n.name                         
+      n.name = "New Name"            
+      n.name.should == "New Name"
+    end
+
   end
 
   describe "get node properties" do
