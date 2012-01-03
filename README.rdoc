@@ -284,10 +284,22 @@ Phase 2 way of doing these:
 
 === To Do
 
+* Batch functions
 * Phase 2 Index functionality
 * More Tests
 * More Examples
 * Mixins ?
+
+=== Contributing
+
+{<img src="https://secure.travis-ci.org/maxdemarzi/neography.png" />}[http://travis-ci.org/maxdemarzi/neography]
+
+Please create a {new issue}[https://github.com/maxdemarzi/neography/issues] if you run into any bugs.
+Contribute patches via pull requests.
+
+=== Help
+
+If you are just starting out, or need help send me an e-mail at maxdemazi@gmail.com.
 
 === Licenses
 
