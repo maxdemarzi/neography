@@ -1,6 +1,16 @@
 module Neography
+  
   class Rest
     include HTTParty
+    
+    class CrackParser < HTTParty::Parser
+      require 'crack'
+      
+      protected 
+        def json
+          Crack::JSON.parse(body)
+        end
+    end
 
     attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
 
@@ -14,7 +24,8 @@ module Neography
                 :max_threads    => Neography::Config.max_threads,
                 :authentication => Neography::Config.authentication,
                 :username       => Neography::Config.username,
-                :password       => Neography::Config.password}
+                :password       => Neography::Config.password,
+                }
 
         unless options.respond_to?(:each_pair)
           url = URI.parse(options)
@@ -40,6 +51,7 @@ module Neography
         @max_threads    = init[:max_threads]
         @authentication = Hash.new
         @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
+        @parser = {:parser => CrackParser}
       end
 
       def configure(protocol, server, port, directory)
@@ -381,19 +393,19 @@ module Neography
       end
 
        def get(path,options={})
-          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication)))
+          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
        end
 
        def post(path,options={})
-          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication)))
+          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
        end
 
        def put(path,options={})
-          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication)))
+          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
        end
 
        def delete(path,options={})
-          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication)))
+          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
        end
 
       def get_id(id)
