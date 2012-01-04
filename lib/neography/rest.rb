@@ -352,8 +352,30 @@ module Neography
         result = post("/ext/GremlinPlugin/graphdb/execute_script", options)
         result == "null" ? nil : result
       end
+
+      def batch(*args)
+        batch = []
+        Array(args).each_with_index do |c,i|
+          batch << {:id => i}.merge(get_batch(c))
+        end
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/batch", options)
+      end
             
       private
+
+      def get_batch(args)
+        case args[0]
+          when :get_node
+            {:method => "GET", :to => "/node/#{get_id(args[1])}", :body => args[2]}
+          when :create_node
+            {:method => "POST", :to => "/node/", :body => args[1]}
+          when :set_node_property
+            {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
+          when :reset_node_properties
+            {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties", :body => args[2]}
+        end
+     end
 
       def evaluate_response(response)
         code = response.code
