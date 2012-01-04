@@ -158,6 +158,20 @@ To Use:
 
 Please see the specs for more examples.
 
+Batch (in progress):
+
+  @neo.batch [:get_node, node1], [:get_node, node2]                        # Gets two nodes in a batch
+  @neo.batch [:create_node, {"name" => "Max"}], 
+             [:create_node, {"name" => "Marc"}]                            # Creates two nodes in a batch
+  @neo.batch [:set_node_property, node1, {"name" => "Tom"}], 
+             [:set_node_property, node2, {"name" => "Jerry"}]              # Sets the property of two nodes
+  @neo.batch [:get_relationship, rel1],
+             [:get_relationship, rel2]                                     # Gets two relationships in a batch
+  @neo.batch [:create_relationship, "friends",
+               node1, node2, {:since => "high school"}]
+             [:create_relationship, "friends",
+               node1, node3, {:since => "college"}]                        # Creates two relationships in a batch
+
 Experimental:
 
   nodes = @neo.create_nodes(5)                                              # Create 5 empty nodes

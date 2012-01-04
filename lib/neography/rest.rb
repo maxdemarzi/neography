@@ -253,7 +253,6 @@ module Neography
 
       def add_node_to_index(index, key, value, id)
         options = { :body => ({:uri =>  self.configuration + "/node/#{get_id(id)}", :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
-        #post("/index/node/#{index}/#{key}/#{value}", options)
         post("/index/node/#{index}", options)
       end
 
@@ -367,13 +366,23 @@ module Neography
       def get_batch(args)
         case args[0]
           when :get_node
-            {:method => "GET", :to => "/node/#{get_id(args[1])}", :body => args[2]}
+            {:method => "GET", :to => "/node/#{get_id(args[1])}"}
           when :create_node
             {:method => "POST", :to => "/node/", :body => args[1]}
           when :set_node_property
             {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
           when :reset_node_properties
             {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties", :body => args[2]}
+          when :get_relationship
+            {:method => "GET", :to => "/relationship/#{get_id(args[1])}"}
+          when :create_relationship
+            {:method => "POST", :to => "/node/#{get_id(args[2])}/relationships", :body => {:to => "/node/#{get_id(args[3])}", :type => args[1], :data => args[4] } }
+          when :set_relationship_property
+            {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
+          when :reset_relationship_properties
+            {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties", :body => args[2]}
+          when :add_node_to_index
+            {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => "/node/#{get_id(args[4])}", :key => args[2], :value => args[3] } }
         end
      end
 

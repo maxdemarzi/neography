@@ -97,31 +97,53 @@ describe Neography::Rest do
     end
 
     it "can get a single relationship" do
-      pending
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", node1, node2)
+      batch_result = @neo.batch [:get_relationship, new_relationship]
+      batch_result.first["body"]["type"].should == "friends"
+      batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
+      batch_result.first["body"]["self"].should == new_relationship["self"]
     end
     
-    it "can get multiple relationships" do
-      pending
-    end
-
     it "can create a single relationship" do
-      pending
-    end
-
-    it "can create multiple relationships" do
-      pending
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      batch_result = @neo.batch [:create_relationship, "friends", node1, node2, {:since => "high school"}]
+      batch_result.first["body"]["type"].should == "friends"
+      batch_result.first["body"]["data"]["since"].should == "high school"
+      batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
     end
 
     it "can update a single relationship" do
-      pending
-    end
-
-    it "can update multiple relationships" do
-      pending
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", node1, node2, {:since => "high school"})
+      batch_result = @neo.batch [:set_relationship_property, new_relationship, {:since => "college"}]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_relationship = @neo.get_relationship(new_relationship)
+      existing_relationship["type"].should == "friends"
+      existing_relationship["data"]["since"].should == "college"
+      existing_relationship["start"].split('/').last.should == node1["self"].split('/').last
+      existing_relationship["end"].split('/').last.should == node2["self"].split('/').last
+      existing_relationship["self"].should == new_relationship["self"]
     end
 
     it "can add a node to an index" do
-      pending
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      new_index = @neo.get_node_index("test_node_index", key, value) 
+      batch_result = @neo.batch [:add_node_to_index, "test_node_index", key, value, new_node]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_index = @neo.find_node_index("test_node_index", key, value) 
+      existing_index.should_not be_nil
+      existing_index.first["self"].should == new_node["self"]
+      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
   end
 
