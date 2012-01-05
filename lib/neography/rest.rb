@@ -376,13 +376,15 @@ module Neography
           when :get_relationship
             {:method => "GET", :to => "/relationship/#{get_id(args[1])}"}
           when :create_relationship
-            {:method => "POST", :to => "/node/#{get_id(args[2])}/relationships", :body => {:to => "/node/#{get_id(args[3])}", :type => args[1], :data => args[4] } }
+            {:method => "POST", :to => (args[2].is_a?(String) && args[2].start_with?("{") ? "" : "/node/") + "#{get_id(args[2])}/relationships", :body => {:to => (args[3].is_a?(String) && args[3].start_with?("{") ? "" : "/node/") + "#{get_id(args[3])}", :type => args[1], :data => args[4] } }
           when :set_relationship_property
             {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
           when :reset_relationship_properties
             {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties", :body => args[2]}
           when :add_node_to_index
-            {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => "/node/#{get_id(args[4])}", :key => args[2], :value => args[3] } }
+            {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/node/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
+          when :add_relationship_to_index
+            {:method => "POST", :to => "/index/relationship/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/relationship/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
         end
      end
 

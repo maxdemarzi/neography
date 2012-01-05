@@ -149,19 +149,65 @@ describe Neography::Rest do
 
   describe "referenced batch" do
     it "can create a relationship from two newly created nodes" do
-      pending
+      batch_result = @neo.batch [:create_node, {"name" => "Max"}], [:create_node, {"name" => "Marc"}], [:create_relationship, "friends", "{0}", "{1}", {:since => "high school"}]
+      batch_result.first["body"]["data"]["name"].should == "Max"
+      batch_result[1]["body"]["data"]["name"].should == "Marc"
+      batch_result.last["body"]["type"].should == "friends"
+      batch_result.last["body"]["data"]["since"].should == "high school"
+      batch_result.last["body"]["start"].split('/').last.should == batch_result.first["body"]["self"].split('/').last
+      batch_result.last["body"]["end"].split('/').last.should == batch_result[1]["body"]["self"].split('/').last
     end
 
     it "can create a relationship from an existing node and a newly created node" do
-      pending
+      node1 = @neo.create_node("name" => "Max", "weight" => 200)
+      batch_result = @neo.batch [:create_node, {"name" => "Marc"}], [:create_relationship, "friends", "{0}", node1, {:since => "high school"}]
+      batch_result.first["body"]["data"]["name"].should == "Marc"
+      batch_result.last["body"]["type"].should == "friends"
+      batch_result.last["body"]["data"]["since"].should == "high school"
+      batch_result.last["body"]["start"].split('/').last.should == batch_result.first["body"]["self"].split('/').last
+      batch_result.last["body"]["end"].split('/').last.should == node1["self"].split('/').last
     end
 
     it "can add a newly created node to an index" do
-      pending
+      key = generate_text(6)
+      value = generate_text
+      new_index = @neo.get_node_index("test_node_index", key, value) 
+      batch_result = @neo.batch [:create_node, {"name" => "Max"}], [:add_node_to_index, "test_node_index", key, value, "{0}"]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_index = @neo.find_node_index("test_node_index", key, value) 
+      existing_index.should_not be_nil
+      existing_index.first["self"].should == batch_result.first["body"]["self"]
+      @neo.remove_node_from_index("test_node_index", key, value, batch_result.first["body"]["self"].split('/').last) 
     end
 
     it "can add a newly created relationship to an index" do
-      pending
+      key = generate_text(6)
+      value = generate_text
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      batch_result = @neo.batch [:create_relationship, "friends", node1, node2, {:since => "high school"}], [:add_relationship_to_index, "test_relationship_index", key, value, "{0}"]
+      batch_result.first["body"]["type"].should == "friends"
+      batch_result.first["body"]["data"]["since"].should == "high school"
+      batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
+      existing_index = @neo.find_relationship_index("test_relationship_index", key, value) 
+      existing_index.should_not be_nil
+      existing_index.first["self"].should == batch_result.first["body"]["self"]
+
+    end
+
+    it "can kitchen sink" do
+      key = generate_text(6)
+      value = generate_text
+
+      batch_result = @neo.batch [:create_node, {"name" => "Max"}], 
+                                [:create_node, {"name" => "Marc"}],                           
+                                [:add_node_to_index, "test_node_index", key, value, "{0}"]
+                                [:add_node_to_index, "test_node_index", key, value, "{1}"]
+                                [:create_relationship, "friends", "{0}", "{1}", {:since => "college"}]                        
+                                [:add_relationship_to_index, "test_relationship_index", key, value, "{4}"] 
+      batch_result.should_not be_nil
     end
   end
   

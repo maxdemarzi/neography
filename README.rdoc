@@ -171,6 +171,16 @@ Batch (in progress):
                node1, node2, {:since => "high school"}]
              [:create_relationship, "friends",
                node1, node3, {:since => "college"}]                        # Creates two relationships in a batch
+  @neo.batch [:create_node, {"name" => "Max"}], 
+             [:create_node, {"name" => "Marc"}],                           # Creates two nodes and index them
+             [:add_node_to_index, "test_node_index", key, value, "{0}"]
+             [:add_node_to_index, "test_node_index", key, value, "{1}"]
+             [:create_relationship, "friends",                             # and create a relationship for those
+               "{0}", "{1}", {:since => "college"}]                        # newly created nodes
+             [:add_relationship_to_index, 
+               "test_relationship_index", key, value, "{4}"]               # and index the new relationship
+
+See http://docs.neo4j.org/chunked/milestone/rest-api-batch-ops.html for Neo4j Batch operations documentation.
 
 Experimental:
 
