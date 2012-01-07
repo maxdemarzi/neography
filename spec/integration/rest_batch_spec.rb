@@ -47,6 +47,13 @@ describe Neography::Rest do
       batch_result.last["body"]["data"]["name"].should == "Marc"
     end
 
+    it "can create multiple nodes given an *array" do
+      batch_result = @neo.batch *[[:create_node, {"name" => "Max"}], [:create_node, {"name" => "Marc"}]]
+      batch_result.first["body"]["data"]["name"].should == "Max"
+      batch_result.last["body"]["data"]["name"].should == "Marc"
+    end
+
+
     it "can update a property of a node" do
       new_node = @neo.create_node("name" => "Max")
       batch_result = @neo.batch [:set_node_property, new_node, {"name" => "Marc"}]
