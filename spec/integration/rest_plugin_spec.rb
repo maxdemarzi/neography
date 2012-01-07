@@ -11,6 +11,27 @@ describe Neography::Rest do
       root_node.should have_key("self")
       root_node["self"].split('/').last.should == "0"
     end
+
+    it "can get the a node" do
+      new_node = @neo.create_node
+      id = new_node["self"].split('/').last
+      existing_node = @neo.execute_script("g.v(#{id})")
+      existing_node.should_not be_nil
+      existing_node.should have_key("self")
+      existing_node["self"].split('/').last.should == id
+    end
+
+    it "can get the a node with a variable" do
+      new_node = @neo.create_node
+      id = new_node["self"].split('/').last
+      existing_node = @neo.execute_script("g.v(id)", {:id => id})
+      existing_node.should_not be_nil
+      existing_node.should have_key("self")
+      existing_node["self"].split('/').last.should == id
+    end
+
+
+
   end
 
   describe "execute cypher query" do

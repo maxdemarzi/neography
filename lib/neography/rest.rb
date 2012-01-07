@@ -346,8 +346,8 @@ module Neography
           result = post("/ext/CypherPlugin/graphdb/execute_query", options)
       end
       
-      def execute_script(script)
-        options = { :body => "script=" + CGI::escape(script), :headers => {'Content-Type' => 'application/x-www-form-urlencoded'} }
+      def execute_script(script, params = {})
+        options = { :body => {:script => script, :params => params}.to_json , :headers => {'Content-Type' => 'application/json'} }
         result = post("/ext/GremlinPlugin/graphdb/execute_script", options)
         result == "null" ? nil : result
       end
