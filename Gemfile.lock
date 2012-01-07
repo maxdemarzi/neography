@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    neography (0.0.17)
+    neography (0.0.19)
       httparty (= 0.7.8)
       json
       os
@@ -15,7 +15,6 @@ GEM
     httparty (0.7.8)
       crack (= 0.1.8)
     json (1.6.4)
-    json (1.6.4-java)
     net-http-spy (0.2.1)
     os (0.9.5)
     rake (0.8.7)
