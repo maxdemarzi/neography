@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "net-http-spy", "0.2.1"
-  s.add_development "rake", ">= 0.8.7"
+  s.add_dependency "rake", ">= 0.8.7"
   s.add_dependency "httparty", "~> 0.7.8"
   s.add_dependency "json"
   s.add_dependency "os"
