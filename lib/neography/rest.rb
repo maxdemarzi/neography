@@ -265,7 +265,6 @@ module Neography
 
       def add_node_to_index(index, key, value, id)
         options = { :body => ({:uri =>  self.configuration + "/node/#{get_id(id)}", :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
-        #post("/index/node/#{index}/#{key}/#{value}", options)
         post("/index/node/#{index}", options)
       end
 
@@ -354,18 +353,57 @@ module Neography
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
-      def execute_query(query)
+      def execute_query_old(query)
           options = { :body => {:query => query}.to_json, :headers => {'Content-Type' => 'application/json'} }
           result = post("/ext/CypherPlugin/graphdb/execute_query", options)
       end
+
+      def execute_query(query, params = {})
+          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
+          result = post("/ext/CypherPlugin/graphdb/execute_query", options)
+      end
       
-      def execute_script(script)
-        options = { :body => "script=" + CGI::escape(script), :headers => {'Content-Type' => 'application/x-www-form-urlencoded'} }
+      def execute_script(script, params = {})
+        options = { :body => {:script => script, :params => params}.to_json , :headers => {'Content-Type' => 'application/json'} }
         result = post("/ext/GremlinPlugin/graphdb/execute_script", options)
         result == "null" ? nil : result
       end
+
+      def batch(*args)
+        batch = []
+        Array(args).each_with_index do |c,i|
+          batch << {:id => i}.merge(get_batch(c))
+        end
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/batch", options)
+      end
             
       private
+
+      def get_batch(args)
+        case args[0]
+          when :get_node
+            {:method => "GET", :to => "/node/#{get_id(args[1])}"}
+          when :create_node
+            {:method => "POST", :to => "/node/", :body => args[1]}
+          when :set_node_property
+            {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
+          when :reset_node_properties
+            {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties", :body => args[2]}
+          when :get_relationship
+            {:method => "GET", :to => "/relationship/#{get_id(args[1])}"}
+          when :create_relationship
+            {:method => "POST", :to => (args[2].is_a?(String) && args[2].start_with?("{") ? "" : "/node/") + "#{get_id(args[2])}/relationships", :body => {:to => (args[3].is_a?(String) && args[3].start_with?("{") ? "" : "/node/") + "#{get_id(args[3])}", :type => args[1], :data => args[4] } }
+          when :set_relationship_property
+            {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
+          when :reset_relationship_properties
+            {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties", :body => args[2]}
+          when :add_node_to_index
+            {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/node/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
+          when :add_relationship_to_index
+            {:method => "POST", :to => "/index/relationship/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/relationship/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
+        end
+     end
 
       def evaluate_response(response)
         code = response.code

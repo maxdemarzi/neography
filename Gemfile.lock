@@ -1,11 +1,12 @@
 PATH
   remote: .
   specs:
-    neography (0.0.18)
+    neography (0.0.20)
       crack (= 0.1.8)
       httparty (= 0.8.1)
       json
       os
+      rake (>= 0.8.7)
       rubyzip
 
 GEM
