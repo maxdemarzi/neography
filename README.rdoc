@@ -13,11 +13,8 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 
 === Installation
 
-  gem install 'neography', '0.0.14' # for version 1.4 of Neo4j
+  gem install 'neography'
 
-or 
-
-  gem install 'neography'           # for version 1.5M of Neo4j or higher
 
 After that, in your ruby script:
 
