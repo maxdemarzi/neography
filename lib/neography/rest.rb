@@ -341,11 +341,6 @@ module Neography
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
 
-      def execute_query_old(query)
-          options = { :body => {:query => query}.to_json, :headers => {'Content-Type' => 'application/json'} }
-          result = post("/ext/CypherPlugin/graphdb/execute_query", options)
-      end
-
       def execute_query(query, params = {})
           options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
           result = post("/ext/CypherPlugin/graphdb/execute_query", options)
