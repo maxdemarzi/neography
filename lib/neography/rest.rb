@@ -59,7 +59,7 @@ module Neography
 
       def create_node(*args)
         if args[0].respond_to?(:each_pair) && args[0] 
-          options = { :body => args[0].to_json, :headers => {'Content-Type' => 'application/json'} } 
+          options = { :body => args[0].delete_if { |k, v| v.nil? }.to_json, :headers => {'Content-Type' => 'application/json'} } 
           post("/node", options) 
         else
           post("/node") 

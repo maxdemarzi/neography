@@ -24,6 +24,13 @@ describe Neography::Rest do
       new_node["data"]["name"].should == "Max"
     end
 
+    it "can create a node with nil properties" do
+      new_node = @neo.create_node("name" => "Max", "age" => nil )
+      new_node["data"]["name"].should == "Max"
+      new_node["data"]["age"].should be_nil
+    end
+
+
     it "can create a node with more than one property" do
       new_node = @neo.create_node("age" => 31, "name" => "Max")
       new_node["data"]["name"].should == "Max"
