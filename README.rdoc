@@ -12,15 +12,15 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 
 === Neography in the Wild
 
-http://getvouched.com
-http://neovigator.herokuapp.com fork it at https://github.com/maxdemarzi/neovigator
-http://neoflix.herokuapp.com fork it at  https://github.com/maxdemarzi/neoflix
+* {Vouched}[http://getvouched.com]
+* {http://neovigator.herokuapp.com}[Neovigator] fork it at https://github.com/maxdemarzi/neovigator
+* {http://neoflix.herokuapp.com}[Neoflix] fork it at  https://github.com/maxdemarzi/neoflix
 
 === Getting started with Neography
 
-http://maxdemarzi.com/2012/01/04/getting-started-with-ruby-and-neo4j/
-http://maxdemarzi.com/2012/01/11/graph-visualization-and-neo4j/
-http://maxdemarzi.com/2012/01/13/neo4j-on-heroku-part-one/
+* {http://maxdemarzi.com/2012/01/04/getting-started-with-ruby-and-neo4j/}[Getting Started with Ruby and Neo4j]
+* {http://maxdemarzi.com/2012/01/11/graph-visualization-and-neo4j/}[Graph visualization with Neo4j]
+* {http://maxdemarzi.com/2012/01/13/neo4j-on-heroku-part-one/}[Neo4j on Heroku]
 
 
 === Installation
