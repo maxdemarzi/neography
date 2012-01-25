@@ -4,7 +4,7 @@ module Neography
 
     attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
 
-      def initialize(options={})
+      def initialize(options=ENV['NEO4J_URL'] || {})
         init = {:protocol       => Neography::Config.protocol, 
                 :server         => Neography::Config.server, 
                 :port           => Neography::Config.port, 
