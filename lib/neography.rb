@@ -40,7 +40,7 @@ require 'neography/index'
 require 'neography/node'
 require 'neography/relationship'
 
-require 'neography/railtie' if defined? Rails
+require 'neography/railtie' if defined? Rails::Railtie
 
 find_and_require_user_defined_code
 
