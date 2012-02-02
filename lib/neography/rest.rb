@@ -172,6 +172,14 @@ module Neography
          post("/node/#{get_id(from)}/relationships", options)
       end
 
+      def create_unique_relationship(index, key, value, type, from, to)
+        body = {:key=>key,:value=>value, :type => type }
+        body[:start] = self.configuration + "/node/#{get_id(from)}"
+        body[:end] = self.configuration + "/node/#{get_id(to)}"
+        options = { :body => body.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/relationship/#{index}?unique", options) 
+      end
+
       def get_relationship(id)
         get("/relationship/#{get_id(id)}")
       end
@@ -254,6 +262,11 @@ module Neography
       def add_node_to_index(index, key, value, id)
         options = { :body => ({:uri =>  self.configuration + "/node/#{get_id(id)}", :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/node/#{index}", options)
+      end
+
+      def create_unique_node(index, key, value, props={})
+        options = { :body => ({:properties=>props, :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
+        post("/index/node/#{index}?unique", options) 
       end
 
       def remove_node_from_index(*args)
