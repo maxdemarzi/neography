@@ -356,7 +356,7 @@ module Neography
 
       def execute_query(query, params = {})
           options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
-          result = post("/ext/CypherPlugin/graphdb/execute_query", options)
+          result = post("/cypher", options)
       end
       
       def execute_script(script, params = {})
