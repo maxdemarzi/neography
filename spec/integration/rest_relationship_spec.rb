@@ -30,6 +30,28 @@ describe Neography::Rest do
       new_relationship["data"]["since"].should == '10-1-2010'
       new_relationship["data"]["met"].should == "college"
     end
+    
+    it "can create a unique node with more than one property" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_node_index(index_name)
+      new_node = @neo.create_unique_node(index_name, key, value, {"age" => 31, "name" => "Max"})
+      new_node["data"]["name"].should == "Max"
+      new_node["data"]["age"].should == 31
+    end
+    
+    it "can create a unique relationship" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_unique_relationship(index_name, key, value, "friends", new_node1, new_node2)
+      new_relationship["data"][key].should == value
+    end
+
+    
   end
 
   describe "get_relationship" do
