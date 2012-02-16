@@ -45,6 +45,11 @@ describe Neography::Rest do
       new_node = @neo.create_unique_node(index_name, key, value, {"age" => 31, "name" => "Max"})
       new_node["data"]["name"].should == "Max"
       new_node["data"]["age"].should == 31
+      new_node_id = new_node["self"].split('/').last
+      existing_node = @neo.create_unique_node(index_name, key, value, {"age" => 31, "name" => "Max"})
+      existing_node["self"].split('/').last.should == new_node_id
+      existing_node["data"]["name"].should == "Max"
+      existing_node["data"]["age"].should == 31
     end
 
   end
