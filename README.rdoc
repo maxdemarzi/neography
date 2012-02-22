@@ -347,7 +347,8 @@ Contribute patches via pull requests.
 
 === Help
 
-If you are just starting out, or need help send me an e-mail at maxdemazi@gmail.com.
+If you are just starting out, or need help send me an e-mail at maxdemarzi@gmail.com.
+Check you my blog at http://maxdemarzi.com where I have more Neography examples.
 
 === Licenses
 
