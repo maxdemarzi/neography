@@ -144,6 +144,19 @@ describe Neography::Rest do
       batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
     end
 
+    it "can create a unique relationship" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_relationship_index(index_name)
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      batch_result = @neo.batch [:create_unique_relationship, index_name, key, value, "friends", node1, node2]
+      batch_result.first["body"]["type"].should == "friends"
+      batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
+    end
+
     it "can update a single relationship" do
       node1 = @neo.create_node
       node2 = @neo.create_node

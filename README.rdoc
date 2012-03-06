@@ -182,12 +182,16 @@ To Use:
              [:create_node, {"name" => "Marc"}]                            # Creates two nodes in a batch
   @neo.batch [:set_node_property, node1, {"name" => "Tom"}], 
              [:set_node_property, node2, {"name" => "Jerry"}]              # Sets the property of two nodes
+  @neo.batch [:create_unique_node, index_name, key, value, 
+               {"age" => 33, "name" => "Max"}]                             # Creates a unique node
   @neo.batch [:get_relationship, rel1],
              [:get_relationship, rel2]                                     # Gets two relationships in a batch
   @neo.batch [:create_relationship, "friends",
                node1, node2, {:since => "high school"}],
              [:create_relationship, "friends",
                node1, node3, {:since => "college"}]                        # Creates two relationships in a batch
+  @neo.batch [:create_unique_relationship, index_name,               
+               key, value, "friends", node1, node2]                        # Creates a unique relationship
   @neo.batch [:create_node, {"name" => "Max"}], 
              [:create_node, {"name" => "Marc"}],                           # Creates two nodes and index them
              [:add_node_to_index, "test_node_index", key, value, "{0}"],
