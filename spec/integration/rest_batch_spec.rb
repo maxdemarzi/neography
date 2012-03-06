@@ -172,6 +172,22 @@ describe Neography::Rest do
       existing_relationship["self"].should == new_relationship["self"]
     end
 
+    it "can reset the properties of a relationship" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", node1, node2, {:since => "high school"})
+      batch_result = @neo.batch [:reset_relationship_properties, new_relationship, {"since" => "college", "dated" => "yes"}]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_relationship = @neo.get_relationship(batch_result.first["from"].split('/')[2])
+      existing_relationship["type"].should == "friends"
+      existing_relationship["data"]["since"].should == "college"
+      existing_relationship["data"]["dated"].should == "yes"
+      existing_relationship["start"].split('/').last.should == node1["self"].split('/').last
+      existing_relationship["end"].split('/').last.should == node2["self"].split('/').last
+      existing_relationship["self"].should == new_relationship["self"]
+    end
+
     it "can add a node to an index" do
       new_node = @neo.create_node
       key = generate_text(6)
