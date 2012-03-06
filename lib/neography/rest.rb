@@ -382,6 +382,8 @@ module Neography
             {:method => "GET", :to => "/node/#{get_id(args[1])}"}
           when :create_node
             {:method => "POST", :to => "/node/", :body => args[1]}
+          when :create_unique_node
+            {:method => "POST", :to => "/index/node/#{args[1]}?unique", :body => {:key => args[2], :value => args[3], :properties => args[4]}}
           when :set_node_property
             {:method => "PUT", :to => "/node/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
           when :reset_node_properties

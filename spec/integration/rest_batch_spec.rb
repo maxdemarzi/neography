@@ -53,6 +53,26 @@ describe Neography::Rest do
       batch_result.last["body"]["data"]["name"].should == "Marc"
     end
 
+    it "can create a unique node" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_node_index(index_name)
+      batch_result = @neo.batch [:create_unique_node, index_name, key, value, {"age" => 31, "name" => "Max"}]
+      batch_result.first["body"]["data"]["name"].should == "Max"
+      batch_result.first["body"]["data"]["age"].should == 31
+      new_node_id = batch_result.first["body"]["self"].split('/').last
+      batch_result = @neo.batch [:create_unique_node, index_name, key, value, {"age" => 31, "name" => "Max"}]
+      batch_result.first["body"]["self"].split('/').last.should == new_node_id
+      batch_result.first["body"]["data"]["name"].should == "Max"
+      batch_result.first["body"]["data"]["age"].should == 31
+
+      #Sanity Check
+      existing_node = @neo.create_unique_node(index_name, key, value, {"age" => 31, "name" => "Max"})
+      existing_node["self"].split('/').last.should == new_node_id
+      existing_node["data"]["name"].should == "Max"
+      existing_node["data"]["age"].should == 31
+    end
 
     it "can update a property of a node" do
       new_node = @neo.create_node("name" => "Max")
