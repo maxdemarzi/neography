@@ -235,9 +235,6 @@ describe Neography::Rest do
       batch_result.first["body"].first["end"].split('/').last.should == node2["self"].split('/').last
     end
 
-
-
-
   describe "referenced batch" do
     it "can create a relationship from two newly created nodes" do
       batch_result = @neo.batch [:create_node, {"name" => "Max"}], [:create_node, {"name" => "Marc"}], [:create_relationship, "friends", "{0}", "{1}", {:since => "high school"}]
@@ -285,7 +282,21 @@ describe Neography::Rest do
       existing_index = @neo.find_relationship_index("test_relationship_index", key, value) 
       existing_index.should_not be_nil
       existing_index.first["self"].should == batch_result.first["body"]["self"]
+    end
 
+    it "can reset the properties of a newly created relationship" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      batch_result = @neo.batch [:create_relationship, "friends", node1, node2, {:since => "high school"}], [:reset_relationship_properties, "{0}", {"since" => "college", "dated" => "yes"}]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_relationship = @neo.get_relationship(batch_result.first["body"]["self"].split('/').last)
+      existing_relationship["type"].should == "friends"
+      existing_relationship["data"]["since"].should == "college"
+      existing_relationship["data"]["dated"].should == "yes"
+      existing_relationship["start"].split('/').last.should == node1["self"].split('/').last
+      existing_relationship["end"].split('/').last.should == node2["self"].split('/').last
+      existing_relationship["self"].should == batch_result.first["body"]["self"]
     end
 
     it "can kitchen sink" do

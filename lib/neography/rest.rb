@@ -397,7 +397,7 @@ module Neography
           when :set_relationship_property
             {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
           when :reset_relationship_properties
-            {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties", :body => args[2]}
+            {:method => "PUT", :to => (args[1].is_a?(String) && args[1].start_with?("{") ? "" : "/relationship/") + "#{get_id(args[1])}/properties", :body => args[2]}
           when :add_node_to_index
             {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/node/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
           when :add_relationship_to_index
