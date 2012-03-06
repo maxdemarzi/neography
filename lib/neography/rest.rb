@@ -402,6 +402,10 @@ module Neography
             {:method => "POST", :to => "/index/node/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/node/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
           when :add_relationship_to_index
             {:method => "POST", :to => "/index/relationship/#{args[1]}", :body => {:uri => (args[4].is_a?(String) && args[4].start_with?("{") ? "" : "/relationship/") + "#{get_id(args[4])}", :key => args[2], :value => args[3] } }
+          when :get_node_index
+            {:method => "GET", :to => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}"}
+          when :get_relationship_index
+            {:method => "GET", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"}
         end
      end
 

@@ -189,19 +189,54 @@ describe Neography::Rest do
     end
 
     it "can add a node to an index" do
+      index_name = generate_text(6)
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      new_index = @neo.get_node_index("test_node_index", key, value) 
-      batch_result = @neo.batch [:add_node_to_index, "test_node_index", key, value, new_node]
+      new_index = @neo.get_node_index(index_name, key, value) 
+      batch_result = @neo.batch [:add_node_to_index, index_name, key, value, new_node]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
-      existing_index = @neo.find_node_index("test_node_index", key, value) 
+      existing_index = @neo.find_node_index(index_name, key, value) 
       existing_index.should_not be_nil
       existing_index.first["self"].should == new_node["self"]
-      @neo.remove_node_from_index("test_node_index", key, value, new_node) 
+      @neo.remove_node_from_index(index_name, key, value, new_node) 
     end
   end
+
+    it "can get a node index" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_node_index(index_name)
+      new_node = @neo.create_node
+      @neo.add_node_to_index(index_name, key, value, new_node)
+      batch_result = @neo.batch [:get_node_index, index_name, key, value]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"].first["self"].should == new_node["self"]
+      @neo.remove_node_from_index(index_name, key, value, new_node) 
+    end
+
+    it "can get a relationship index" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_relationship_index(index_name)
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", node1, node2, {:since => "high school"})
+      @neo.add_relationship_to_index(index_name, key, value, new_relationship)
+      batch_result = @neo.batch [:get_relationship_index, index_name, key, value]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"].first["type"].should == "friends"
+      batch_result.first["body"].first["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"].first["end"].split('/').last.should == node2["self"].split('/').last
+    end
+
+
+
 
   describe "referenced batch" do
     it "can create a relationship from two newly created nodes" do
