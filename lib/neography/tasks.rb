@@ -4,7 +4,7 @@ require 'os'
 namespace :neo4j do
   desc "Install Neo4j"
   task :install, :edition, :version do |t, args|
-    args.with_defaults(:edition => "community", :version => "1.6.1")
+    args.with_defaults(:edition => "community", :version => "1.7.M01")
     puts "Installing Neo4j-#{args[:edition]}-#{args[:version]}"
     
     if OS::Underlying.windows?
