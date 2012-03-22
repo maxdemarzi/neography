@@ -33,6 +33,28 @@ describe Neography::Rest do
       path["nodes"].should == [new_node1["self"], new_node2["self"], new_node3["self"], new_node5["self"]]
     end
 
+    it "can get the shortest weighted path between two nodes" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_node3 = @neo.create_node
+      new_node4 = @neo.create_node
+      new_node5 = @neo.create_node
+      rel1_2 = @neo.create_relationship("friends", new_node1, new_node2)
+      rel2_3 = @neo.create_relationship("friends", new_node2, new_node3)
+      rel3_4 = @neo.create_relationship("friends", new_node3, new_node4)
+      rel4_5 = @neo.create_relationship("friends", new_node4, new_node5)
+      rel3_5 = @neo.create_relationship("friends", new_node3, new_node5)
+      @neo.set_relationship_properties(rel1_2, {weight: 1})
+      @neo.set_relationship_properties(rel2_3, {weight: 1})
+      @neo.set_relationship_properties(rel3_4, {weight: 1})
+      @neo.set_relationship_properties(rel4_5, {weight: 1})
+      @neo.set_relationship_properties(rel3_5, {weight: 2})
+      path = @neo.get_shortest_weighted_path(new_node1, new_node5, {"type"=> "friends", "direction" => "out"})
+      path["start"].should == new_node1["self"]
+      path["end"].should == new_node5["self"]
+      path["nodes"].should == [new_node1["self"], new_node2["self"], new_node3["self"], new_node5["self"]]
+    end
+
     it "can get a simple path between two nodes" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
