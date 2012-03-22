@@ -2,13 +2,15 @@ module Neography
   class Rest
     include HTTParty
 
-    attr_accessor :protocol, :server, :port, :directory, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
+    attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
 
       def initialize(options=ENV['NEO4J_URL'] || {})
         init = {:protocol       => Neography::Config.protocol, 
                 :server         => Neography::Config.server, 
                 :port           => Neography::Config.port, 
-                :directory      => Neography::Config.directory, 
+                :directory      => Neography::Config.directory,
+                :cypher_path    => Neography::Config.cypher_path,
+                :gremlin_path   => Neography::Config.gremlin_path, 
                 :log_file       => Neography::Config.log_file, 
                 :log_enabled    => Neography::Config.log_enabled, 
                 :max_threads    => Neography::Config.max_threads,
@@ -34,6 +36,8 @@ module Neography
         @server         = init[:server]
         @port           = init[:port]
         @directory      = init[:directory]
+        @cypher_path    = init[:cypher_path]
+        @gremlin_path   = init[:gremlin_path]
         @log_file       = init[:log_file]
         @log_enabled    = init[:log_enabled]
         @logger         = Logger.new(@log_file) if @log_enabled
@@ -361,12 +365,12 @@ module Neography
 
       def execute_query(query, params = {})
           options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
-          result = post("/cypher", options)
+          result = post(@cypher_path, options)
       end
       
       def execute_script(script, params = {})
         options = { :body => {:script => script, :params => params}.to_json , :headers => {'Content-Type' => 'application/json'} }
-        result = post("/ext/GremlinPlugin/graphdb/execute_script", options)
+        result = post(@gremlin_path, options)
         result == "null" ? nil : result
       end
 
