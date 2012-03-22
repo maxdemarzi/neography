@@ -48,11 +48,11 @@ describe Neography::Rest do
       @neo.set_relationship_properties(rel2_3, {weight: 1})
       @neo.set_relationship_properties(rel3_4, {weight: 1})
       @neo.set_relationship_properties(rel4_5, {weight: 1})
-      @neo.set_relationship_properties(rel3_5, {weight: 2})
+      @neo.set_relationship_properties(rel3_5, {weight: 3})
       path = @neo.get_shortest_weighted_path(new_node1, new_node5, {"type"=> "friends", "direction" => "out"})
-      path["start"].should == new_node1["self"]
-      path["end"].should == new_node5["self"]
-      path["nodes"].should == [new_node1["self"], new_node2["self"], new_node3["self"], new_node5["self"]]
+      path.first["start"].should == new_node1["self"]
+      path.first["end"].should == new_node5["self"]
+      path.first["nodes"].should == [new_node1["self"], new_node2["self"], new_node3["self"], new_node4["self"], new_node5["self"]]
     end
 
     it "can get a simple path between two nodes" do
