@@ -353,6 +353,11 @@ module Neography
         options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "max_depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
         paths = post("/node/#{get_id(from)}/paths", options) || Array.new
       end
+      
+      def get_shortest_weighted_path(from, to, relationships, weight_attr='weight', depth=1, algorithm="dijkstra")
+        options = { :body => {"to" => self.configuration + "/node/#{get_id(to)}", "relationships" => relationships, "cost_property" => weight_attr, "max_depth" => depth, "algorithm" => get_algorithm(algorithm) }.to_json, :headers => {'Content-Type' => 'application/json'} } 
+        paths = post("/node/#{get_id(from)}/paths", options) || Hash.new
+      end
 
       def execute_query(query, params = {})
           options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
@@ -482,6 +487,8 @@ module Neography
             "shortestPath"
           when :allSimplePaths, "allSimplePaths", :simple, "simple"
             "allSimplePaths"
+          when :dijkstra, "dijkstra"
+            "dijkstra"
           else
             "allPaths"
         end
