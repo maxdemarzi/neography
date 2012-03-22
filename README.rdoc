@@ -159,6 +159,9 @@ To Use:
 
   @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
+  @neo.get_shortest_weighted_path(node1, node2, relationships,   # find the shortest path between two nodes
+                                  weight_attr='weight', depth=2, # accounting for weight in the relationships
+                                  algorithm='dijkstra')          # using 'weight' as the attribute
 
   nodes = @neo.traverse(node1,                                              # the node where the traversal starts
                         "nodes",                                            # return_type "nodes", "relationships" or "paths"
