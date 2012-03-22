@@ -86,7 +86,9 @@ to your Rakefile to have access to these tasks.
                               :password => 'your password',  #leave out for default 
                               :log_file => 'neography.log',
                               :log_enabled => false,
-                              :max_threads => 20})
+                              :max_threads => 20,
+                              :cypher_path => '/cypher',
+                              :gremlin_path => '/ext/GremlinPlugin/graphdb/execute_script'})
 
 Quick initializer (assumes basic authorization if username is given):
 
