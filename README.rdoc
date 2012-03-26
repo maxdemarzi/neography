@@ -343,6 +343,26 @@ Phase 2 way of doing these:
 *  {Facebook}[https://github.com/maxdemarzi/neography/blob/master/examples/facebook_v2.rb]
 *  {Linked In}[https://github.com/maxdemarzi/neography/blob/master/examples/linkedin_v2.rb]
 
+=== Testing
+
+To run testing locally you will need to have two instances of the server running. There is some 
+good advice on how to set up the a second instance on the 
+{neo4j site}[http://docs.neo4j.org/chunked/stable/server-installation.html#_multiple_server_instances_on_one_machine]. 
+Connect to the second instance in your testing environment, for example:
+
+  if Rails.env.development?
+    @neo  = Neography::Rest.new({:port => 7474})
+  elsif Rails.env.test?
+    @neo  = Neography::Rest.new({:port => 7475})
+  end
+
+Install the test-delete-db-extension plugin, as mentioned in the neo4j.org docs, if you want to use 
+the Rest clean_database method to empty your database between tests. In Rspec, for example, 
+put this in your spec_helper.rb:
+
+  config.before(:each) do
+    @neo.clean_database("yes_i_really_want_to_clean_the_database")
+  end
 
 === To Do
 
