@@ -383,8 +383,8 @@ module Neography
          post("/batch", options)
       end
       
-      ###
-      # FOR TESTING
+      # For testing (use a separate neo4j instance)
+      # call this before each test or spec
       def clean_database(sanity_check = "not_really")
         if sanity_check == "yes_i_really_want_to_clean_the_database"
           delete("/cleandb/secret-key")
