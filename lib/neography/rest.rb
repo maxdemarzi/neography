@@ -382,6 +382,17 @@ module Neography
          options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
          post("/batch", options)
       end
+      
+      # For testing (use a separate neo4j instance)
+      # call this before each test or spec
+      def clean_database(sanity_check = "not_really")
+        if sanity_check == "yes_i_really_want_to_clean_the_database"
+          delete("/cleandb/secret-key")
+          true
+        else
+          false
+        end
+      end
             
       private
 
@@ -435,7 +446,7 @@ module Neography
             @logger.error "Invalid data sent #{body}"  if @log_enabled
             nil
           when 404
-            @logger.error "#{body}" if @log_enabled
+            @logger.error "Not Found #{body}" if @log_enabled
             nil
           when 409
             @logger.error "Node could not be deleted (still has relationships?)" if @log_enabled
