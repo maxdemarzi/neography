@@ -55,6 +55,11 @@ module Neography
     def exist?
       !self.start_node.neo_server.get_relationship(self.neo_id).nil?
     end
+    
+    def attributes
+      attrs = self.methods - OpenStruct.instance_methods - Neography::Relationship.instance_methods
+      attrs.values_at(*self.each_index.select {|i| i.odd?})
+    end
 
     def other_node(node)
       if node == @start_node
