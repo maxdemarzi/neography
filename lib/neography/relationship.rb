@@ -58,7 +58,7 @@ module Neography
     
     def attributes
       attrs = self.methods - OpenStruct.instance_methods - Neography::Relationship.instance_methods
-      attrs.values_at(*self.each_index.select {|i| i.odd?})
+      attrs.values_at(*attrs.each_index.select {|i| i.even?})
     end
 
     def other_node(node)

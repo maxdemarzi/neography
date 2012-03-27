@@ -270,6 +270,7 @@ The Neo4j ID is available by using node.neo_id .
   new_rel.start_node                                                   # Get the start/from node of a relationship
   new_rel.end_node                                                     # Get the end/to node of a relationship
   new_rel.other_node(n2)                                               # Get the other node of a relationship
+  new_rel.attributes                                                   # Get the attributes of the relationship as an array
 
   existing_rel = Neography::Relationship.load(12)                      # Get an existing relationship by id
   existing_rel.del                                                     # Delete a relationship
