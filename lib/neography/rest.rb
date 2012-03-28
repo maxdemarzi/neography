@@ -426,6 +426,8 @@ module Neography
             {:method => "GET", :to => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}"}
           when :get_relationship_index
             {:method => "GET", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"}
+          else
+            raise "Unknown option #{args[0]}"
         end
      end
 
