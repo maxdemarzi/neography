@@ -191,6 +191,8 @@ To Use:
              [:set_node_property, node2, {"name" => "Jerry"}]              # Sets the property of two nodes
   @neo.batch [:create_unique_node, index_name, key, value, 
                {"age" => 33, "name" => "Max"}]                             # Creates a unique node
+  @neo.batch [:get_node_relationships, node1, "out",  
+             [:get_node_relationships, node2, "out"]                       # Get node relationships in a batch
   @neo.batch [:get_relationship, rel1],
              [:get_relationship, rel2]                                     # Gets two relationships in a batch
   @neo.batch [:create_relationship, "friends",
