@@ -311,6 +311,24 @@ describe Neography::Rest do
                                 [:add_relationship_to_index, "test_relationship_index", key, value, "{4}"] 
       batch_result.should_not be_nil
     end
+
+    it "can get multiple relationships" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      node3 = @neo.create_node
+      new_relationship1 = @neo.create_relationship("friends", node1, node2)
+      new_relationship2 = @neo.create_relationship("brothers", node1, node3)
+      batch_result = @neo.batch [:get_node_relationships, node1]
+      batch_result.first["body"][0]["type"].should == "friends"
+      batch_result.first["body"][0]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"][0]["end"].split('/').last.should == node2["self"].split('/').last
+      batch_result.first["body"][0]["self"].should == new_relationship1["self"]
+      batch_result.first["body"][1]["type"].should == "brothers"
+      batch_result.first["body"][1]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"][1]["end"].split('/').last.should == node3["self"].split('/').last
+      batch_result.first["body"][1]["self"].should == new_relationship2["self"]
+    end
+
   end
   
 end

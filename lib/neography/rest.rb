@@ -427,7 +427,7 @@ module Neography
           when :get_relationship_index
             {:method => "GET", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"}
           when :get_node_relationships
-            {:method => "GET", :to => "/node/#{get_id(args[1])}/relationships/#{args[2]}"}
+            {:method => "GET", :to => "/node/#{get_id(args[1])}/relationships/#{args[2] || 'all'}"}
           else
             raise "Unknown option #{args[0]}"
         end
