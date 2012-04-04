@@ -74,7 +74,9 @@ If you are not using Rails, then add:
 
   require 'neography/tasks'
 
-to your Rakefile to have access to these tasks.
+to your Rakefile to have access to these tasks.  
+
+rake neo4j:install requires wget to be installed.  It will download and install Neo4j into a neo4j directory in your project regardless of what version you choose.
 
 
 === Documentation
