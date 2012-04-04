@@ -3,16 +3,7 @@ module Neography
   class Rest
     include HTTParty
     
-    class CrackParser < HTTParty::Parser
-      require 'crack'
-      
-      protected 
-        def json
-          Crack::JSON.parse(body)
-        end
-    end
-
-    attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
+    attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password, :parser
 
       def initialize(options=ENV['NEO4J_URL'] || {})
         init = {:protocol       => Neography::Config.protocol, 
@@ -27,6 +18,7 @@ module Neography
                 :authentication => Neography::Config.authentication,
                 :username       => Neography::Config.username,
                 :password       => Neography::Config.password,
+                :parser         => Neography::Config.parser
                 }
 
         unless options.respond_to?(:each_pair)
@@ -55,7 +47,7 @@ module Neography
         @max_threads    = init[:max_threads]
         @authentication = Hash.new
         @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
-        @parser = {:parser => CrackParser}
+        @parser         = init[:parser]
       end
 
       def configure(protocol, server, port, directory)
