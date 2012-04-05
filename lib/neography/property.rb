@@ -41,9 +41,13 @@ module Neography
   end
 
 
-  def self.method_missing(method_sym, *arguments, &block)
-    if (method_sym.to_s =~ /$=/) != nil
+  def method_missing(method_sym, *arguments, &block)
+    if (method_sym.to_s =~ /=$/) != nil
       new_ostruct_member(method_sym.to_s.chomp("="))
+
+      # We just defined the getter/setter above, but we haven't actually
+      # applied them yet.
+      self.send(method_sym, *arguments)
     else
       super
     end
