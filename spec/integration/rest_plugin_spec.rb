@@ -64,4 +64,13 @@ describe Neography::Rest do
 
   end
 
+  describe "clean_database" do
+    it "can delete all data" do
+      new_node = @neo.create_node
+      @neo.clean_database("yes_i_really_want_to_clean_the_database")
+      existing_node = @neo.get_node(new_node)
+      existing_node.should be_nil
+    end
+  end
+
 end

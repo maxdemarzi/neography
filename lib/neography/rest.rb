@@ -58,7 +58,11 @@ module Neography
       end
 
       def configuration
-        @protocol + @server + ':' + @port.to_s + @directory + "/db/data"
+        configuration_root + "/db/data"
+      end
+
+      def configuration_root
+      @protocol + @server + ':' + @port.to_s + @directory
       end
 
       def get_root
@@ -386,12 +390,12 @@ module Neography
          options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
          post("/batch", options)
       end
-      
+
       # For testing (use a separate neo4j instance)
       # call this before each test or spec
       def clean_database(sanity_check = "not_really")
         if sanity_check == "yes_i_really_want_to_clean_the_database"
-          delete("/cleandb/secret-key")
+          evaluate_response(HTTParty.delete(configuration_root + URI.encode("/cleandb/secret-key"), {}.merge!(@authentication).merge!(@parser)))
           true
         else
           false
