@@ -293,5 +293,24 @@ describe Neography::Rest do
 
   end
 
+  describe "auto indexes" do
+  
+    it "can get a node from an automatic index" do
+      pending
+    end
+
+    it "can query a node from an automatic index" do
+      pending
+    end
+
+    it "can get a relationship from an automatic index" do
+      pending
+    end
+
+    it "can query a relationship from an automatic index" do
+      pending
+    end
+
+  end
 
 end

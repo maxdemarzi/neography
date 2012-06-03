@@ -294,6 +294,18 @@ module Neography
         index
       end
 
+      def get_node_auto_index(key, value)
+        index = get("/index/auto/node/#{key}/#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
+      def find_node_auto_index(query)
+        index = get("/index/auto/node/?query=#{query}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
       def find_node_index(*args)
         case args.size
           when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
@@ -341,6 +353,18 @@ module Neography
           when 3 then index = get("/index/relationship/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
           when 2 then index = get("/index/relationship/#{args[0]}?query=#{args[1]}") || Array.new
         end
+        return nil if index.empty?
+        index
+      end
+
+      def get_relationship_auto_index(key, value)
+        index = get("/index/auto/relationship/#{key}/#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
+      def find_relationship_auto_index(query)
+        index = get("/index/auto/relationship/?query=#{query}") || Array.new
         return nil if index.empty?
         index
       end
