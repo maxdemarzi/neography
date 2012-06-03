@@ -3,7 +3,7 @@ module Neography
   class Rest
     include HTTParty
     
-    attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password, :parser
+    attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password
 
       def initialize(options=ENV['NEO4J_URL'] || {})
         init = {:protocol       => Neography::Config.protocol, 
@@ -17,8 +17,7 @@ module Neography
                 :max_threads    => Neography::Config.max_threads,
                 :authentication => Neography::Config.authentication,
                 :username       => Neography::Config.username,
-                :password       => Neography::Config.password,
-                :parser         => Neography::Config.parser
+                :password       => Neography::Config.password
                 }
 
         unless options.respond_to?(:each_pair)
@@ -141,12 +140,13 @@ module Neography
       end
 
       def get_node_properties(id, properties = nil)
+        options = {:parser => CrackParser}
         if properties.nil?
-          get("/node/#{get_id(id)}/properties")
+          get("/node/#{get_id(id)}/properties", options)
         else
           node_properties = Hash.new 
           Array(properties).each do |property| 
-            value = get("/node/#{get_id(id)}/properties/#{property}")
+            value = get("/node/#{get_id(id)}/properties/#{property}", options)
             node_properties[property] = value unless value.nil?
           end
           return nil if node_properties.empty?
@@ -155,18 +155,19 @@ module Neography
       end
 
       def remove_node_properties(id, properties = nil)
+        options = {:parser => CrackParser}
         if properties.nil?
-          delete("/node/#{get_id(id)}/properties")
+          delete("/node/#{get_id(id)}/properties", options)
         else 
           Array(properties).each do |property| 
-            delete("/node/#{get_id(id)}/properties/#{property}") 
+            delete("/node/#{get_id(id)}/properties/#{property}", options) 
           end
         end
       end
 
       def set_node_properties(id, properties)
           properties.each do |key, value| 
-            options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'} } 
+            options = { :body => value.to_json, :headers => {'Content-Type' => 'application/json'}, :parser => CrackParser} 
             put("/node/#{get_id(id)}/properties/#{key}", options) 
           end
       end
@@ -206,12 +207,13 @@ module Neography
       end
 
       def get_relationship_properties(id, properties = nil)
+        options = {:parser => CrackParser}
         if properties.nil?
-          get("/relationship/#{get_id(id)}/properties")
+          get("/relationship/#{get_id(id)}/properties", options)
         else
           relationship_properties = Hash.new 
           Array(properties).each do |property| 
-            value = get("/relationship/#{get_id(id)}/properties/#{property}")
+            value = get("/relationship/#{get_id(id)}/properties/#{property}", options)
             relationship_properties[property] = value unless value.nil?
           end
           return nil if relationship_properties.empty?
@@ -220,11 +222,12 @@ module Neography
       end
 
       def remove_relationship_properties(id, properties = nil)
+        options = {:parser => CrackParser}
         if properties.nil?
-          delete("/relationship/#{get_id(id)}/properties")
+          delete("/relationship/#{get_id(id)}/properties", options)
         else 
           Array(properties).each do |property| 
-            delete("/relationship/#{get_id(id)}/properties/#{property}")
+            delete("/relationship/#{get_id(id)}/properties/#{property}", options)
           end
         end
       end
@@ -368,10 +371,15 @@ module Neography
       end
 
       def execute_query(query, params = {})
-          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
+          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json', 'accept' => 'application/json;stream=true'} , :parser => HTTParty::Parser}
           result = post(@cypher_path, options)
       end
       
+      def execute_query_not_streaming(query, params = {})
+          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'}, :parser => HTTParty::Parser }
+          result = post(@cypher_path, options)
+      end
+
       def execute_script(script, params = {})
         options = { :body => {:script => script, :params => params}.to_json , :headers => {'Content-Type' => 'application/json'} }
         result = post(@gremlin_path, options)
@@ -463,19 +471,19 @@ module Neography
       end
 
        def get(path,options={})
-          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def post(path,options={})
-          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def put(path,options={})
-          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
        def delete(path,options={})
-          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication)))
        end
 
       def get_id(id)

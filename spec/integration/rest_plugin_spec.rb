@@ -29,6 +29,12 @@ describe Neography::Rest do
       existing_node.should have_key("self")
       existing_node["self"].split('/').last.should == id
     end
+
+    #it "can create a ton of nodes" do
+    #  ton_nodes = @neo.execute_script("5000.times { g.addVertex();}")
+    #  ton_nodes.should be_nil
+    #end
+
   end
 
   describe "execute cypher query" do
@@ -60,6 +66,15 @@ describe Neography::Rest do
       existing_node.should have_key("columns")
       existing_node["data"][0][0].should have_key("self")
       existing_node["data"][0][0]["self"].split('/').last.should == id
+    end
+
+    it "can get the a bunch of nodes streaming", :slow => true do
+      Benchmark.bm do |x|
+        x.report("cypher           ") { @existing_nodes = @neo.execute_query_not_streaming("start n=node(*) return n") }
+        x.report("streaming cypher ") { @existing_nodes_streaming = @neo.execute_query("start n=node(*) return n") }
+      end
+      @existing_nodes.should_not be_nil
+      @existing_nodes_streaming.should_not be_nil
     end
 
   end
