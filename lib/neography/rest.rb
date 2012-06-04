@@ -392,7 +392,7 @@ module Neography
       end
 
       def execute_query(query, params = {})
-          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
+          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json;stream=true'} }
           result = post(@cypher_path, options)
       end
       
@@ -407,10 +407,19 @@ module Neography
         Array(args).each_with_index do |c,i|
           batch << {:id => i}.merge(get_batch(c))
         end
-         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json;stream=true'} } 
          post("/batch", options)
       end
       
+      def batch_not_streaming(*args)
+        batch = []
+        Array(args).each_with_index do |c,i|
+          batch << {:id => i}.merge(get_batch(c))
+        end
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/batch", options)
+      end
+            
       # For testing (use a separate neo4j instance)
       # call this before each test or spec
       def clean_database(sanity_check = "not_really")
@@ -456,6 +465,11 @@ module Neography
             {:method => "GET", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"}
           when :get_node_relationships
             {:method => "GET", :to => "/node/#{get_id(args[1])}/relationships/#{args[2] || 'all'}"}
+          when :execute_script
+            {:method => "POST", :to => @gremlin_path, :body => {:script => args[1], :params => args[2]}}
+          # execute_query returning "exception => java.lang.NullPointerException"
+          when :execute_query
+            {:method => "POST", :to => @cypher_path, :body => {:query => args[1], :params => args[2]}}
           else
             raise "Unknown option #{args[0]}"
         end
