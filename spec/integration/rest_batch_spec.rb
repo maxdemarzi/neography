@@ -254,17 +254,18 @@ describe Neography::Rest do
       batch_result = @neo.batch [:execute_query, "start n=node(0) return n"]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
-      pending "exception => java.lang.NullPointerException"
+      batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == "0"
     end  
 
     it "can batch cypher with parameters" do
       new_node = @neo.create_node
       id = new_node["self"].split('/').last
-      batch_result = @neo.batch [:execute_script, "start n=node({id}) return n", {:id => id.to_i}]
+      batch_result = @neo.batch [:execute_query, "start n=node({id}) return n", {:id => id.to_i}]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
-      pending "exception => java.lang.NullPointerException"
+      batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == id
     end  
+  
 
   end
 

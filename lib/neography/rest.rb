@@ -467,9 +467,12 @@ module Neography
             {:method => "GET", :to => "/node/#{get_id(args[1])}/relationships/#{args[2] || 'all'}"}
           when :execute_script
             {:method => "POST", :to => @gremlin_path, :body => {:script => args[1], :params => args[2]}}
-          # execute_query returning "exception => java.lang.NullPointerException"
           when :execute_query
-            {:method => "POST", :to => @cypher_path, :body => {:query => args[1], :params => args[2]}}
+            if args[2]
+              {:method => "POST", :to => @cypher_path, :body => {:query => args[1], :params => args[2]}}
+            else
+              {:method => "POST", :to => @cypher_path, :body => {:query => args[1]}}
+            end
           else
             raise "Unknown option #{args[0]}"
         end
