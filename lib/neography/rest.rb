@@ -404,16 +404,19 @@ module Neography
         Array(args).each_with_index do |c,i|
           batch << {:id => i}.merge(get_batch(c))
         end
-         options = { :body => batch.to_json, 
-                     :headers => {'Content-Type' => 'application/json'
-                                  # Seeing connection reset by peer errors
-                                  # and timeouts. 
-                                  #, 'Accept' => 'application/json;stream=true'
-                                  },
-                     :write_timeout => 600 } 
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json;stream=true'} } 
          post("/batch", options)
       end
-                        
+      
+      def batch_not_streaming(*args)
+        batch = []
+        Array(args).each_with_index do |c,i|
+          batch << {:id => i}.merge(get_batch(c))
+        end
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/batch", options)
+      end
+            
       # For testing (use a separate neo4j instance)
       # call this before each test or spec
       def clean_database(sanity_check = "not_really")
