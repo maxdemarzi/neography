@@ -92,7 +92,7 @@ describe Neography::Rest do
       end
     end
 
-    commands = 2000.times.collect{|x| [:create_node, {:name => "node-#{x}"}]}
+    commands = 5000.times.collect{|x| [:create_node, {:name => "node-#{x}"}]}
     file = StringIO.new(commands.to_json)
        
       Benchmark.bm do |x|
