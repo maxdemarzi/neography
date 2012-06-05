@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "net-http-spy", "0.2.1"
   s.add_development_dependency "rake", "~> 0.8.7"
-  s.add_dependency "excon", ">= 0.14.0"
+  s.add_dependency "httparty", "0.8.1"
   s.add_dependency "rake", ">= 0.8.7"
   s.add_dependency "json"
   s.add_dependency "os"

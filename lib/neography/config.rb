@@ -1,6 +1,6 @@
 module Neography
   class Config 
-    class << self; attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password end
+    class << self; attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password, :parser end
 
     @protocol       = 'http://'
     @server         = 'localhost'
@@ -15,5 +15,6 @@ module Neography
     @authentication = {}
     @username       = nil
     @password       = nil
+    @parser         = {:parser => OjParser}
   end
 end
