@@ -16,7 +16,6 @@ end
 DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
 
 require 'cgi'
-require 'crack'
 require 'httparty'
 require 'json'
 require 'oj'
