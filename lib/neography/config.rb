@@ -15,6 +15,6 @@ module Neography
     @authentication = {}
     @username       = nil
     @password       = nil
-    @parser         = {:parser => CrackParser}
+    @parser         = {:parser => OjParser}
   end
 end

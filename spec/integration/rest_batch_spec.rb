@@ -202,7 +202,6 @@ describe Neography::Rest do
       existing_index.first["self"].should == new_node["self"]
       @neo.remove_node_from_index(index_name, key, value, new_node) 
     end
-  end
 
     it "can get a node index" do
       index_name = generate_text(6)
@@ -234,6 +233,41 @@ describe Neography::Rest do
       batch_result.first["body"].first["start"].split('/').last.should == node1["self"].split('/').last
       batch_result.first["body"].first["end"].split('/').last.should == node2["self"].split('/').last
     end
+
+    it "can batch gremlin" do
+      batch_result = @neo.batch [:execute_script, "g.v(0)"]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"]["self"].split('/').last.should == "0"
+    end  
+
+    it "can batch gremlin with parameters" do
+      new_node = @neo.create_node
+      id = new_node["self"].split('/').last
+      batch_result = @neo.batch [:execute_script, "g.v(id)", {:id => id.to_i}]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"]["self"].split('/').last.should == id
+    end  
+
+    it "can batch cypher" do
+      batch_result = @neo.batch [:execute_query, "start n=node(0) return n"]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == "0"
+    end  
+
+    it "can batch cypher with parameters" do
+      new_node = @neo.create_node
+      id = new_node["self"].split('/').last
+      batch_result = @neo.batch [:execute_query, "start n=node({id}) return n", {:id => id.to_i}]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == id
+    end  
+  
+
+  end
 
   describe "referenced batch" do
     it "can create a relationship from two newly created nodes" do

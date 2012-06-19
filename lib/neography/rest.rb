@@ -291,6 +291,18 @@ module Neography
         index
       end
 
+      def get_node_auto_index(key, value)
+        index = get("/index/auto/node/#{key}/#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
+      def find_node_auto_index(query)
+        index = get("/index/auto/node/?query=#{query}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
       def find_node_index(*args)
         case args.size
           when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
@@ -342,6 +354,18 @@ module Neography
         index
       end
 
+      def get_relationship_auto_index(key, value)
+        index = get("/index/auto/relationship/#{key}/#{value}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
+      def find_relationship_auto_index(query)
+        index = get("/index/auto/relationship/?query=#{query}") || Array.new
+        return nil if index.empty?
+        index
+      end
+
       def traverse(id, return_type, description)
         options = { :body => {"order" => get_order(description["order"]), 
                               "uniqueness" => get_uniqueness(description["uniqueness"]), 
@@ -368,7 +392,7 @@ module Neography
       end
 
       def execute_query(query, params = {})
-          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
+          options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json;stream=true'} }
           result = post(@cypher_path, options)
       end
       
@@ -383,10 +407,19 @@ module Neography
         Array(args).each_with_index do |c,i|
           batch << {:id => i}.merge(get_batch(c))
         end
-         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json;stream=true'} } 
          post("/batch", options)
       end
       
+      def batch_not_streaming(*args)
+        batch = []
+        Array(args).each_with_index do |c,i|
+          batch << {:id => i}.merge(get_batch(c))
+        end
+         options = { :body => batch.to_json, :headers => {'Content-Type' => 'application/json'} } 
+         post("/batch", options)
+      end
+            
       # For testing (use a separate neo4j instance)
       # call this before each test or spec
       def clean_database(sanity_check = "not_really")
@@ -432,6 +465,14 @@ module Neography
             {:method => "GET", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"}
           when :get_node_relationships
             {:method => "GET", :to => "/node/#{get_id(args[1])}/relationships/#{args[2] || 'all'}"}
+          when :execute_script
+            {:method => "POST", :to => @gremlin_path, :body => {:script => args[1], :params => args[2]}}
+          when :execute_query
+            if args[2]
+              {:method => "POST", :to => @cypher_path, :body => {:query => args[1], :params => args[2]}}
+            else
+              {:method => "POST", :to => @cypher_path, :body => {:query => args[1]}}
+            end
           else
             raise "Unknown option #{args[0]}"
         end

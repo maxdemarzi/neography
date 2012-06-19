@@ -6,13 +6,15 @@ Neography is a thin Ruby wrapper to the Neo4j Rest API, for more information:
 
 If you want to the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j by Andreas Ronge
 
+{<img src="https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master" alt="Build Status" />}[http://travis-ci.org/maxdemarzi/neography]
+
 Complement to Neography are the:
 
-* {Neo4j Active Record Adapter}[https://github.com/yournextleap/activerecord-neo4j-adapter] by Nikhil Lanjewar 
+* {Neo4j Active Record Adapter}[https://github.com/yournextleap/activerecord-neo4j-adapter] by Nikhil Lanjewar
 * {Neology}[https://github.com/lordkada/neology] by Carlo Alberto Degli Atti
 * {Neoid}[https://github.com/elado/neoid] by Elad Ossadon
 
-An alternative is the Architect4r Gem at https://github.com/namxam/architect4r by Maximilian Schulz 
+An alternative is the Architect4r Gem at https://github.com/namxam/architect4r by Maximilian Schulz
 
 === Neography in the Wild
 
@@ -46,48 +48,48 @@ in order to access the functionality.
   os
   rake
   json
-  httparty 
+  httparty
 
   for development:
-  rspec 
-  net-http-spy 
+  rspec
+  net-http-spy
 
 ==== Rails
 
 Just add gem 'neography' to your Gemfile and run bundle install.
 
 The following tasks will be available to you:
-  
+
   rake neo4j:install                           # Install Neo4j to the neo4j directory under your project
   rake neo4j:install[community,1.6.M03]        # Install Neo4j Community edition, version 1.6.M03
-  rake neo4j:install[advanced,1.5]             # Install Neo4j Advanced edition, version 1.5 
+  rake neo4j:install[advanced,1.5]             # Install Neo4j Advanced edition, version 1.5
   rake neo4j:install[enterprise,1.5]           # Install Neo4j Enterprise edition, version 1.5
   rake neo4j:start                             # Start Neo4j
   rake neo4j:stop                              # Stop Neo4j
   rake neo4j:restart                           # Restart Neo4j
-  rake neo4j:reset_yes_i_am_sure               # Wipe your Neo4j Database 
+  rake neo4j:reset_yes_i_am_sure               # Wipe your Neo4j Database
 
 Windows users will need to run in a command prompt with Administrative Privileges
-in order to install Neo4j as a Service. 
+in order to install Neo4j as a Service.
 
 If you are not using Rails, then add:
 
   require 'neography/tasks'
 
-to your Rakefile to have access to these tasks.  
+to your Rakefile to have access to these tasks.
 
 rake neo4j:install requires wget to be installed.  It will download and install Neo4j into a neo4j directory in your project regardless of what version you choose.
 
 
 === Documentation
 
-  @neo = Neography::Rest.new({:protocol => 'http://', 
-                              :server => 'localhost', 
-                              :port => 7474, 
-                              :directory => '',  # use '/<my directory>' or leave out for default 
-                              :authentication => 'basic', # 'basic', 'digest' or leave out for default 
-                              :username => 'your username', #leave out for default  
-                              :password => 'your password',  #leave out for default 
+  @neo = Neography::Rest.new({:protocol => 'http://',
+                              :server => 'localhost',
+                              :port => 7474,
+                              :directory => '',  # use '/<my directory>' or leave out for default
+                              :authentication => 'basic', # 'basic', 'digest' or leave out for default
+                              :username => 'your username', #leave out for default
+                              :password => 'your password',  #leave out for default
                               :log_file => 'neography.log',
                               :log_enabled => false,
                               :max_threads => 20,
@@ -101,12 +103,12 @@ Quick initializer (assumes basic authorization if username is given):
 
 To Use:
 
-  @neo = Neography::Rest.new                                 # Inialize using all default parameters 
+  @neo = Neography::Rest.new                                 # Inialize using all default parameters
 
   @neo.get_root                                              # Get the root node
   @neo.create_node                                           # Create an empty node
   @neo.create_node("age" => 31, "name" => "Max")             # Create a node with some properties
-  @neo.create_unique_node(index_name, key, unique_value,     # Create a unique node 
+  @neo.create_unique_node(index_name, key, unique_value,     # Create a unique node
                          {"age" => 31, "name" => "Max"})     # this needs an existing index
 
   @neo.get_node(node2)                                       # Get a node and its properties
@@ -122,7 +124,7 @@ To Use:
   @neo.remove_node_properties(node1, ["weight","age"])       # Remove multiple properties of a node
 
   @neo.create_relationship("friends", node1, node2)          # Create a relationship between node1 and node2
-  @neo.create_unique_relationship(index_name, key, value,    # Create a unique relationship between nodes 
+  @neo.create_unique_relationship(index_name, key, value,    # Create a unique relationship between nodes
                           "friends", new_node1, new_node2)   # this needs an existing index
 
   @neo.get_relationship(rel1)                                # Get a relationship
@@ -148,7 +150,9 @@ To Use:
   @neo.remove_node_from_index(index, node1)                  # removes a node from the index
   @neo.get_node_index(index, key, value)                     # exact query of the node index with the given key/value pair
   @neo.find_node_index(index, key, value)                    # advanced query of the node index with the given key/value pair
-  @neo.find_node_index(index, query )                        # advanced query of the node index with the given query
+  @neo.find_node_index(index, query)                         # advanced query of the node index with the given query
+  @neo.get_node_auto_index(key, value)                       # exact query of the node auto index with the given key/value pair
+  @neo.find_node_auto_index(query)                           # advanced query of the node auto index with the given query
   @neo.list_relationship_indexes                             # gives names and query templates for relationship indices
   @neo.create_relationship_index(name, "fulltext", provider) # creates a relationship index with "fulltext" option
   @neo.add_relationship_to_index(index, key, value, rel1)    # adds a relationship to the index with the given key/value pair
@@ -158,12 +162,14 @@ To Use:
   @neo.get_relationship_index(index, key, value)             # exact query of the relationship index with the given key/value pair
   @neo.find_relationship_index(index, key, value)            # advanced query of the relationship index with the given key/value pair
   @neo.find_relationship_index(index, query)                 # advanced query of the relationship index with the given query
+  @neo.get_relationship_auto_index(key, value)               # exact query of the relationship auto index with the given key/value pair
+  @neo.find_relationship_auto_index(query)                   # advanced query of the relationship auto index with the given query
   @neo.execute_script("g.v(0)")                              # sends a Groovy script (through the Gremlin plugin)
   @neo.execute_script("g.v(id)", {:id => 3})                 # sends a parameterized Groovy script (optimized for repeated calls)
   @neo.execute_query("start n=node(0) return n")             # sends a Cypher query (through the Cypher plugin)
   @neo.execute_query("start n=node(id) return n", {:id => 3}) # sends a parameterized Cypher query (optimized for repeated calls)
 
-  @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes 
+  @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes
   @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
   @neo.get_shortest_weighted_path(node1, node2, relationships,   # find the shortest path between two nodes
                                   weight_attr='weight', depth=2, # accounting for weight in the relationships
@@ -174,26 +180,26 @@ To Use:
                         {"order" => "breadth first",                        # "breadth first" or "depth first" traversal order
                          "uniqueness" => "node global",                     # See Uniqueness in API documentation for options.
                          "relationships" => [{"type"=> "roommates",         # A hash containg a description of the traversal
-                                              "direction" => "all"},        # two relationships. 
-                                             {"type"=> "friends",           # 
-                                              "direction" => "out"}],       # 
+                                              "direction" => "all"},        # two relationships.
+                                             {"type"=> "friends",           #
+                                              "direction" => "out"}],       #
                          "prune evaluator" => {"language" => "javascript",  # A prune evaluator (when to stop traversing)
                                                "body" => "position.endNode().getProperty('age') < 21;"},
                          "return filter" => {"language" => "builtin",       # "all" or "all but start node"
                                              "name" => "all"},
-                         "depth" => 4})  
+                         "depth" => 4})
 
-  # "depth" is a short-hand way of specifying a prune evaluator which prunes after a certain depth. 
+  # "depth" is a short-hand way of specifying a prune evaluator which prunes after a certain depth.
   # If not specified a depth of 1 is used and if a "prune evaluator" is specified instead of a depth, no depth limit is set.
 
   @neo.batch [:get_node, node1], [:get_node, node2]                        # Gets two nodes in a batch
-  @neo.batch [:create_node, {"name" => "Max"}], 
+  @neo.batch [:create_node, {"name" => "Max"}],
              [:create_node, {"name" => "Marc"}]                            # Creates two nodes in a batch
-  @neo.batch [:set_node_property, node1, {"name" => "Tom"}], 
+  @neo.batch [:set_node_property, node1, {"name" => "Tom"}],
              [:set_node_property, node2, {"name" => "Jerry"}]              # Sets the property of two nodes
-  @neo.batch [:create_unique_node, index_name, key, value, 
+  @neo.batch [:create_unique_node, index_name, key, value,
                {"age" => 33, "name" => "Max"}]                             # Creates a unique node
-  @neo.batch [:get_node_relationships, node1, "out",  
+  @neo.batch [:get_node_relationships, node1, "out",
              [:get_node_relationships, node2, "out"]                       # Get node relationships in a batch
   @neo.batch [:get_relationship, rel1],
              [:get_relationship, rel2]                                     # Gets two relationships in a batch
@@ -201,22 +207,23 @@ To Use:
                node1, node2, {:since => "high school"}],
              [:create_relationship, "friends",
                node1, node3, {:since => "college"}]                        # Creates two relationships in a batch
-  @neo.batch [:create_unique_relationship, index_name,               
+  @neo.batch [:create_unique_relationship, index_name,
                key, value, "friends", node1, node2]                        # Creates a unique relationship
   @neo.batch [:get_node_index, index_name, key, value]                     # Get node index
   @neo.batch [:get_relationship_index, index_name, key, value]             # Get relationship index
 
-  @neo.batch [:create_node, {"name" => "Max"}], 
+  @neo.batch [:create_node, {"name" => "Max"}],
              [:create_node, {"name" => "Marc"}],                           # Creates two nodes and index them
              [:add_node_to_index, "test_node_index", key, value, "{0}"],
              [:add_node_to_index, "test_node_index", key, value, "{1}"],
              [:create_relationship, "friends",                             # and create a relationship for those
                "{0}", "{1}", {:since => "college"}],                       # newly created nodes
-             [:add_relationship_to_index, 
+             [:add_relationship_to_index,
                "test_relationship_index", key, value, "{4}"]               # and index the new relationship
 
-  @neo.batch *[[:create_node, {"name" => "Max"}], 
+  @neo.batch *[[:create_node, {"name" => "Max"}],
                [:create_node, {"name" => "Marc"}]]                         # Use the Splat (*) with Arrays of Arrays
+
 
 See http://docs.neo4j.org/chunked/milestone/rest-api-batch-ops.html for Neo4j Batch operations documentation.
 
@@ -234,7 +241,7 @@ Experimental:
                                            {"age" => 24, "name" => "Alex"}) # Create two nodes with properties threaded
   nodes = @neo.get_nodes([17,86,397,33])                                    # Get four nodes by their id
 
-  one_set_nodes = @neo.create_nodes(3) 
+  one_set_nodes = @neo.create_nodes(3)
   another_node = @neo.create_node("age" => 31, "name" => "Max")
   nodes = @neo.get_nodes([one_set_nodes, another_node])                     # Get four nodes
 
@@ -272,7 +279,7 @@ The Neo4j ID is available by using node.neo_id .
   n1.weight = 190                                                      # Add a node property as a method
   n1[:name] = nil                                                      # Delete a node property using [:key] = nil
   n1.name = nil                                                        # Delete a node property by setting it to nil
- 
+
   n2 = Neography::Node.create
   new_rel = Neography::Relationship.create(:family, n1, n2)            # Create a relationship from my_node to node2
   new_rel.start_node                                                   # Get the start/from node of a relationship
@@ -317,13 +324,13 @@ The Neo4j ID is available by using node.neo_id .
   n1.rels(:friends).outgoing                                           # Get outgoing friends relationships
   n1.rels(:friends).incoming                                           # Get incoming friends relationships
   n1.rels(:friends,:work)                                              # Get friends and work relationships
-  n1.rels(:friends,:work).outgoing                                     # Get outgoing friends and work relationships          
-  
+  n1.rels(:friends,:work).outgoing                                     # Get outgoing friends and work relationships
+
   n1.all_paths_to(n2).incoming(:friends).depth(4)                      # Gets all paths of a specified type
   n1.all_simple_paths_to(n2).incoming(:friends).depth(4)               # for the relationships defined
-  n1.all_shortest_paths_to(n2).incoming(:friends).depth(4)             # at a maximum depth 
+  n1.all_shortest_paths_to(n2).incoming(:friends).depth(4)             # at a maximum depth
   n1.path_to(n2).incoming(:friends).depth(4)                           # Same as above, but just one path.
-  n1.simple_path_to(n2).incoming(:friends).depth(4)                    
+  n1.simple_path_to(n2).incoming(:friends).depth(4)
   n1.shortest_path_to(n2).incoming(:friends).depth(4)
 
   n1.shortest_path_to(n2).incoming(:friends).depth(4).rels             # Gets just relationships in path
@@ -350,9 +357,9 @@ Phase 2 way of doing these:
 
 === Testing
 
-To run testing locally you will need to have two instances of the server running. There is some 
-good advice on how to set up the a second instance on the 
-{neo4j site}[http://docs.neo4j.org/chunked/stable/server-installation.html#_multiple_server_instances_on_one_machine]. 
+To run testing locally you will need to have two instances of the server running. There is some
+good advice on how to set up the a second instance on the
+{neo4j site}[http://docs.neo4j.org/chunked/stable/server-installation.html#_multiple_server_instances_on_one_machine].
 Connect to the second instance in your testing environment, for example:
 
   if Rails.env.development?
@@ -361,8 +368,8 @@ Connect to the second instance in your testing environment, for example:
     @neo  = Neography::Rest.new({:port => 7475})
   end
 
-Install the test-delete-db-extension plugin, as mentioned in the neo4j.org docs, if you want to use 
-the Rest clean_database method to empty your database between tests. In Rspec, for example, 
+Install the test-delete-db-extension plugin, as mentioned in the neo4j.org docs, if you want to use
+the Rest clean_database method to empty your database between tests. In Rspec, for example,
 put this in your spec_helper.rb:
 
   config.before(:each) do
