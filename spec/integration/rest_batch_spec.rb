@@ -329,6 +329,26 @@ describe Neography::Rest do
       batch_result.first["body"][1]["self"].should == new_relationship2["self"]
     end
 
+    it "can create a relationship from a unique node" do
+
+      require 'net-http-spy'
+      Net::HTTP.http_logger_options = {:verbose => true} # see everything
+
+      batch_result = @neo.batch [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
+                                [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
+                                [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
+                                [:create_relationship, "has", "{0}", "{2}", {}]   
+      puts batch_result.inspect
+
+
+      batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
+                                [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
+                                [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
+                                [:create_relationship, "has", "{0}", "{2}", {}]
+    
+     puts batch_result.inspect
+    end
+
   end
   
 end
