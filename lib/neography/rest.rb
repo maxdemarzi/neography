@@ -473,7 +473,11 @@ module Neography
             else
               {:method => "POST", :to => @cypher_path, :body => {:query => args[1]}}
             end
-          else
+          when :remove_node_from_index
+			 {:method => "DELETE", :to => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}/#{get_id(args[4])}" }
+		  when :delete_node
+		   	{:method => "DELETE", :to => "/node/#{get_id(args[1])}"}
+		  else
             raise "Unknown option #{args[0]}"
         end
      end
