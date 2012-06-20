@@ -474,11 +474,7 @@ module Neography
               {:method => "POST", :to => @cypher_path, :body => {:query => args[1]}}
             end
           when :remove_node_from_index
-		  	case args.size
-				when 5 then {:method => "DELETE", :to => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}/#{get_id(args[4])}" }
-				when 4 then {:method => "DELETE", :to => "/index/node/#{args[1]}/#{args[2]}/#{get_id(args[3])}" }
-				when 3 then {:method => "DELETE", :to => "/index/node/#{args[1]}/#{get_id(args[2])}" }
-			end
+			 {:method => "DELETE", :to => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}/#{get_id(args[4])}" }
 		  when :delete_node
 		   	{:method => "DELETE", :to => "/node/#{get_id(args[1])}"}
 		  else
