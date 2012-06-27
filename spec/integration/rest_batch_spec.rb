@@ -282,15 +282,20 @@ describe Neography::Rest do
 		index = generate_text(6)
 		key = generate_text(6)
 		value1 = generate_text
-		value2 = generate_text 
+		value2 = generate_text
+		value3 = generate_text  
 		
-		node1 = @neo.create_unique_node( index , key  , value1  , { "name" => "Max" } )
-		node2 = @neo.create_unique_node( index , key , value2 , { "name" => "Neo" }) 
+		node1 = @neo.create_unique_node(index, key, value1, { "name" => "Max" })
+		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" }) 
+		node3 = @neo.create_unique_node(index, key, value3, { "name" => "Samir"})
 		
-		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ], [:remove_node_from_index, index, key, value2, node2 ]
+		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ], 
+		                          [:remove_node_from_index, index, key, node2 ],
+		                          [:remove_node_from_index, index, node3 ]
 		
 		@neo.get_node_index(index, key, value1).should be_nil
 		@neo.get_node_index(index, key, value2).should be_nil
+		@neo.get_node_index(index, key, value3).should be_nil
 	end
 
   end
