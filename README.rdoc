@@ -1,4 +1,4 @@
-== Welcome to Neography
+== Welcome to Neography 
 
 Neography is a thin Ruby wrapper to the Neo4j Rest API, for more information:
 * {Getting Started with Neo4j Server}[http://neo4j.org/community/]
@@ -7,6 +7,7 @@ Neography is a thin Ruby wrapper to the Neo4j Rest API, for more information:
 If you want to the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j by Andreas Ronge
 
 {<img src="https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master" alt="Build Status" />}[http://travis-ci.org/maxdemarzi/neography]
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/maxdemarzi/neography]
 
 Complement to Neography are the:
 
