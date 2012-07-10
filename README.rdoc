@@ -144,6 +144,7 @@ To Use:
 
   @neo.list_node_indexes                                     # gives names and query templates for all defined indices
   @neo.create_node_index(name, type, provider)               # creates an index, defaults are "exact" and "lucene"
+  @neo.create_node_auto_index(type, provider)                # creates an auto index, defaults are "exact" and "lucene"
   @neo.add_node_to_index(index, key, value, node1)           # adds a node to the index with the given key/value pair
   @neo.remove_node_from_index(index, key, value, node1)      # removes a node from the index with the given key/value pair
   @neo.remove_node_from_index(index, key, node1)             # removes a node from the index with the given key
@@ -155,6 +156,7 @@ To Use:
   @neo.find_node_auto_index(query)                           # advanced query of the node auto index with the given query
   @neo.list_relationship_indexes                             # gives names and query templates for relationship indices
   @neo.create_relationship_index(name, "fulltext", provider) # creates a relationship index with "fulltext" option
+  @neo.create_relationship_auto_index("fulltext", provider)  # creates a relationship auto index with "fulltext" option
   @neo.add_relationship_to_index(index, key, value, rel1)    # adds a relationship to the index with the given key/value pair
   @neo.remove_relationship_from_index(index, key, value, rel1) # removes a relationship from the index with the given key/value pair
   @neo.remove_relationship_from_index(index, key, rel1)      # removes a relationship from the index with the given key
@@ -164,6 +166,18 @@ To Use:
   @neo.find_relationship_index(index, query)                 # advanced query of the relationship index with the given query
   @neo.get_relationship_auto_index(key, value)               # exact query of the relationship auto index with the given key/value pair
   @neo.find_relationship_auto_index(query)                   # advanced query of the relationship auto index with the given query
+
+  @neo.get_node_auto_index_status                            # true or false depending on node auto index setting
+  @neo.get_relationship_auto_index_status                    # true or false depending on relationship auto index setting
+  @neo.set_node_auto_index_status(true)                      # set the node auto index setting to true
+  @neo.set_relationship_auto_index_status(false)             # set the relationship auto index setting to false
+  @neo.get_node_auto_index_properties                        # array of currently auto indexed node properties
+  @neo.get_relationship_auto_index_properties                # array of currently auto indexed relationship properties
+  @neo.add_node_auto_index_property(property)                # add to auto indexed node properties
+  @neo.remove_node_auto_index_property(property)             # remove from auto indexed node properties
+  @neo.add_relationship_auto_index_property(property)        # add to auto indexed relationship properties
+  @neo.remove_relationship_auto_index_property(property)     # remove from auto indexed relationship properties
+
   @neo.execute_script("g.v(0)")                              # sends a Groovy script (through the Gremlin plugin)
   @neo.execute_script("g.v(id)", {:id => 3})                 # sends a parameterized Groovy script (optimized for repeated calls)
   @neo.execute_query("start n=node(0) return n")             # sends a Cypher query (through the Cypher plugin)

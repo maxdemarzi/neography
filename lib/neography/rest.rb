@@ -267,6 +267,10 @@ module Neography
         post("/index/node", options)
       end
 
+      def create_node_auto_index(type = "exact", provider = "lucene")
+        create_node_index("node_auto_index", type, provider)
+      end
+
       def add_node_to_index(index, key, value, id)
         options = { :body => ({:uri =>  self.configuration + "/node/#{get_id(id)}", :key => key, :value => value }).to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/node/#{index}", options)
@@ -297,8 +301,11 @@ module Neography
         index
       end
 
-      def find_node_auto_index(query)
-        index = get("/index/auto/node/?query=#{query}") || Array.new
+      def find_node_auto_index(*args)
+        case args.size
+          when 2 then index = get("/index/auto/node/#{args[0]}/#{args[1]}") || Array.new
+          when 1 then index = get("/index/auto/node/?query=#{args[0]}") || Array.new
+        end
         return nil if index.empty?
         index
       end
@@ -324,6 +331,10 @@ module Neography
       def create_relationship_index(name, type = "exact", provider = "lucene")
         options = { :body => ({:name => name, :config => {:type => type, :provider => provider}}).to_json, :headers => {'Content-Type' => 'application/json'} } 
         post("/index/relationship", options)
+      end
+
+      def create_relationship_auto_index(type = "exact", provider = "lucene")
+        create_relationship_index("relationship_auto_index", type, provider)
       end
 
       def add_relationship_to_index(index, key, value, id)
@@ -360,10 +371,57 @@ module Neography
         index
       end
 
-      def find_relationship_auto_index(query)
-        index = get("/index/auto/relationship/?query=#{query}") || Array.new
+      def find_relationship_auto_index(*args)
+        case args.size
+          when 2 then index = get("/index/auto/relationship/#{args[0]}/#{args[1]}") || Array.new
+          when 1 then index = get("/index/auto/relationship/?query=#{args[0]}") || Array.new
+        end
         return nil if index.empty?
         index
+      end
+
+      def get_node_auto_index_status
+        get("/index/auto/node/status")
+      end
+
+      def get_relationship_auto_index_status
+        get("/index/auto/relationship/status")
+      end
+
+      def set_node_auto_index_status(change_to = true)
+        options = { :body => change_to.to_json, :headers => {'Content-Type' => 'application/json'} }
+        put("/index/auto/node/status", options)
+      end
+
+      def set_relationship_auto_index_status(change_to = true)
+        options = { :body => change_to.to_json, :headers => {'Content-Type' => 'application/json'} }
+        put("/index/auto/relationship/status", options)
+      end
+
+      def get_node_auto_index_properties
+        get("/index/auto/node/properties")
+      end
+
+      def get_relationship_auto_index_properties
+        get("/index/auto/relationship/properties")
+      end
+
+      def add_node_auto_index_property(property)
+        options = { :body => property, :headers => {'Content-Type' => 'application/json'} }
+        post("/index/auto/node/properties", options)
+      end
+
+      def remove_node_auto_index_property(property)
+        delete("/index/auto/node/properties/#{property}")
+      end
+
+      def add_relationship_auto_index_property(property)
+        options = { :body => property, :headers => {'Content-Type' => 'application/json'} }
+        post("/index/auto/relationship/properties", options)
+      end
+
+      def remove_relationship_auto_index_property(property)
+        delete("/index/auto/relationship/properties/#{property}")
       end
 
       def traverse(id, return_type, description)

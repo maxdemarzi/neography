@@ -294,21 +294,95 @@ describe Neography::Rest do
   end
 
   describe "auto indexes" do
+
+    it "can check the status of node auto index" do
+      @neo.get_node_auto_index_status.should satisfy{|status| [true, false].include?(status)}
+    end
   
+    it "can check the status of relationship auto index" do
+      @neo.get_relationship_auto_index_status.should satisfy{|status| [true, false].include?(status)}
+    end
+
+    it "can change the node auto index status" do
+      @neo.set_node_auto_index_status(true)
+      @neo.get_node_auto_index_status.should be_true
+    end
+
+    it "can change the relationship auto index status" do
+      @neo.set_relationship_auto_index_status(true)
+      @neo.get_relationship_auto_index_status.should be_true
+    end
+
+    it "can get a list of auto indexed node properties" do
+      @neo.set_node_auto_index_status(true)
+      @neo.create_node_auto_index
+      @neo.add_node_auto_index_property("name")
+      @neo.get_node_auto_index_properties.should == ["name"]
+    end
+
+    it "can get a list of auto indexed relationship properties" do
+      @neo.set_relationship_auto_index_status(true)
+      @neo.create_relationship_auto_index
+      @neo.add_relationship_auto_index_property("weight")
+      @neo.get_relationship_auto_index_properties.should == ["weight"]
+    end
+
+   it "can remove a property from the auto indexed node properties" do
+      @neo.add_node_auto_index_property("name")
+      @neo.add_node_auto_index_property("label")
+      @neo.get_node_auto_index_properties.should == ["name", "label"]
+      @neo.remove_node_auto_index_property("label")   
+      @neo.get_node_auto_index_properties.should == ["name"]
+   end
+
+   it "can remove a property from the auto indexed relationship properties" do
+      @neo.add_relationship_auto_index_property("weight")
+      @neo.add_relationship_auto_index_property("strength")
+      @neo.get_relationship_auto_index_properties.should == ["weight", "strength"]
+      @neo.remove_relationship_auto_index_property("strength")   
+      @neo.get_relationship_auto_index_properties.should == ["weight"]
+   end
+
     it "can get a node from an automatic index" do
-      pending
+      new_node = @neo.create_node("name" => "Max")
+      existing_nodes = @neo.get_node_auto_index("name", "Max")
+      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
+    end
+
+    it "can query a node from an automatic index using key value" do
+      new_node = @neo.create_node("name" => "Max")
+      existing_nodes = @neo.find_node_auto_index("name", "Max")
+      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
     end
 
     it "can query a node from an automatic index" do
-      pending
+      new_node = @neo.create_node("name" => "Max")
+      existing_nodes = @neo.find_node_auto_index("name:Max")
+      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
     end
 
     it "can get a relationship from an automatic index" do
-      pending
+      new_node1 = @neo.create_node("name" => "Max")
+      new_node2 = @neo.create_node("name" => "Peter")
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
+      existing_rels = @neo.get_relationship_auto_index("weight", 5)
+      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
+    end
+
+    it "can query a relationship from an automatic index using key value" do
+      new_node1 = @neo.create_node("name" => "Max")
+      new_node2 = @neo.create_node("name" => "Peter")
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
+      existing_rels = @neo.find_relationship_auto_index("weight", 5)
+      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
     end
 
     it "can query a relationship from an automatic index" do
-      pending
+      new_node1 = @neo.create_node("name" => "Max")
+      new_node2 = @neo.create_node("name" => "Peter")
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
+      existing_rels = @neo.find_relationship_auto_index("weight:5")
+      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
     end
 
   end
