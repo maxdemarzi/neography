@@ -395,23 +395,20 @@ describe Neography::Rest do
     end
 
     it "can create a relationship from a unique node" do
-
-      require 'net-http-spy'
-      Net::HTTP.http_logger_options = {:verbose => true} # see everything
-
       batch_result = @neo.batch [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                 [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                 [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
                                 [:create_relationship, "has", "{0}", "{2}", {}]   
-      puts batch_result.inspect
+      batch_result.should_not be_nil
 
 
       batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
                                 [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                 [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                 [:create_relationship, "has", "{0}", "{2}", {}]
-    
-     puts batch_result.inspect
+      # create_unique_node is returning an index result, not a node, so we can't do this yet.
+      # See https://github.com/neo4j/community/issues/697
+      batch_result.should_not be_nil
     end
 
   end
