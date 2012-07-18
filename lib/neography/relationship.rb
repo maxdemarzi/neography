@@ -2,7 +2,7 @@ module Neography
   class Relationship < PropertyContainer
     include Neography::Equal
     include Neography::Property
-    extend  Neography::Index
+    include Neography::Index
     
     attr_accessor :start_node, :end_node, :rel_type
 
