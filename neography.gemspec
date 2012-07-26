@@ -27,5 +27,5 @@ Gem::Specification.new do |s|
   s.add_dependency "json"
   s.add_dependency "os"
   s.add_dependency "rubyzip"
-  s.add_dependency "oj"
+  s.add_dependency "multi_json"
 end
