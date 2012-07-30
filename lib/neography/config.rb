@@ -15,6 +15,6 @@ module Neography
     @authentication = {}
     @username       = nil
     @password       = nil
-    @parser         = {:parser => OjParser}
+    @parser         = {:parser => MultiJsonParser}
   end
 end

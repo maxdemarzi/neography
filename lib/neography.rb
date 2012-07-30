@@ -18,13 +18,13 @@ DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
 require 'cgi'
 require 'httparty'
 require 'json'
-require 'oj'
+require 'multi_json'
 require 'logger'
 require 'ostruct'
 require 'os'
 require 'zip/zipfilesystem'
 
-require 'neography/oj_parser'
+require 'neography/multi_json_parser'
 
 require 'neography/config'
 require 'neography/rest'
