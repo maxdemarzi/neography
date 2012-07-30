@@ -149,10 +149,10 @@ describe Neography::Rest do
       node2 = @neo.create_node
       batch_result = @neo.batch [:create_relationship, "friends", node1, node2, {:since => "time immemorial"}]
       batch_result.should_not be_nil
-	  batch_result[0]["status"].should == 201
-	  id = batch_result.first["body"]["self"].split("/").last
+      batch_result[0]["status"].should == 201
+      id = batch_result.first["body"]["self"].split("/").last
       batch_result = @neo.batch [:delete_relationship, id]
-	  batch_result[0]["status"].should == 204
+      batch_result[0]["status"].should == 204
       batch_result[0]["from"].should == "/relationship/#{id}"
     end
 
