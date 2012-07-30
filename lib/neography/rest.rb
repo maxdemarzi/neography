@@ -509,6 +509,8 @@ module Neography
             {:method => "POST", :to => (args[2].is_a?(String) && args[2].start_with?("{") ? "" : "/node/") + "#{get_id(args[2])}/relationships", :body => {:to => (args[3].is_a?(String) && args[3].start_with?("{") ? "" : "/node/") + "#{get_id(args[3])}", :type => args[1], :data => args[4] } }
           when :create_unique_relationship
             {:method => "POST", :to => "/index/relationship/#{args[1]}?unique", :body => {:key => args[2], :value => args[3], :type => args[4], :start => (args[5].is_a?(String) && args[5].start_with?("{") ? "" : "/node/") + "#{get_id(args[5])}", :end=> (args[6].is_a?(String) && args[6].start_with?("{") ? "" : "/node/") + "#{get_id(args[6])}"} }
+          when :delete_relationship
+            {:method => "DELETE", :to => "/relationship/#{get_id(args[1])}"}
           when :set_relationship_property
             {:method => "PUT", :to => "/relationship/#{get_id(args[1])}/properties/#{args[2].keys.first}", :body => args[2].values.first}
           when :reset_relationship_properties
