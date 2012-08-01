@@ -5,3 +5,4 @@ pkg/*
 *.gem
 .bundle
 log/*
+Gemfile.lock
