@@ -11,7 +11,7 @@ class MultiJsonParser < HTTParty::Parser
     def json
       begin
         MultiJson.load(body)
-      rescue MultiJson::DecodeError
+      rescue MultiJson::DecodeError, ArgumentError
         case
           when body == "true"
             true
