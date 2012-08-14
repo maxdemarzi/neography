@@ -6,14 +6,13 @@ describe Neography::Rest do
   end
 
   it "should not add a content-type header if there's no existing headers" do
-    @neo.merge_options({}).should == {:parser => OjParser}
+    @neo.merge_options({}).keys.should == [:parser]
   end
 
   it "should add a content type if there's existing headers" do
-    @neo.merge_options({:headers => {'Content-Type' => 'foo/bar'}}).should ==
-                       {:headers => {'Content-Type' => "foo/bar",
-                                    "User-Agent"   => "Neography/#{Neography::VERSION}"},
-                                    :parser => OjParser}
+    @neo.merge_options({:headers => {'Content-Type' => 'foo/bar'}})[:headers].should ==
+      {'Content-Type' => "foo/bar",  "User-Agent"   => "Neography/#{Neography::VERSION}"}
+
   end
 
 
