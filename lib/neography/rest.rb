@@ -490,6 +490,12 @@ module Neography
           false
         end
       end
+
+      def merge_options(options)
+        merged_options = options.merge!(@authentication).merge!(@parser)
+        merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
+        merged_options
+      end
             
       private
 
@@ -570,12 +576,6 @@ module Neography
             nil
         end
       end
-
-       def merge_options(options)
-          merged_options = options.merge!(@authentication).merge!(@parser)
-          merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
-          merged_options
-       end
 
        def get(path,options={})
           evaluate_response(HTTParty.get(configuration + URI.encode(path), merge_options(options)))
