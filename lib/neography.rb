@@ -26,6 +26,8 @@ require 'zip/zipfilesystem'
 
 require 'neography/multi_json_parser'
 
+require 'neography/version'
+
 require 'neography/config'
 require 'neography/rest'
 require 'neography/neography'
