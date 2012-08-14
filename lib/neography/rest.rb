@@ -2,6 +2,7 @@ module Neography
   
   class Rest
     include HTTParty
+    USER_AGENT = "Neography/#{Neography::VERSION}"
     
     attr_accessor :protocol, :server, :port, :directory, :cypher_path, :gremlin_path, :log_file, :log_enabled, :logger, :max_threads, :authentication, :username, :password, :parser
 
@@ -48,6 +49,7 @@ module Neography
         @authentication = Hash.new
         @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
         @parser         = init[:parser]
+        @user_agent     = {"User-Agent" => USER_AGENT}
       end
 
       def configure(protocol, server, port, directory)
@@ -569,20 +571,28 @@ module Neography
         end
       end
 
-       def get(path,options={})
-          evaluate_response(HTTParty.get(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+       def merge_options(options)
+          merged_options = options.merge!(@authentication).merge!(@parser)
+          merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
+          merged_options
        end
 
+       def get(path,options={})
+          evaluate_response(HTTParty.get(configuration + URI.encode(path), merge_options(options)))
+       end
+
+
+
        def post(path,options={})
-          evaluate_response(HTTParty.post(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.post(configuration + URI.encode(path), merge_options(options)))
        end
 
        def put(path,options={})
-          evaluate_response(HTTParty.put(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.put(configuration + URI.encode(path), merge_options(options)))
        end
 
        def delete(path,options={})
-          evaluate_response(HTTParty.delete(configuration + URI.encode(path), options.merge!(@authentication).merge!(@parser)))
+          evaluate_response(HTTParty.delete(configuration + URI.encode(path), merge_options(options)))
        end
 
       def get_id(id)
