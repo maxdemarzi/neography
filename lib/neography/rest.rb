@@ -589,8 +589,6 @@ module Neography
           evaluate_response(HTTParty.get(configuration + URI.encode(path), merge_options(options)))
        end
 
-
-
        def post(path,options={})
           evaluate_response(HTTParty.post(configuration + URI.encode(path), merge_options(options)))
        end
