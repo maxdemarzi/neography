@@ -314,7 +314,7 @@ module Neography
 
       def find_node_index(*args)
         case args.size
-          when 3 then index = get("/index/node/#{args[0]}/#{args[1]}/#{args[2]}") || Array.new
+          when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=\"#{args[2]}\"") || Array.new
           when 2 then index = get("/index/node/#{args[0]}?query=#{args[1]}") || Array.new
         end
         return nil if index.empty?
