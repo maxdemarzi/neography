@@ -224,6 +224,17 @@ describe Neography::Rest do
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
+    it "can find a node index with spaces in the value" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text + ' ' + generate_text
+      @neo.add_node_to_index("test_node_index", key, value, new_node)
+      new_index = @neo.find_node_index("test_node_index", key, value)
+      new_index.should_not be_nil
+      new_index.first["self"].should == new_node["self"]
+      @neo.remove_node_from_index("test_node_index", key, value, new_node)
+    end
+
     it "can get a relationship index" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
