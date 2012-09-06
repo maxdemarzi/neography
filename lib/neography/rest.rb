@@ -314,7 +314,7 @@ module Neography
 
       def find_node_index(*args)
         case args.size
-          when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=#{args[2]}") || Array.new
+          when 3 then index = get("/index/node/#{args[0]}/#{args[1]}?query=\"#{args[2]}\"") || Array.new
           when 2 then index = get("/index/node/#{args[0]}?query=#{args[1]}") || Array.new
         end
         return nil if index.empty?
@@ -547,6 +547,12 @@ module Neography
               when 4 then {:method => "DELETE", :to => "/index/node/#{args[1]}/#{args[2]}/#{get_id(args[3])}" } 
               when 3 then {:method => "DELETE", :to => "/index/node/#{args[1]}/#{get_id(args[2])}" } 
             end
+          when :remove_relationship_from_index
+           case args.size
+             when 5 then {:method => "DELETE", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}/#{get_id(args[4])}" }
+             when 4 then {:method => "DELETE", :to => "/index/relationship/#{args[1]}/#{args[2]}/#{get_id(args[3])}" }
+             when 3 then {:method => "DELETE", :to => "/index/relationship/#{args[1]}/#{get_id(args[2])}" }
+           end
     		  when :delete_node
     		   	{:method => "DELETE", :to => "/node/#{get_id(args[1])}"}
     		  else

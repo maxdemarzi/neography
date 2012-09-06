@@ -310,6 +310,24 @@ describe Neography::Rest do
 		@neo.get_node_index(index, key, value3).should be_nil
 	end
 
+  it "can remove a relationship from an index in batch" do
+     index = generate_text(6)
+     key = generate_text(6)
+     value1 = generate_text
+     value2 = generate_text
+
+     node1 = @neo.create_node
+     node2 = @neo.create_node
+     relationship1 = @neo.create_unique_relationship(index, key, value1, "friends", node1, node2)
+     relationship2 = @neo.create_unique_relationship(index, key, value2, "friends", node2, node1)
+
+     batch_result = @neo.batch [:remove_relationship_from_index, index, key, relationship1],
+       [:remove_relationship_from_index, index, key, relationship2]
+
+     @neo.get_relationship_index(index, key, value1).should be_nil
+     @neo.get_relationship_index(index, key, value2).should be_nil
+   end
+
   end
 
   describe "referenced batch" do
