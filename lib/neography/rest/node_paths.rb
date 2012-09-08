@@ -31,7 +31,7 @@ module Neography
             "algorithm"     => get_algorithm(algorithm)
           }.to_json,
           :headers => json_content_type
-        } 
+        }
         @connection.post(all_path(:id => get_id(from)), options) || []
       end
 
