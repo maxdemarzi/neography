@@ -29,7 +29,28 @@ require 'neography/multi_json_parser'
 require 'neography/version'
 
 require 'neography/config'
+
+require 'neography/rest/helpers'
+require 'neography/rest/paths'
+
+require 'neography/rest/nodes'
+require 'neography/rest/node_properties'
+require 'neography/rest/node_relationships'
+require 'neography/rest/node_indexes'
+require 'neography/rest/node_auto_indexes'
+require 'neography/rest/node_traversal'
+require 'neography/rest/node_paths'
+require 'neography/rest/relationships'
+require 'neography/rest/relationship_properties'
+require 'neography/rest/relationship_indexes'
+require 'neography/rest/relationship_auto_indexes'
+require 'neography/rest/cypher'
+require 'neography/rest/gremlin'
+require 'neography/rest/batch'
+require 'neography/rest/clean'
+require 'neography/connection'
 require 'neography/rest'
+
 require 'neography/neography'
 
 require 'neography/property_container'
