@@ -2,15 +2,33 @@
 RSpec::Matchers.define :json_match do |field, expected|
 
   match do |actual|
+    p actual[field]
     expected == JSON.parse(actual[field])
   end
 
   failure_message_for_should do
-    "expected JSON in field '#{@field}' to not match '#{@expected}'"
+    "expected JSON in field '#{field}' to match '#{expected}'"
   end
 
   description do
     "JSON in field '#{field}' should match '#{expected.inspect}'"
+  end
+
+end
+
+# Convenience matcher for matching fields in a hash
+RSpec::Matchers.define :hash_match do |field, expected|
+
+  match do |actual|
+    expected == actual[field]
+  end
+
+  failure_message_for_should do
+    "expected field '#{field}' to match '#{expected}'"
+  end
+
+  description do
+    "field '#{field}' should match '#{expected.inspect}'"
   end
 
 end
