@@ -2,7 +2,6 @@
 RSpec::Matchers.define :json_match do |field, expected|
 
   match do |actual|
-    p actual[field]
     expected == JSON.parse(actual[field])
   end
 
