@@ -1,19 +1,20 @@
 module Neography
   class Rest
-    class NodeIndexes
+    class RelationshipIndexes
       include Neography::Rest::Paths
       include Neography::Rest::Helpers
 
-      add_path :all,       "/index/node"
-      add_path :base,      "/index/node/:index"
-      add_path :unique,    "/index/node/:index?unique"
-      add_path :node,      "/index/node/:index/:id"
-      add_path :key,       "/index/node/:index/:key/:id"
-      add_path :value,     "/index/node/:index/:key/:value/:id"
-      add_path :key_value, "/index/node/:index/:key/:value"
-      add_path :query,     "/index/node/:index?query=:query"
+      add_path :all,  "/index/relationship"
+      add_path :base, "/index/relationship/:index"
+      add_path :unique, "/index/relationship/:index?unique"
 
-      add_path :key_value2, "/index/node/:index/:key?query=\":value\"" # TODO FIX BUG %20
+      add_path :relationship, "/index/relationship/:index/:id"
+      add_path :key,          "/index/relationship/:index/:key/:id"
+      add_path :value,        "/index/relationship/:index/:key/:value/:id"
+      add_path :key_value,    "/index/relationship/:index/:key/:value"
+
+      add_path :key_query,    "/index/relationship/:index/:key?query=:query"
+      add_path :query,        "/index/relationship/:index?query=:query"
 
       def initialize(connection)
         @connection = connection
@@ -39,32 +40,33 @@ module Neography
       end
 
       def create_auto(type, provider)
-        create("node_auto_index", type, provider)
+        create("relationship_auto_index", type, provider)
       end
 
-      def create_unique(index, key, value, props)
-        options = {
-          :body => (
-            { :properties => props,
-              :key => key,
-              :value => value
-            }
-          ).to_json,
-          :headers => json_content_type
+      def create_unique(index, key, value, type, from, to)
+        body = {
+          :key   => key,
+          :value => value,
+          :type  => type,
+          :start => @connection.configuration + "/node/#{get_id(from)}",
+          :end   => @connection.configuration + "/node/#{get_id(to)}"
         }
+        options = { :body => body.to_json, :headers => json_content_type }
+
         @connection.post(unique(:index => index), options)
       end
 
       def add(index, key, value, id)
         options = {
           :body => (
-            { :uri => @connection.configuration + "/node/#{get_id(id)}",
-              :key => key,
+            { :uri   => @connection.configuration + "/relationship/#{get_id(id)}",
+              :key   => key,
               :value => value
             }
           ).to_json,
           :headers => json_content_type
         }
+
         @connection.post(base(:index => index), options)
       end
 
@@ -74,9 +76,8 @@ module Neography
         index
       end
 
-      # TODO FIX BUG %20
-      def find_by_value(index, key, value)
-        @connection.get(key_value2(:index => index, :key => key, :value => value)) || Array.new
+      def find_by_key_query(index, key, query)
+        @connection.get(key_query(:index => index, :key => key, :query => query)) || Array.new
       end
 
       def find_by_query(index, query)
@@ -84,7 +85,7 @@ module Neography
       end
 
       def remove(index, id)
-        @connection.delete(node(:index => index, :id => get_id(id)))
+        @connection.delete(relationship(:index => index, :id => get_id(id)))
       end
 
       def remove_by_key(index, id, key)
