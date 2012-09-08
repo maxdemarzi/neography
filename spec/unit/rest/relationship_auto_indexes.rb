@@ -1,0 +1,57 @@
+require 'spec_helper'
+
+module Neography
+  class Rest
+    describe RelationshipAutoIndexes do
+
+      let(:connection) { stub }
+      subject { RelationshipAutoIndexes.new(connection) }
+
+      it "gets a relationship from an auto index" do
+        connection.should_receive(:get).with("/index/auto/relationship/some_key/some_value")
+        subject.get("some_key", "some_value")
+      end
+
+      it "returns nil if nothing was found in the auto index" do
+        connection.stub(:get).and_return(nil)
+        subject.get("some_key", "some_value").should be_nil
+      end
+
+      it "finds by key and value" do
+        connection.should_receive(:get).with("/index/auto/relationship/some_key/some_value")
+        subject.find("some_key", "some_value")
+      end
+
+      it "finds by query" do
+        connection.should_receive(:get).with("/index/auto/relationship/?query=some_query")
+        subject.query("some_query")
+      end
+
+      it "gets the status" do
+        connection.should_receive(:get).with("/index/auto/relationship/status")
+        subject.status
+      end
+
+      it "sets the status" do
+        connection.should_receive(:put).with("/index/auto/relationship/status", hash_match(:body, '"foo"'))
+        subject.status = "foo"
+      end
+
+      it "gets auto index properties" do
+        connection.should_receive(:get).with("/index/auto/relationship/properties")
+        subject.properties
+      end
+
+      it "adds a property to an auto index" do
+        connection.should_receive(:post).with("/index/auto/relationship/properties", hash_match(:body, "foo"))
+        subject.add_property("foo")
+      end
+
+      it "removes a property from an auto index" do
+        connection.should_receive(:delete).with("/index/auto/relationship/properties/foo")
+        subject.remove_property("foo")
+      end
+
+    end
+  end
+end
