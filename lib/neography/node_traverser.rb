@@ -59,16 +59,18 @@ module Neography
     end
 
     def filter(body)
-      @filter = Hash.new
-      @filter["language"] = "javascript"
-      @filter["body"] = body
+      @filter = {
+        "language" => "javascript",
+        "body"     => body
+      }
       self
     end
 
     def prune(body)
-      @prune = Hash.new
-      @prune["language"] = "javascript"
-      @prune["body"] = body
+      @prune = {
+        "language" => "javascript",
+        "body"     => body
+      }
       self
     end
 
@@ -79,9 +81,10 @@ module Neography
     end
 
     def include_start_node
-      @filter = Hash.new
-      @filter["language"] = "builtin"
-      @filter["name"] = "all"
+      @filter = {
+        "language" => "builtin",
+        "name"     => "all"
+      }
       self
     end
 
@@ -108,13 +111,14 @@ module Neography
     end
 
     def iterator
-      options = Hash.new
-      options["order"] = @order
-      options["uniqueness"] = @uniqueness
-      options["relationships"] = @relationships
-      options["prune evaluator"] = @prune unless @prune.nil?
-      options["return filter"] = @filter unless @filter.nil?
-      options["depth"] = @depth unless @depth.nil?
+      options = {
+        "order"         => @order,
+        "uniqueness"    => @uniqueness,
+        "relationships" => @relationships
+      }
+      options["prune evaluator"] = @prune  unless @prune.nil?
+      options["return filter"]   = @filter unless @filter.nil?
+      options["depth"]           = @depth  unless @depth.nil?
 
       if @relationships[0]["type"].empty?
         rels = @from.neo_server.get_node_relationships(@from, @relationships[0]["direction"])
@@ -124,11 +128,11 @@ module Neography
           when "out"
             rels.collect { |r| @from.neo_server.get_node(r["end"]) } #.uniq
           else
-            rels.collect { |r| 
+            rels.collect { |r|
             if @from.neo_id == r["start"].split('/').last
-              @from.neo_server.get_node(r["end"]) 
+              @from.neo_server.get_node(r["end"])
             else
-              @from.neo_server.get_node(r["start"]) 
+              @from.neo_server.get_node(r["start"])
             end
             } #.uniq
         end
