@@ -36,7 +36,7 @@ module Neography
 
       def remove(id, *properties)
         if properties.none?
-          @connection.delete(all_path(id: get_id(id)))
+          @connection.delete(all_path(:id => get_id(id)))
         else
           remove_each(id, *properties)
         end
