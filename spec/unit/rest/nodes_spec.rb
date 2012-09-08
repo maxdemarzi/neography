@@ -183,12 +183,6 @@ module Neography
 
       end
 
-      private
-
-      def json_content_type
-        {"Content-Type"=>"application/json"}
-      end
-
     end
   end
 end
