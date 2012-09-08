@@ -11,6 +11,13 @@ module Neography
         @connection = connection
       end
 
+      def set(id, properties)
+        properties.each do |key, value|
+          options = { :body => value.to_json, :headers => json_content_type }
+          @connection.put(single_path(:id => get_id(id), :property => key), options)
+        end
+      end
+
       def reset(id, properties)
         options = { :body => properties.to_json, :headers => json_content_type }
         @connection.put(all_path(:id => get_id(id)), options)
@@ -45,13 +52,6 @@ module Neography
       def remove_each(id, *properties)
         properties.each do |property|
           @connection.delete(single_path(:id => get_id(id), :property => property))
-        end
-      end
-
-      def set(id, properties)
-        properties.each do |key, value|
-          options = { :body => value.to_json, :headers => json_content_type }
-          @connection.put(single_path(:id => get_id(id), :property => key), options)
         end
       end
 
