@@ -13,7 +13,9 @@ module Neography
       add_path :key_value, "/index/node/:index/:key/:value"
       add_path :query,     "/index/node/:index?query=:query"
 
-      add_path :key_value2, "/index/node/:index/:key?query=\":value\"" # TODO FIX BUG %20
+      # this should be the same as the :key_value path above
+      # was changed to ?query="..." to fix bug with spaces and slashes
+      add_path :key_value2, "/index/node/:index/:key?query=\":value\""
 
       def initialize(connection)
         @connection = connection
@@ -42,10 +44,10 @@ module Neography
         create("node_auto_index", type, provider)
       end
 
-      def create_unique(index, key, value, props)
+      def create_unique(index, key, value, properties)
         options = {
           :body => (
-            { :properties => props,
+            { :properties => properties,
               :key => key,
               :value => value
             }
