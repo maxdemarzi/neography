@@ -81,17 +81,17 @@ module Neography
         subject.find_by_query("some_index", "some_query")
       end
 
-      it "removed a node from an index" do
+      it "removes a node from an index" do
         connection.should_receive(:delete).with("/index/node/some_index/42")
         subject.remove("some_index", "42")
       end
 
-      it "removed a node from an index by key" do
+      it "removes a node from an index by key" do
         connection.should_receive(:delete).with("/index/node/some_index/some_key/42")
         subject.remove_by_key("some_index", "42", "some_key")
       end
 
-      it "removed a node from an index by key and value" do
+      it "removes a node from an index by key and value" do
         connection.should_receive(:delete).with("/index/node/some_index/some_key/some_value/42")
         subject.remove_by_value("some_index", "42", "some_key", "some_value")
       end
