@@ -10,7 +10,6 @@ module Neography
         @connection = connection
       end
 
-
       def execute
         @connection.delete(clean_path)
       end

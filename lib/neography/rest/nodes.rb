@@ -48,6 +48,10 @@ module Neography
         @connection.post(index_path)
       end
 
+      def delete(id)
+        @connection.delete(base_path(:id => get_id(id)))
+      end
+
       def create_multiple(nodes)
         nodes = Array.new(nodes) if nodes.kind_of? Fixnum
         created_nodes = []
@@ -91,10 +95,6 @@ module Neography
           created_nodes << responses.pop
         end
         created_nodes
-      end
-
-      def delete(id)
-        @connection.delete(base_path(:id => get_id(id)))
       end
 
     end
