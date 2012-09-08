@@ -190,7 +190,7 @@ describe Neography::Rest do
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
-    xit "can get a node index with a slash in the value" do
+    it "can get a node index with a slash in the value" do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text + "/" + generate_text

@@ -8,8 +8,12 @@ module Neography
 
       def build_path(path, attributes)
         path.gsub(/:([\w_]*)/) do
-          attributes[$1.to_sym].to_s
+          encode(attributes[$1.to_sym].to_s)
         end
+      end
+
+      def encode(value)
+        URI.encode(value).gsub("/","%2F")
       end
 
       module ClassMethods

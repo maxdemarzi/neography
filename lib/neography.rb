@@ -30,8 +30,9 @@ require 'neography/version'
 
 require 'neography/config'
 
-require 'neography/rest_helpers'
-require 'neography/rest_paths'
+require 'neography/rest/helpers'
+require 'neography/rest/paths'
+
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
 require 'neography/rest/node_relationships'

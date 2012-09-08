@@ -76,19 +76,19 @@ module Neography
     end
 
     def get(path, options={})
-      evaluate_response(HTTParty.get(configuration + URI.encode(path), merge_options(options)))
+      evaluate_response(HTTParty.get(configuration + path, merge_options(options)))
     end
 
     def post(path, options={})
-      evaluate_response(HTTParty.post(configuration + URI.encode(path), merge_options(options)))
+      evaluate_response(HTTParty.post(configuration + path, merge_options(options)))
     end
 
     def put(path, options={})
-      evaluate_response(HTTParty.put(configuration + URI.encode(path), merge_options(options)))
+      evaluate_response(HTTParty.put(configuration + path, merge_options(options)))
     end
 
     def delete(path, options={})
-      evaluate_response(HTTParty.delete(configuration + URI.encode(path), merge_options(options)))
+      evaluate_response(HTTParty.delete(configuration + path, merge_options(options)))
     end
 
     def evaluate_response(response)

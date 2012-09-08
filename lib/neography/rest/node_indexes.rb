@@ -13,10 +13,6 @@ module Neography
       add_path :key_value, "/index/node/:index/:key/:value"
       add_path :query,     "/index/node/:index?query=:query"
 
-      # this should be the same as the :key_value path above
-      # was changed to ?query="..." to fix bug with spaces and slashes
-      add_path :key_value2, "/index/node/:index/:key?query=\":value\""
-
       def initialize(connection)
         @connection = connection
       end
@@ -78,7 +74,7 @@ module Neography
 
       # TODO FIX BUG %20
       def find_by_value(index, key, value)
-        @connection.get(key_value2_path(:index => index, :key => key, :value => value)) || []
+        @connection.get(key_value_path(:index => index, :key => key, :value => value)) || []
       end
 
       def find_by_query(index, query)
