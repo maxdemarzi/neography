@@ -11,11 +11,11 @@ module Neography
       end
 
       def get(id)
-        @connection.get(base(:id => get_id(id)))
+        @connection.get(base_path(:id => get_id(id)))
       end
 
       def delete(id)
-        @connection.delete(base(:id => get_id(id)))
+        @connection.delete(base_path(:id => get_id(id)))
       end
 
     end

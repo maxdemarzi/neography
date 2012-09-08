@@ -14,7 +14,7 @@ module Neography
 
       module ClassMethods
         def add_path(key, path)
-          define_method key do |*attributes|
+          define_method :"#{key}_path" do |*attributes|
             if attributes.any?
               build_path(path, *attributes)
             else

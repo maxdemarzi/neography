@@ -13,11 +13,11 @@ module Neography
 
       def get(id, properties)
         if properties.nil?
-          @connection.get(all(:id => get_id(id)))
+          @connection.get(all_path(:id => get_id(id)))
         else
           relationship_properties = Hash.new
           Array(properties).each do |property|
-            value = @connection.get(single(:id => get_id(id), :property => property))
+            value = @connection.get(single_path(:id => get_id(id), :property => property))
             relationship_properties[property] = value unless value.nil?
           end
           return nil if relationship_properties.empty?
@@ -27,15 +27,15 @@ module Neography
 
       def reset(id, properties)
         options = { :body => properties.to_json, :headers => json_content_type }
-        @connection.put(all(:id => get_id(id)), options)
+        @connection.put(all_path(:id => get_id(id)), options)
       end
 
       def remove(id, properties)
         if properties.nil?
-          @connection.delete(all(id: get_id(id)))
+          @connection.delete(all_path(id: get_id(id)))
         else
           Array(properties).each do |property|
-            @connection.delete(single(:id => get_id(id), :property => property))
+            @connection.delete(single_path(:id => get_id(id), :property => property))
           end
         end
       end
@@ -43,7 +43,7 @@ module Neography
       def set(id, properties)
         properties.each do |key, value|
           options = { :body => value.to_json, :headers => json_content_type }
-          @connection.put(single(:id => get_id(id), :property => key), options)
+          @connection.put(single_path(:id => get_id(id), :property => key), options)
         end
       end
 

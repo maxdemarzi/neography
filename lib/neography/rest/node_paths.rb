@@ -20,7 +20,7 @@ module Neography
           }.to_json,
           :headers => json_content_type
         }
-        @connection.post(base(:id => get_id(from)), options) || Hash.new
+        @connection.post(base_path(:id => get_id(from)), options) || Hash.new
       end
 
       def get_all(from, to, relationships, depth, algorithm)
@@ -32,7 +32,7 @@ module Neography
           }.to_json,
           :headers => json_content_type
         } 
-        @connection.post(all(:id => get_id(from)), options) || Array.new
+        @connection.post(all_path(:id => get_id(from)), options) || Array.new
       end
 
       def shortest_weighted(from, to, relationships, weight_attribute, depth, algorithm)
@@ -45,7 +45,7 @@ module Neography
           }.to_json,
           :headers => json_content_type
         }
-        @connection.post(all(:id => get_id(from)), options) || Hash.new
+        @connection.post(all_path(:id => get_id(from)), options) || Hash.new
       end
 
       private

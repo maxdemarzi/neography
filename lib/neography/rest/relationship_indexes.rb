@@ -21,7 +21,7 @@ module Neography
       end
 
       def list
-        @connection.get(all)
+        @connection.get(all_path)
       end
 
       def create(name, type, provider)
@@ -36,7 +36,7 @@ module Neography
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(all, options)
+        @connection.post(all_path, options)
       end
 
       def create_auto(type, provider)
@@ -53,7 +53,7 @@ module Neography
         }
         options = { :body => body.to_json, :headers => json_content_type }
 
-        @connection.post(unique(:index => index), options)
+        @connection.post(unique_path(:index => index), options)
       end
 
       def add(index, key, value, id)
@@ -67,33 +67,33 @@ module Neography
           :headers => json_content_type
         }
 
-        @connection.post(base(:index => index), options)
+        @connection.post(base_path(:index => index), options)
       end
 
       def get(index, key, value)
-        index = @connection.get(key_value(:index => index, :key => key, :value => value)) || Array.new
+        index = @connection.get(key_value_path(:index => index, :key => key, :value => value)) || Array.new
         return nil if index.empty?
         index
       end
 
       def find_by_key_query(index, key, query)
-        @connection.get(key_query(:index => index, :key => key, :query => query)) || Array.new
+        @connection.get(key_query_path(:index => index, :key => key, :query => query)) || Array.new
       end
 
       def find_by_query(index, query)
-        @connection.get(query(:index => index, :query => query)) || Array.new
+        @connection.get(query_path(:index => index, :query => query)) || Array.new
       end
 
       def remove(index, id)
-        @connection.delete(relationship(:index => index, :id => get_id(id)))
+        @connection.delete(relationship_path(:index => index, :id => get_id(id)))
       end
 
       def remove_by_key(index, id, key)
-        @connection.delete(key(:index => index, :id => get_id(id), :key => key))
+        @connection.delete(key_path(:index => index, :id => get_id(id), :key => key))
       end
 
       def remove_by_value(index, id, key, value)
-        @connection.delete(value(:index => index, :id => get_id(id), :key => key, :value => value))
+        @connection.delete(value_path(:index => index, :id => get_id(id), :key => key, :value => value))
       end
 
     end

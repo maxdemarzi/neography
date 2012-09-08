@@ -21,16 +21,16 @@ module Neography
           }.to_json,
           :headers => json_content_type }
 
-        @connection.post(base(:id => get_id(from)), options)
+        @connection.post(base_path(:id => get_id(from)), options)
       end
 
       def get(id, direction, types)
         direction = get_direction(direction)
 
         if types.nil?
-          node_relationships = @connection.get(direction(:id => get_id(id), :direction => direction)) || Array.new
+          node_relationships = @connection.get(direction_path(:id => get_id(id), :direction => direction)) || Array.new
         else
-          node_relationships = @connection.get(type(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))) || Array.new
+          node_relationships = @connection.get(type_path(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))) || Array.new
         end
         return nil if node_relationships.empty?
         node_relationships

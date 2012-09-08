@@ -12,7 +12,7 @@ module Neography
       end
 
       def get(id)
-        @connection.get(base(:id => get_id(id)))
+        @connection.get(base_path(:id => get_id(id)))
       end
 
       def get_each(*nodes)
@@ -25,7 +25,7 @@ module Neography
 
       def root
         root_node = @connection.get('/')["reference_node"]
-        @connection.get("/node/#{get_id(root_node)}")
+        @connection.get(base_path(:id => get_id(root_node)))
       end
 
       def create(*args)
@@ -41,11 +41,11 @@ module Neography
           :body => attributes.delete_if { |k, v| v.nil? }.to_json,
           :headers => json_content_type
         }
-        @connection.post(index, options)
+        @connection.post(index_path, options)
       end
 
       def create_empty
-        @connection.post(index)
+        @connection.post(index_path)
       end
 
       def create_multiple(nodes)
@@ -73,12 +73,12 @@ module Neography
             until node_queue.empty? do
               node = node_queue.pop
               if node.respond_to?(:each_pair)
-                responses.push( @connection.post(index, {
+                responses.push( @connection.post(index_path, {
                   :body => node.to_json,
                   :headers => json_content_type
                 } ) )
               else
-                responses.push( @connection.post(index) )
+                responses.push( @connection.post(index_path) )
               end
             end
             self.join
@@ -94,7 +94,7 @@ module Neography
       end
 
       def delete(id)
-        @connection.delete(base(:id => get_id(id)))
+        @connection.delete(base_path(:id => get_id(id)))
       end
 
     end

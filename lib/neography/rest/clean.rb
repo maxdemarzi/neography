@@ -12,7 +12,7 @@ module Neography
 
 
       def execute
-        @connection.delete(clean)
+        @connection.delete(clean_path)
       end
 
     end

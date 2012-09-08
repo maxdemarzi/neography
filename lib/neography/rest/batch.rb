@@ -4,7 +4,7 @@ module Neography
       include Neography::Rest::Paths
       include Neography::Rest::Helpers
 
-      add_path :batch_path, "/batch"
+      add_path :batch, "/batch"
 
       def initialize(connection)
         @connection = connection

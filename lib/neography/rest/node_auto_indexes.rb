@@ -15,21 +15,21 @@ module Neography
       end
 
       def get(key, value)
-        index = @connection.get(key_value(:key => key, :value => value)) || Array.new
+        index = @connection.get(key_value_path(:key => key, :value => value)) || Array.new
         return nil if index.empty?
         index
       end
 
       def find(key, value)
-        @connection.get(key_value(:key => key, :value => value)) || Array.new
+        @connection.get(key_value_path(:key => key, :value => value)) || Array.new
       end
 
       def query(query_expression)
-        @connection.get(query_index(:query => query_expression)) || Array.new
+        @connection.get(query_index_path(:query => query_expression)) || Array.new
       end
 
       def status
-        @connection.get(index_status)
+        @connection.get(index_status_path)
       end
 
       def status=(value)
@@ -37,11 +37,11 @@ module Neography
           :body => value.to_json,
           :headers => json_content_type
         }
-        @connection.put(index_status, options)
+        @connection.put(index_status_path, options)
       end
 
       def properties
-        @connection.get(index_properties)
+        @connection.get(index_properties_path)
       end
 
       def add_property(property)
@@ -49,11 +49,11 @@ module Neography
           :body => property,
           :headers => json_content_type
         }
-        @connection.post(index_properties, options)
+        @connection.post(index_properties_path, options)
       end
 
       def remove_property(property)
-        @connection.delete(index_property(:property => property))
+        @connection.delete(index_property_path(:property => property))
       end
 
     end

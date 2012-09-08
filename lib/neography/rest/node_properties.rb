@@ -13,12 +13,12 @@ module Neography
 
       def reset(id, properties)
         options = { :body => properties.to_json, :headers => json_content_type }
-        @connection.put(all(:id => get_id(id)), options)
+        @connection.put(all_path(:id => get_id(id)), options)
       end
 
       def get(id, *properties)
         if properties.none?
-          @connection.get(all(:id => get_id(id)))
+          @connection.get(all_path(:id => get_id(id)))
         else
           get_each(id, *properties)
         end
@@ -26,7 +26,7 @@ module Neography
 
       def get_each(id, *properties)
         node_properties = properties.inject({}) do |memo, property|
-          value = @connection.get(single(:id => get_id(id), :property => property))
+          value = @connection.get(single_path(:id => get_id(id), :property => property))
           memo[property] = value unless value.nil?
           memo
         end
@@ -36,7 +36,7 @@ module Neography
 
       def remove(id, *properties)
         if properties.none?
-          @connection.delete(all(:id => get_id(id)))
+          @connection.delete(all_path(:id => get_id(id)))
         else
           remove_each(id, *properties)
         end
@@ -44,14 +44,14 @@ module Neography
 
       def remove_each(id, *properties)
         properties.each do |property|
-          @connection.delete(single(:id => get_id(id), :property => property))
+          @connection.delete(single_path(:id => get_id(id), :property => property))
         end
       end
 
       def set(id, properties)
         properties.each do |property, value|
           options = { :body => value.to_json, :headers => json_content_type }
-          @connection.put(single(:id => get_id(id), :property => property), options)
+          @connection.put(single_path(:id => get_id(id), :property => property), options)
         end
       end
 
