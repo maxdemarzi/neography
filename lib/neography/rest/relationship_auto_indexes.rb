@@ -15,17 +15,17 @@ module Neography
       end
 
       def get(key, value)
-        index = @connection.get(key_value_path(:key => key, :value => value)) || Array.new
+        index = @connection.get(key_value_path(:key => key, :value => value)) || []
         return nil if index.empty?
         index
       end
 
       def find(key, value)
-        @connection.get(key_value_path(:key => key, :value => value)) || Array.new
+        @connection.get(key_value_path(:key => key, :value => value)) || []
       end
 
       def query(query_expression)
-        @connection.get(query_index_path(:query => query_expression)) || Array.new
+        @connection.get(query_index_path(:query => query_expression)) || []
       end
 
       def status

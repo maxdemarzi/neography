@@ -71,17 +71,17 @@ module Neography
       end
 
       def get(index, key, value)
-        index = @connection.get(key_value_path(:index => index, :key => key, :value => value)) || Array.new
+        index = @connection.get(key_value_path(:index => index, :key => key, :value => value)) || []
         return nil if index.empty?
         index
       end
 
       def find_by_key_query(index, key, query)
-        @connection.get(key_query_path(:index => index, :key => key, :query => query)) || Array.new
+        @connection.get(key_query_path(:index => index, :key => key, :query => query)) || []
       end
 
       def find_by_query(index, query)
-        @connection.get(query_path(:index => index, :query => query)) || Array.new
+        @connection.get(query_path(:index => index, :query => query)) || []
       end
 
       def remove(index, id)

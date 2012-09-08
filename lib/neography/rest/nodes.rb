@@ -16,7 +16,7 @@ module Neography
       end
 
       def get_each(*nodes)
-        gotten_nodes = Array.new
+        gotten_nodes = []
         Array(nodes).flatten.each do |node|
           gotten_nodes << get(node)
         end
@@ -50,7 +50,7 @@ module Neography
 
       def create_multiple(nodes)
         nodes = Array.new(nodes) if nodes.kind_of? Fixnum
-        created_nodes = Array.new
+        created_nodes = []
         nodes.each do |node|
           created_nodes << create(node)
         end
@@ -85,7 +85,7 @@ module Neography
           end
         end
 
-        created_nodes = Array.new
+        created_nodes = []
 
         while created_nodes.size < nodes.size 
           created_nodes << responses.pop

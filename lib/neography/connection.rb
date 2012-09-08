@@ -11,14 +11,15 @@ module Neography
       :parser
 
     def initialize(options=ENV['NEO4J_URL'] || {})
-      init = {:protocol       => Neography::Config.protocol, 
-        :server         => Neography::Config.server, 
-        :port           => Neography::Config.port, 
+      init = {
+        :protocol       => Neography::Config.protocol,
+        :server         => Neography::Config.server,
+        :port           => Neography::Config.port,
         :directory      => Neography::Config.directory,
         :cypher_path    => Neography::Config.cypher_path,
-        :gremlin_path   => Neography::Config.gremlin_path, 
-        :log_file       => Neography::Config.log_file, 
-        :log_enabled    => Neography::Config.log_enabled, 
+        :gremlin_path   => Neography::Config.gremlin_path,
+        :log_file       => Neography::Config.log_file,
+        :log_enabled    => Neography::Config.log_enabled,
         :max_threads    => Neography::Config.max_threads,
         :authentication => Neography::Config.authentication,
         :username       => Neography::Config.username,
@@ -28,13 +29,14 @@ module Neography
 
       unless options.respond_to?(:each_pair)
         url = URI.parse(options)
-        options = Hash.new
-        options[:protocol] = url.scheme + "://"
-        options[:server] = url.host
-        options[:port] = url.port
-        options[:directory] = url.path
-        options[:username] = url.user
-        options[:password] = url.password
+        options = {
+          :protocol  => url.scheme + "://",
+          :server    => url.host,
+          :port      => url.port,
+          :directory => url.path,
+          :username  => url.user,
+          :password  => url.password
+        }
         options[:authentication] = 'basic' unless url.user.nil?
       end
 
@@ -50,7 +52,7 @@ module Neography
       @log_enabled    = init[:log_enabled]
       @logger         = Logger.new(@log_file) if @log_enabled
       @max_threads    = init[:max_threads]
-      @authentication = Hash.new
+      @authentication = {}
       @authentication = {"#{init[:authentication]}_auth".to_sym => {:username => init[:username], :password => init[:password]}} unless init[:authentication].empty?
       @parser         = init[:parser]
       @user_agent     = {"User-Agent" => USER_AGENT}

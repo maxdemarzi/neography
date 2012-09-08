@@ -28,9 +28,9 @@ module Neography
         direction = get_direction(direction)
 
         if types.nil?
-          node_relationships = @connection.get(direction_path(:id => get_id(id), :direction => direction)) || Array.new
+          node_relationships = @connection.get(direction_path(:id => get_id(id), :direction => direction)) || []
         else
-          node_relationships = @connection.get(type_path(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))) || Array.new
+          node_relationships = @connection.get(type_path(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))) || []
         end
         return nil if node_relationships.empty?
         node_relationships

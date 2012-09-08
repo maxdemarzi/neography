@@ -121,12 +121,12 @@ module Neography
       @relationship_properties.reset(id, properties)
     end
 
-    def get_relationship_properties(id, properties = nil)
-      @relationship_properties.get(id, properties)
+    def get_relationship_properties(id, *properties)
+      @relationship_properties.get(id, *properties.flatten)
     end
 
-    def remove_relationship_properties(id, properties = nil)
-      @relationship_properties.remove(id, properties)
+    def remove_relationship_properties(id, *properties)
+      @relationship_properties.remove(id, *properties.flatten)
     end
 
     def set_relationship_properties(id, properties)

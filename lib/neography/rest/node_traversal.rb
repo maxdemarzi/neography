@@ -24,7 +24,7 @@ module Neography
 
         type = get_type(return_type)
 
-        @connection.post(traversal_path(:id => get_id(id), :type => type), options) || Array.new
+        @connection.post(traversal_path(:id => get_id(id), :type => type), options) || []
       end
 
       private
