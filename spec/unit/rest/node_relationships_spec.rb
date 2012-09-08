@@ -17,6 +17,12 @@ module Neography
         subject.create("some_type", "42", "43", {:foo => "bar", :baz => "qux"})
       end
 
+      it "returns the post results" do
+        connection.stub(:post).and_return("foo")
+
+        subject.create("some_type", "42", "43", {}).should == "foo"
+      end
+
       it "gets relationships" do
         connection.should_receive(:get).with("/node/42/relationships/all")
         subject.get("42")
@@ -35,6 +41,16 @@ module Neography
       it "gets relationships with direction and types" do
         connection.should_receive(:get).with("/node/42/relationships/in/foo&bar")
         subject.get("42", :in, ["foo", "bar"])
+      end
+
+      it "returns nil if no relationships were found" do
+        connection.stub(:get).and_return(nil)
+        subject.get("42", :in).should be_nil
+      end
+
+      it "returns nil if no relationships were found by type" do
+        connection.stub(:get).and_return(nil)
+        subject.get("42", :in, "foo")
       end
 
       context "directions" do
