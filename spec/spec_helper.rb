@@ -1,5 +1,6 @@
 require 'neography'
 require 'benchmark'
+require 'matchers'
 
 # If you want to see more, uncomment the next few lines
 # require 'net-http-spy'
@@ -16,6 +17,7 @@ end
 RSpec.configure do |c|
   c.filter_run_excluding :slow => true, :break_gremlin => true
 end
+
 
 def json_content_type
   {"Content-Type"=>"application/json"}
