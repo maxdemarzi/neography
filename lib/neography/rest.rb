@@ -183,7 +183,7 @@ module Neography
 
     def find_node_index(*args)
       case args.size
-      when 3 then index = @node_indexes.find_by_value(args[0], args[1], args[2])
+      when 3 then index = @node_indexes.find_by_key_value(args[0], args[1], args[2])
       when 2 then index = @node_indexes.find_by_query(args[0], args[1])
       end
       return nil if index.empty?
@@ -261,7 +261,7 @@ module Neography
 
     def find_relationship_index(*args)
       case args.size
-      when 3 then index = @relationship_indexes.find_by_key_query(args[0], args[1], args[2])
+      when 3 then index = @relationship_indexes.find_by_key_value(args[0], args[1], args[2])
       when 2 then index = @relationship_indexes.find_by_query(args[0], args[1])
       end
       return nil if index.empty?

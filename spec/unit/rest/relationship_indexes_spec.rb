@@ -74,8 +74,8 @@ module Neography
       end
 
       it "finds by key query" do
-        connection.should_receive(:get).with("/index/relationship/some_index/some_key?query=some_query")
-        subject.find_by_key_query("some_index", "some_key", "some_query")
+        connection.should_receive(:get).with("/index/relationship/some_index/some_key/some_value")
+        subject.find_by_key_value("some_index", "some_key", "some_value")
       end
 
       it "finds by query" do

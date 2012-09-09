@@ -12,39 +12,17 @@ module Neography
       end
 
       def get(from, to, relationships, depth, algorithm)
-        options = { :body => {
-            "to"            => @connection.configuration + "/node/#{get_id(to)}",
-            "relationships" => relationships,
-            "max_depth"     => depth,
-            "algorithm"     => get_algorithm(algorithm)
-          }.to_json,
-          :headers => json_content_type
-        }
+        options = path_options(to, relationships, depth, algorithm)
         @connection.post(base_path(:id => get_id(from)), options) || {}
       end
 
       def get_all(from, to, relationships, depth, algorithm)
-        options = { :body => {
-            "to"            => @connection.configuration + "/node/#{get_id(to)}",
-            "relationships" => relationships,
-            "max_depth"     => depth,
-            "algorithm"     => get_algorithm(algorithm)
-          }.to_json,
-          :headers => json_content_type
-        }
+        options = path_options(to, relationships, depth, algorithm)
         @connection.post(all_path(:id => get_id(from)), options) || []
       end
 
       def shortest_weighted(from, to, relationships, weight_attribute, depth, algorithm)
-        options = { :body => {
-            "to"            => @connection.configuration + "/node/#{get_id(to)}",
-            "relationships" => relationships,
-            "cost_property" => weight_attribute,
-            "max_depth"     => depth,
-            "algorithm"     => get_algorithm(algorithm)
-          }.to_json,
-          :headers => json_content_type
-        }
+        options = path_options(to, relationships, depth, algorithm, { :cost_property => weight_attribute })
         @connection.post(all_path(:id => get_id(from)), options) || {}
       end
 
@@ -61,6 +39,17 @@ module Neography
           else
             "allPaths"
         end
+      end
+
+      def path_options(to, relationships, depth, algorithm, extra_body = {})
+        options = { :body => {
+            "to"            => @connection.configuration + "/node/#{get_id(to)}",
+            "relationships" => relationships,
+            "max_depth"     => depth,
+            "algorithm"     => get_algorithm(algorithm)
+          }.merge(extra_body).to_json,
+          :headers => json_content_type
+        }
       end
 
     end
