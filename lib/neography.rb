@@ -33,6 +33,10 @@ require 'neography/config'
 require 'neography/rest/helpers'
 require 'neography/rest/paths'
 
+require 'neography/rest/properties'
+require 'neography/rest/indexes'
+require 'neography/rest/auto_indexes'
+
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
 require 'neography/rest/node_relationships'
