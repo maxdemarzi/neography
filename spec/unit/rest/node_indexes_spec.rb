@@ -73,7 +73,7 @@ module Neography
 
       it "finds by key and value" do
         connection.should_receive(:get).with("/index/node/some_index/some_key/some_value")
-        subject.find_by_value("some_index", "some_key", "some_value")
+        subject.find_by_key_value("some_index", "some_key", "some_value")
       end
 
       it "finds by query" do
