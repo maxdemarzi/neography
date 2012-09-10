@@ -7,7 +7,7 @@ module Neography
         @connection = connection
       end
 
-      def execute(script, parameters)
+      def execute(script, parameters = {})
         options = {
           :body => {
             :script => script,

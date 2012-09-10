@@ -12,7 +12,7 @@ module Neography
         @connection.get(all_path)
       end
 
-      def create(name, type, provider)
+      def create(name, type = "exact", provider = "lucene")
         options = {
           :body => (
             { :name => name,
@@ -27,7 +27,7 @@ module Neography
         @connection.post(all_path, options)
       end
 
-      def create_auto(type, provider)
+      def create_auto(type = "exact", provider = "lucene")
         create("#{@index_type}_auto_index", type, provider)
       end
 

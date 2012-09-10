@@ -12,7 +12,7 @@ module Neography
         @connection = connection
       end
 
-      def create(type, from, to, properties)
+      def create(type, from, to, properties = nil)
         options = {
           :body => {
             :to => @connection.configuration + "/node/#{get_id(to)}",
