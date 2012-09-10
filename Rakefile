@@ -6,10 +6,9 @@ require 'neography/tasks'
 
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = "--color"
-  t.pattern = "spec/integration/*_spec.rb"
+  t.pattern = "spec/**/*_spec.rb"
 end
 
 desc "Run Tests"
 task :default => :spec
-
 
