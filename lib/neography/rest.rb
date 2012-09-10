@@ -167,12 +167,8 @@ module Neography
       @node_indexes.create_unique(index, key, value, props)
     end
 
-    def remove_node_from_index(*args)
-      case args.size
-      when 4 then @node_indexes.remove_by_value(args[0], args[3], args[1], args[2])
-      when 3 then @node_indexes.remove_by_key(args[0], args[2], args[1])
-      when 2 then @node_indexes.remove(args[0], args[1])
-      end
+    def remove_node_from_index(index, id_or_key, id_or_value = nil, id = nil)
+      @node_indexes.remove(index, id_or_key, id_or_value, id)
     end
     alias_method :remove_from_index, :remove_node_from_index
 
@@ -181,13 +177,8 @@ module Neography
     end
     alias_method :get_index, :get_node_index
 
-    def find_node_index(*args)
-      case args.size
-      when 3 then index = @node_indexes.find_by_key_value(args[0], args[1], args[2])
-      when 2 then index = @node_indexes.find_by_query(args[0], args[1])
-      end
-      return nil if index.empty?
-      index
+    def find_node_index(index, key_or_query, value = nil)
+      @node_indexes.find(index, key_or_query, value)
     end
 
     # auto node indexes
@@ -196,13 +187,8 @@ module Neography
       @node_auto_indexes.get(key, value)
     end
 
-    def find_node_auto_index(*args)
-      case args.size
-      when 2 then index = @node_auto_indexes.find(args[0], args[1])
-      when 1 then index = @node_auto_indexes.query(args[0])
-      end
-      return nil if index.empty?
-      index
+    def find_node_auto_index(key_or_query, value = nil)
+      @node_auto_indexes.find_or_query(key_or_query, value)
     end
 
     def get_node_auto_index_status
@@ -247,25 +233,16 @@ module Neography
       @relationship_indexes.add(index, key, value, id)
     end
 
-    def remove_relationship_from_index(*args)
-      case args.size
-      when 4 then @relationship_indexes.remove_by_value(args[0], get_id(args[3]), args[1], args[2])
-      when 3 then @relationship_indexes.remove_by_key(args[0], get_id(args[2]), args[1])
-      when 2 then @relationship_indexes.remove(args[0], get_id(args[1]))
-      end
+    def remove_relationship_from_index(index, id_or_key, id_or_value = nil, id = nil)
+      @relationship_indexes.remove(index, id_or_key, id_or_value, id)
     end
 
     def get_relationship_index(index, key, value)
       @relationship_indexes.get(index, key, value)
     end
 
-    def find_relationship_index(*args)
-      case args.size
-      when 3 then index = @relationship_indexes.find_by_key_value(args[0], args[1], args[2])
-      when 2 then index = @relationship_indexes.find_by_query(args[0], args[1])
-      end
-      return nil if index.empty?
-      index
+    def find_relationship_index(index, key_or_query, value = nil)
+      @relationship_indexes.find(index, key_or_query, value)
     end
 
     # relationship auto indexes
@@ -274,13 +251,8 @@ module Neography
       @relationship_auto_indexes.get(key, value)
     end
 
-    def find_relationship_auto_index(*args)
-      case args.size
-      when 2 then index = @relationship_auto_indexes.find(args[0], args[1])
-      when 1 then index = @relationship_auto_indexes.query(args[0])
-      end
-      return nil if index.empty?
-      index
+    def find_relationship_auto_index(key_or_query, value = nil)
+      @relationship_auto_indexes.find_or_query(key_or_query, value)
     end
 
     def get_relationship_auto_index_status
