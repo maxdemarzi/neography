@@ -11,17 +11,17 @@ module Neography
         @connection = connection
       end
 
-      def get(from, to, relationships, depth, algorithm)
+      def get(from, to, relationships, depth = 1, algorithm = "shortestPath")
         options = path_options(to, relationships, depth, algorithm)
         @connection.post(base_path(:id => get_id(from)), options) || {}
       end
 
-      def get_all(from, to, relationships, depth, algorithm)
+      def get_all(from, to, relationships, depth = 1, algorithm = "allPaths")
         options = path_options(to, relationships, depth, algorithm)
         @connection.post(all_path(:id => get_id(from)), options) || []
       end
 
-      def shortest_weighted(from, to, relationships, weight_attribute, depth, algorithm)
+      def shortest_weighted(from, to, relationships, weight_attribute = "weight", depth = 1, algorithm = "dijkstra")
         options = path_options(to, relationships, depth, algorithm, { :cost_property => weight_attribute })
         @connection.post(all_path(:id => get_id(from)), options) || {}
       end
