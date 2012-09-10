@@ -13,6 +13,16 @@ module Neography
         index
       end
 
+      def find_or_query(key_or_query, value = nil)
+        if value
+          index = find(key_or_query, value)
+        else
+          index = query(key_or_query)
+        end
+        return nil if index.empty?
+        index
+      end
+
       def find(key, value)
         @connection.get(key_value_path(:key => key, :value => value)) || []
       end

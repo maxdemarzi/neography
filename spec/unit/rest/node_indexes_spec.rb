@@ -71,6 +71,16 @@ module Neography
         subject.get("some_index", "some_key", "some_value").should be_nil
       end
 
+      it "finds by key and value if both passed to #find" do
+        connection.should_receive(:get).with("/index/node/some_index/some_key/some_value")
+        subject.find("some_index", "some_key", "some_value")
+      end
+
+      it "finds by query if no value passed to #find" do
+        connection.should_receive(:get).with("/index/node/some_index?query=some_query")
+        subject.find("some_index", "some_query")
+      end
+
       it "finds by key and value" do
         connection.should_receive(:get).with("/index/node/some_index/some_key/some_value")
         subject.find_by_key_value("some_index", "some_key", "some_value")
@@ -81,9 +91,24 @@ module Neography
         subject.find_by_query("some_index", "some_query")
       end
 
-      it "removes a node from an index" do
+      it "removes a node from an index by id for #remove with two arguments" do
         connection.should_receive(:delete).with("/index/node/some_index/42")
         subject.remove("some_index", "42")
+      end
+
+      it "removes a node from an index by key for #remove with three arguments" do
+        connection.should_receive(:delete).with("/index/node/some_index/some_key/42")
+        subject.remove("some_index", "some_key", "42")
+      end
+
+      it "removes a node from an index by key and value for #remove with four arguments" do
+        connection.should_receive(:delete).with("/index/node/some_index/some_key/some_value/42")
+        subject.remove("some_index", "some_key", "some_value", "42")
+      end
+
+      it "removes a node from an index" do
+        connection.should_receive(:delete).with("/index/node/some_index/42")
+        subject.remove_by_id("some_index", "42")
       end
 
       it "removes a node from an index by key" do
