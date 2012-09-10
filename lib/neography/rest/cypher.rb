@@ -7,7 +7,7 @@ module Neography
         @connection = connection
       end
 
-      def query(query, parameters)
+      def query(query, parameters = {})
         options = {
           :body => {
             :query => query,

@@ -28,7 +28,7 @@ module Neography
       end
 
       def get_each(id, *properties)
-        retrieved_properties = properties.inject({}) do |memo, property|
+        retrieved_properties = properties.flatten.inject({}) do |memo, property|
           value = @connection.get(single_path(:id => get_id(id), :property => property))
           memo[property] = value unless value.nil?
           memo
@@ -46,7 +46,7 @@ module Neography
       end
 
       def remove_each(id, *properties)
-        properties.each do |property|
+        properties.flatten.each do |property|
           @connection.delete(single_path(:id => get_id(id), :property => property))
         end
       end

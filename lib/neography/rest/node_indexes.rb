@@ -17,7 +17,7 @@ module Neography
         super(connection, :node)
       end
 
-      def create_unique(index, key, value, properties)
+      def create_unique(index, key, value, properties = {})
         options = {
           :body => (
             { :properties => properties,
