@@ -51,6 +51,16 @@ module Neography
         index
       end
 
+      def find(index, key_or_query, value = nil)
+        if value
+          index = find_by_key_value(index, key_or_query, value)
+        else
+          index = find_by_query(index, key_or_query)
+        end
+        return nil if index.empty?
+        index
+      end
+
       def find_by_key_value(index, key, value)
         @connection.get(key_value_path(:index => index, :key => key, :value => value)) || []
       end
@@ -59,7 +69,18 @@ module Neography
         @connection.get(query_path(:index => index, :query => query)) || []
       end
 
-      def remove(index, id)
+      # Mimick original neography API in Rest class.
+      def remove(index, id_or_key, id_or_value = nil, id = nil)
+        if id
+          remove_by_value(index, id, id_or_key, id_or_value)
+        elsif id_or_value
+          remove_by_key(index, id_or_value, id_or_key)
+        else
+          remove_by_id(index, id_or_key)
+        end
+      end
+
+      def remove_by_id(index, id)
         @connection.delete(id_path(:index => index, :id => get_id(id)))
       end
 

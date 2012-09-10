@@ -17,6 +17,16 @@ module Neography
         subject.get("some_key", "some_value").should be_nil
       end
 
+      it "finds by key and value if value passed to #find_or_query" do
+        connection.should_receive(:get).with("/index/auto/relationship/some_key/some_value")
+        subject.find_or_query("some_key", "some_value")
+      end
+
+      it "finds by query if no value passed to #find_or_query" do
+        connection.should_receive(:get).with("/index/auto/relationship/?query=some_query")
+        subject.find_or_query("some_query")
+      end
+
       it "finds by key and value" do
         connection.should_receive(:get).with("/index/auto/relationship/some_key/some_value")
         subject.find("some_key", "some_value")
