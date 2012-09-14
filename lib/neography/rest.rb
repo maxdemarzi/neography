@@ -5,6 +5,7 @@ module Neography
   class Rest
     include HTTParty
     include Helpers
+    extend Delegation
     extend Forwardable
 
     attr_reader :connection
@@ -15,95 +16,106 @@ module Neography
       @connection = Connection.new(options)
     end
 
-    # nodes
-    def_delegator :nodes, :root,                     :get_root
-    def_delegator :nodes, :create,                   :create_node
-    def_delegator :nodes, :create_multiple,          :create_nodes
-    def_delegator :nodes, :create_multiple_threaded, :create_nodes_threaded
-    def_delegator :nodes, :get,                      :get_node
-    def_delegator :nodes, :get_each,                 :get_nodes
-    def_delegator :nodes, :delete,                   :delete_node
+    def_rest_delegations :nodes => {
+      :get_root              => :root,
+      :create_node           => :create,
+      :create_nodes          => :create_multiple,
+      :create_nodes_threaded => :create_multiple_threaded,
+      :get_node              => :get,
+      :get_nodes             => :get_each,
+      :delete_node           => :delete,
+    }
 
-    # node properties
-    def_delegator :node_properties, :reset,  :reset_node_properties
-    def_delegator :node_properties, :get,    :get_node_properties
-    def_delegator :node_properties, :remove, :remove_node_properties
-    def_delegator :node_properties, :set,    :set_node_properties
+    def_rest_delegations :node_properties => {
+      :reset_node_properties  => :reset,
+      :get_node_properties    => :get,
+      :remove_node_properties => :remove,
+      :set_node_properties    => :set
+    }
 
-    # relationships
-    def_delegator :relationships, :get,    :get_relationship
-    def_delegator :relationships, :delete, :delete_relationship
+    def_rest_delegations :relationships => {
+      :get_relationship    => :get,
+      :delete_relationship => :delete
+    }
 
-    # relationship properties
-    def_delegator :relationship_properties, :reset,  :reset_relationship_properties
-    def_delegator :relationship_properties, :get,    :get_relationship_properties
-    def_delegator :relationship_properties, :remove, :remove_relationship_properties
-    def_delegator :relationship_properties, :set,    :set_relationship_properties
+    def_rest_delegations :relationship_properties => {
+      :reset_relationship_properties  => :reset,
+      :get_relationship_properties    => :get,
+      :remove_relationship_properties => :remove,
+      :set_relationship_properties    => :set
+    }
 
-    # node relationships
-    def_delegator :node_relationships, :create, :create_relationship
-    def_delegator :node_relationships, :get, :get_node_relationships
+    def_rest_delegations :node_relationships => {
+      :create_relationship    => :create,
+      :get_node_relationships => :get
+    }
 
-    # node indexes
-    def_delegator :node_indexes, :list,          :list_node_indexes
-    def_delegator :node_indexes, :create,        :create_node_index
-    def_delegator :node_indexes, :create_auto,   :create_node_auto_index
-    def_delegator :node_indexes, :create_unique, :create_unique_node
-    def_delegator :node_indexes, :add,           :add_node_to_index
-    def_delegator :node_indexes, :remove,        :remove_node_from_index
-    def_delegator :node_indexes, :get,           :get_node_index
-    def_delegator :node_indexes, :find,          :find_node_index
+    def_rest_delegations :node_indexes => {
+      :list_node_indexes      => :list,
+      :create_node_index      => :create,
+      :create_node_auto_index => :create_auto,
+      :create_unique_node     => :create_unique,
+      :add_node_to_index      => :add,
+      :remove_node_from_index => :remove,
+      :get_node_index         => :get,
+      :find_node_index        => :find
+    }
 
     alias_method :list_indexes, :list_node_indexes
     alias_method :add_to_index, :add_node_to_index
     alias_method :remove_from_index, :remove_node_from_index
     alias_method :get_index, :get_node_index
 
-    # auto node indexes
-    def_delegator :node_auto_indexes, :get,             :get_node_auto_index
-    def_delegator :node_auto_indexes, :find_or_query,   :find_node_auto_index
-    def_delegator :node_auto_indexes, :status,          :get_node_auto_index_status
-    def_delegator :node_auto_indexes, :status=,         :set_node_auto_index_status
-    def_delegator :node_auto_indexes, :properties,      :get_node_auto_index_properties
-    def_delegator :node_auto_indexes, :add_property,    :add_node_auto_index_property
-    def_delegator :node_auto_indexes, :remove_property, :remove_node_auto_index_property
+    def_rest_delegations :node_auto_indexes => {
+      :get_node_auto_index             => :get,
+      :find_node_auto_index            => :find_or_query,
+      :get_node_auto_index_status      => :status,
+      :set_node_auto_index_status      => :status=,
+      :get_node_auto_index_properties  => :properties,
+      :add_node_auto_index_property    => :add_property,
+      :remove_node_auto_index_property => :remove_property
+    }
 
-    # relationship indexes
-    def_delegator :relationship_indexes, :list,          :list_relationship_indexes
-    def_delegator :relationship_indexes, :create,        :create_relationship_index
-    def_delegator :relationship_indexes, :create_auto,   :create_relationship_auto_index
-    def_delegator :relationship_indexes, :create_unique, :create_unique_relationship
-    def_delegator :relationship_indexes, :add,           :add_relationship_to_index
-    def_delegator :relationship_indexes, :remove,        :remove_relationship_from_index
-    def_delegator :relationship_indexes, :get,           :get_relationship_index
-    def_delegator :relationship_indexes, :find,          :find_relationship_index
+    def_rest_delegations :relationship_indexes => {
+      :list_relationship_indexes      => :list,
+      :create_relationship_index      => :create,
+      :create_relationship_auto_index => :create_auto,
+      :create_unique_relationship     => :create_unique,
+      :add_relationship_to_index      => :add,
+      :remove_relationship_from_index => :remove,
+      :get_relationship_index         => :get,
+      :find_relationship_index        => :find
+    }
 
-    # relationship auto indexes
-    def_delegator :relationship_auto_indexes, :get,             :get_relationship_auto_index
-    def_delegator :relationship_auto_indexes, :find_or_query,   :find_relationship_auto_index
-    def_delegator :relationship_auto_indexes, :status,          :get_relationship_auto_index_status
-    def_delegator :relationship_auto_indexes, :status=,         :set_relationship_auto_index_status
-    def_delegator :relationship_auto_indexes, :properties,      :get_relationship_auto_index_properties
-    def_delegator :relationship_auto_indexes, :add_property,    :add_relationship_auto_index_property
-    def_delegator :relationship_auto_indexes, :remove_property, :remove_relationship_auto_index_property
+    def_rest_delegations :relationship_auto_indexes => {
+      :get_relationship_auto_index             => :get,
+      :find_relationship_auto_index            => :find_or_query,
+      :get_relationship_auto_index_status      => :status,
+      :set_relationship_auto_index_status      => :status=,
+      :get_relationship_auto_index_properties  => :properties,
+      :add_relationship_auto_index_property    => :add_property,
+      :remove_relationship_auto_index_property => :remove_property
+    }
+
+    def_rest_delegations :node_paths => {
+      :get_path                   => :get,
+      :get_paths                  => :get_all,
+      :get_shortest_weighted_path => :shortest_weighted
+    }
+
+    def_rest_delegations :batch_rest => {
+      :batch               => :execute,
+      :batch_not_streaming => :not_streaming
+    }
 
     # traversal
     def_delegator :node_traversal, :traverse, :traverse
-
-    # paths
-    def_delegator :node_paths, :get,               :get_path
-    def_delegator :node_paths, :get_all,           :get_paths
-    def_delegator :node_paths, :shortest_weighted, :get_shortest_weighted_path
 
     # cypher query
     def_delegator :cypher, :query, :execute_query
 
     # gremlin script
     def_delegator :gremlin, :execute, :execute_script
-
-    # batch
-    def_delegator :batch_rest, :execute,        :batch
-    def_delegator :batch_rest, :not_streaming,  :batch_not_streaming
 
     # For testing (use a separate neo4j instance)
     # call this before each test or spec
