@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    neography (0.0.30)
+    neography (0.0.31)
       httparty (>= 0.8.1)
       json
       multi_json
