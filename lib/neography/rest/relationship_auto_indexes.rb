@@ -1,7 +1,7 @@
 module Neography
   class Rest
     class RelationshipAutoIndexes < AutoIndexes
-      include Neography::Rest::Paths
+      extend Neography::Rest::Paths
 
       add_path :key_value,        "/index/auto/relationship/:key/:value"
       add_path :query_index,      "/index/auto/relationship/?query=:query"

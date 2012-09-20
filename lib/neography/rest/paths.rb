@@ -2,8 +2,23 @@ module Neography
   class Rest
     module Paths
 
-      def self.included(mod)
-        mod.send :extend, ClassMethods
+      def add_path(key, path)
+        method_name = :"#{key}_path"
+
+        metaclass = (class << self; self; end)
+        metaclass.instance_eval do
+          define_method method_name do |*attributes|
+            if attributes.any?
+              build_path(path, *attributes)
+            else
+              path
+            end
+          end
+        end
+
+        define_method method_name do |*attributes|
+          self.class.send(method_name, *attributes)
+        end
       end
 
       def build_path(path, attributes)
@@ -14,18 +29,6 @@ module Neography
 
       def encode(value)
         URI.encode(value).gsub("/","%2F")
-      end
-
-      module ClassMethods
-        def add_path(key, path)
-          define_method :"#{key}_path" do |*attributes|
-            if attributes.any?
-              build_path(path, *attributes)
-            else
-              path
-            end
-          end
-        end
       end
 
     end
