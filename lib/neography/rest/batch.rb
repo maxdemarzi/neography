@@ -44,30 +44,30 @@ module Neography
       def get_node(args)
         {
           :method => "GET",
-          :to => Nodes.base_path(:id => get_id(args[1]))
+          :to     => Nodes.base_path(:id => get_id(args[1]))
         }
       end
 
       def create_node(args)
         {
           :method => "POST",
-          :to => Nodes.index_path,
-          :body => args[1]
+          :to     => Nodes.index_path,
+          :body   => args[1]
         }
       end
 
       def delete_node(args)
         {
           :method => "DELETE",
-          :to => Nodes.base_path(:id => get_id(args[1]))
+          :to     => Nodes.base_path(:id => get_id(args[1]))
         }
       end
 
       def create_unique_node(args)
         {
           :method => "POST",
-          :to => NodeIndexes.unique_path(:index => args[1]),
-          :body => {
+          :to     => NodeIndexes.unique_path(:index => args[1]),
+          :body   => {
             :key        => args[2],
             :value      => args[3],
             :properties => args[4]
@@ -78,8 +78,8 @@ module Neography
       def add_node_to_index(args)
         {
           :method => "POST",
-          :to => "/index/node/#{args[1]}",
-          :body => {
+          :to     => "/index/node/#{args[1]}",
+          :body   => {
             :uri   => build_node_uri(args[4]),
             :key   => args[2],
             :value => args[3]
@@ -136,15 +136,15 @@ module Neography
       def get_relationship(args)
         {
           :method => "GET",
-          :to => Relationships.base_path(:id => get_id(args[1]))
+          :to     => Relationships.base_path(:id => get_id(args[1]))
         }
       end
 
       def create_relationship(args)
         {
           :method => "POST",
-          :to => build_node_uri(args[2]) + "/relationships",
-          :body => {
+          :to     => build_node_uri(args[2]) + "/relationships",
+          :body   => {
             :to   => build_node_uri(args[3]),
             :type => args[1],
             :data => args[4]
@@ -162,8 +162,8 @@ module Neography
       def create_unique_relationship(args)
         {
           :method => "POST",
-          :to => "/index/relationship/#{args[1]}?unique",
-          :body => {
+          :to     => "/index/relationship/#{args[1]}?unique",
+          :body   => {
             :key   => args[2],
             :value => args[3],
             :type  => args[4],
@@ -176,8 +176,8 @@ module Neography
       def add_relationship_to_index(args)
         {
           :method => "POST",
-          :to => "/index/relationship/#{args[1]}",
-          :body => {
+          :to     => "/index/relationship/#{args[1]}",
+          :body   => {
             :uri   => build_relationship_uri(args[4]),
             :key   => args[2],
             :value => args[3]
@@ -211,8 +211,8 @@ module Neography
       def execute_query(args)
         request = {
           :method => "POST",
-          :to => @connection.cypher_path,
-          :body => {
+          :to     => @connection.cypher_path,
+          :body   => {
             :query => args[1]
           }
         }
