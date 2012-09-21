@@ -35,206 +35,220 @@ module Neography
 
       def get_batch(args)
         if respond_to?(args[0].to_sym, true)
-          send(args[0].to_sym, args)
+          send(args[0].to_sym, *args[1..-1])
         else
           raise "Unknown option #{args[0]}"
         end
       end
 
-      def get_node(args)
+      def get_node(id)
         {
           :method => "GET",
-          :to     => Nodes.base_path(:id => get_id(args[1]))
+          :to     => Nodes.base_path(:id => get_id(id))
         }
       end
 
-      def create_node(args)
+      def create_node(body)
         {
           :method => "POST",
           :to     => Nodes.index_path,
-          :body   => args[1]
+          :body   => body
         }
       end
 
-      def delete_node(args)
+      def delete_node(id)
         {
           :method => "DELETE",
-          :to     => Nodes.base_path(:id => get_id(args[1]))
+          :to     => Nodes.base_path(:id => get_id(id))
         }
       end
 
-      def create_unique_node(args)
+      def create_unique_node(index, key, value, properties)
         {
           :method => "POST",
-          :to     => NodeIndexes.unique_path(:index => args[1]),
+          :to     => NodeIndexes.unique_path(:index => index),
           :body   => {
-            :key        => args[2],
-            :value      => args[3],
-            :properties => args[4]
+            :key        => key,
+            :value      => value,
+            :properties => properties
           }
         }
       end
 
-      def add_node_to_index(args)
+      def add_node_to_index(index, key, value, to)
         {
           :method => "POST",
-          :to     => "/index/node/#{args[1]}",
+          :to     => NodeIndexes.base_path(:index => index),
           :body   => {
-            :uri   => build_node_uri(args[4]),
-            :key   => args[2],
-            :value => args[3]
+            :uri   => build_node_uri(to),
+            :key   => key,
+            :value => value
           }
         }
       end
 
-      def get_node_index(args)
+      def get_node_index(index, key, value)
         {
           :method => "GET",
-          :to     => "/index/node/#{args[1]}/#{args[2]}/#{args[3]}"
+          :to     => NodeIndexes.key_value_path(:index => index, :key => key, :value => value)
         }
       end
 
-      def remove_node_from_index(args)
-        path = case args.size
-               when 5
-                 NodeIndexes.value_path(:index => args[1], :key => args[2], :value => args[3], :id => get_id(args[4]))
-               when 4
-                 NodeIndexes.key_path(:index => args[1], :key => args[2], :id => get_id(args[3]))
-               when 3
-                 NodeIndexes.id_path(:index => args[1], :id => get_id(args[2]))
-               end
+      def remove_node_from_index(index, key_or_id, value_or_id = nil, id = nil)
+        {
+          :method => "DELETE",
+          :to     => remove_node_from_index_path(index, key_or_id, value_or_id, id)
+        }
+      end
+
+      def remove_node_from_index_path(index, key_or_id, value_or_id = nil, id = nil)
+        if id
+          NodeIndexes.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
+        elsif value_or_id
+          NodeIndexes.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
+        else
+          NodeIndexes.id_path(:index => index, :id => get_id(key_or_id))
+        end
+      end
+
+      def set_node_property(id, property)
+        {
+          :method => "PUT",
+          :to     => NodeProperties.single_path(:id => get_id(id), :property => property.keys.first),
+          :body   => property.values.first
+        }
+      end
+
+      def reset_node_properties(id, body)
+        {
+          :method => "PUT",
+          :to     => NodeProperties.all_path(:id => get_id(id)),
+          :body   => body
+        }
+      end
+
+      def get_node_relationships(id, direction = nil)
+        {
+          :method => "GET",
+          :to     => NodeRelationships.direction_path(:id => get_id(id), :direction => direction || 'all'),
+        }
+      end
+
+      def get_relationship(id)
+        {
+          :method => "GET",
+          :to     => Relationships.base_path(:id => get_id(id))
+        }
+      end
+
+      def create_relationship(type, from, to, data)
+        {
+          :method => "POST",
+          :to     => build_node_uri(from) + "/relationships",
+          :body   => {
+            :to   => build_node_uri(to),
+            :type => type,
+            :data => data
+          }
+        }
+      end
+
+      def delete_relationship(id)
+        {
+          :method => "DELETE",
+          :to     => Relationships.base_path(:id =>get_id(id))
+        }
+      end
+
+      def create_unique_relationship(index, key, value, type, from, to)
+        {
+          :method => "POST",
+          :to     => RelationshipIndexes.unique_path(:index => index),
+          :body   => {
+            :key   => key,
+            :value => value,
+            :type  => type,
+            :start => build_node_uri(from),
+            :end   => build_node_uri(to)
+          }
+        }
+      end
+
+      def add_relationship_to_index(index, key, value, id)
+        {
+          :method => "POST",
+          :to     => RelationshipIndexes.base_path(:index => index),
+          :body   => {
+            :uri   => build_relationship_uri(id),
+            :key   => key,
+            :value => value
+          }
+        }
+      end
+
+      def get_relationship_index(index, key, value)
+        {
+          :method => "GET",
+          :to     => RelationshipIndexes.key_value_path(:index => index, :key => key, :value => value)
+        }
+      end
+
+      def set_relationship_property(id, property)
+        {
+          :method => "PUT",
+          :to     => RelationshipProperties.single_path(:id => get_id(id), :property => property.keys.first),
+          :body   => property.values.first
+        }
+      end
+
+      def reset_relationship_properties(id, body)
+        {
+          :method => "PUT",
+          :to     => build_relationship_uri(id) + "/properties",
+          :body   => body
+        }
+      end
+
+      def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
 
         {
           :method => "DELETE",
-          :to     => path
+          :to     => remove_relationship_from_index_path(index, key_or_id, value_or_id, id)
         }
       end
 
-      def set_node_property(args)
-        {
-          :method => "PUT",
-          :to     => NodeProperties.single_path(:id => get_id(args[1]), :property => args[2].keys.first),
-          :body   => args[2].values.first
-        }
+      def remove_relationship_from_index_path(index, key_or_id, value_or_id = nil, id = nil)
+         if id
+           RelationshipIndexes.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
+         elsif value_or_id
+           RelationshipIndexes.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
+         else
+           RelationshipIndexes.id_path(:index => index, :id => get_id(key_or_id))
+         end
       end
 
-      def reset_node_properties(args)
-        {
-          :method => "PUT",
-          :to     => NodeProperties.all_path(:id => get_id(args[1])),
-          :body   => args[2]
-        }
-      end
-
-      def get_node_relationships(args)
-        {
-          :method => "GET",
-          :to     => NodeRelationships.direction_path(:id => get_id(args[1]), :direction => args[2] || 'all'),
-        }
-      end
-
-      def get_relationship(args)
-        {
-          :method => "GET",
-          :to     => Relationships.base_path(:id => get_id(args[1]))
-        }
-      end
-
-      def create_relationship(args)
-        {
-          :method => "POST",
-          :to     => build_node_uri(args[2]) + "/relationships",
-          :body   => {
-            :to   => build_node_uri(args[3]),
-            :type => args[1],
-            :data => args[4]
-          }
-        }
-      end
-
-      def delete_relationship(args)
-        {
-          :method => "DELETE",
-          :to     => Relationships.base_path(:id =>get_id(args[1]))
-        }
-      end
-
-      def create_unique_relationship(args)
-        {
-          :method => "POST",
-          :to     => "/index/relationship/#{args[1]}?unique",
-          :body   => {
-            :key   => args[2],
-            :value => args[3],
-            :type  => args[4],
-            :start => build_node_uri(args[5]),
-            :end   => build_node_uri(args[6])
-          }
-        }
-      end
-
-      def add_relationship_to_index(args)
-        {
-          :method => "POST",
-          :to     => "/index/relationship/#{args[1]}",
-          :body   => {
-            :uri   => build_relationship_uri(args[4]),
-            :key   => args[2],
-            :value => args[3]
-          }
-        }
-      end
-
-      def get_relationship_index(args)
-        {
-          :method => "GET",
-          :to     => "/index/relationship/#{args[1]}/#{args[2]}/#{args[3]}"
-        }
-      end
-
-      def set_relationship_property(args)
-        {
-          :method => "PUT",
-          :to     => RelationshipProperties.single_path(:id => get_id(args[1]), :property => args[2].keys.first),
-          :body   => args[2].values.first
-        }
-      end
-
-      def reset_relationship_properties(args)
-        {
-          :method => "PUT",
-          :to     => build_relationship_uri(args[1]) + "/properties",
-          :body   => args[2]
-        }
-      end
-
-      def execute_query(args)
+      def execute_query(query, params = nil)
         request = {
           :method => "POST",
           :to     => @connection.cypher_path,
           :body   => {
-            :query => args[1]
+            :query => query
           }
         }
 
-        request[:body].merge!({ :params => args[2] }) if args[2]
+        request[:body].merge!({ :params => params }) if params
 
         request
       end
 
-      def remove_relationship_from_index(args)
-        path = case args.size
-               when 5
-                 RelationshipIndexes.value_path(:index => args[1], :key => args[2], :value => args[3], :id => get_id(args[4]))
-               when 4
-                 RelationshipIndexes.key_path(:index => args[1], :key => args[2], :id => get_id(args[3]))
-               when 3
-                 RelationshipIndexes.id_path(:index => args[1], :id => get_id(args[2]))
-               end
-
+      def execute_script(script, params = nil)
         {
-          :method => "DELETE",
-          :to     => path
+          :method => "POST",
+          :to => @connection.gremlin_path,
+          :body => {
+            :script => script,
+            :params => params
+          }
         }
       end
 
@@ -256,17 +270,6 @@ module Neography
         else
           "/#{type}/"
         end
-      end
-
-      def execute_script(args)
-        {
-          :method => "POST",
-          :to => @connection.gremlin_path,
-          :body => {
-            :script => args[1],
-            :params => args[2]
-          }
-        }
       end
 
     end
