@@ -41,11 +41,14 @@ module Neography
         end
       end
 
+      # Nodes
+
       def get_node(id)
-        {
-          :method => "GET",
-          :to     => Nodes.base_path(:id => get_id(id))
-        }
+        get(Nodes, id)
+      end
+
+      def delete_node(id)
+        delete(Nodes, id)
       end
 
       def create_node(body)
@@ -56,12 +59,7 @@ module Neography
         }
       end
 
-      def delete_node(id)
-        {
-          :method => "DELETE",
-          :to     => Nodes.base_path(:id => get_id(id))
-        }
-      end
+      # NodeIndexes
 
       def create_unique_node(index, key, value, properties)
         {
@@ -75,48 +73,23 @@ module Neography
         }
       end
 
-      def add_node_to_index(index, key, value, to)
-        {
-          :method => "POST",
-          :to     => NodeIndexes.base_path(:index => index),
-          :body   => {
-            :uri   => build_node_uri(to),
-            :key   => key,
-            :value => value
-          }
-        }
+      def add_node_to_index(index, key, value, id)
+        uri = build_node_uri(id)
+        add_to_index(NodeIndexes, index, key, value, uri)
       end
 
       def get_node_index(index, key, value)
-        {
-          :method => "GET",
-          :to     => NodeIndexes.key_value_path(:index => index, :key => key, :value => value)
-        }
+        get_from_index(NodeIndexes, index, key, value)
       end
 
       def remove_node_from_index(index, key_or_id, value_or_id = nil, id = nil)
-        {
-          :method => "DELETE",
-          :to     => remove_node_from_index_path(index, key_or_id, value_or_id, id)
-        }
+        remove_from_index(NodeIndexes, index, key_or_id, value_or_id, id)
       end
 
-      def remove_node_from_index_path(index, key_or_id, value_or_id = nil, id = nil)
-        if id
-          NodeIndexes.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
-        elsif value_or_id
-          NodeIndexes.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
-        else
-          NodeIndexes.id_path(:index => index, :id => get_id(key_or_id))
-        end
-      end
+      # NodeProperties
 
       def set_node_property(id, property)
-        {
-          :method => "PUT",
-          :to     => NodeProperties.single_path(:id => get_id(id), :property => property.keys.first),
-          :body   => property.values.first
-        }
+        set_property(NodeProperties, id, property)
       end
 
       def reset_node_properties(id, body)
@@ -127,6 +100,8 @@ module Neography
         }
       end
 
+      # NodeRelationships
+
       def get_node_relationships(id, direction = nil)
         {
           :method => "GET",
@@ -134,11 +109,14 @@ module Neography
         }
       end
 
+      # Relationships
+
       def get_relationship(id)
-        {
-          :method => "GET",
-          :to     => Relationships.base_path(:id => get_id(id))
-        }
+        get(Relationships, id)
+      end
+
+      def delete_relationship(id)
+        delete(Relationships, id)
       end
 
       def create_relationship(type, from, to, data)
@@ -153,12 +131,7 @@ module Neography
         }
       end
 
-      def delete_relationship(id)
-        {
-          :method => "DELETE",
-          :to     => Relationships.base_path(:id =>get_id(id))
-        }
-      end
+      # RelationshipIndexes
 
       def create_unique_relationship(index, key, value, type, from, to)
         {
@@ -175,30 +148,22 @@ module Neography
       end
 
       def add_relationship_to_index(index, key, value, id)
-        {
-          :method => "POST",
-          :to     => RelationshipIndexes.base_path(:index => index),
-          :body   => {
-            :uri   => build_relationship_uri(id),
-            :key   => key,
-            :value => value
-          }
-        }
+        uri = build_relationship_uri(id)
+        add_to_index(RelationshipIndexes, index, key, value, uri)
       end
 
       def get_relationship_index(index, key, value)
-        {
-          :method => "GET",
-          :to     => RelationshipIndexes.key_value_path(:index => index, :key => key, :value => value)
-        }
+        get_from_index(RelationshipIndexes, index, key, value)
       end
 
+      def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
+        remove_from_index(RelationshipIndexes, index, key_or_id, value_or_id, id)
+      end
+
+      # RelationshipProperties
+
       def set_relationship_property(id, property)
-        {
-          :method => "PUT",
-          :to     => RelationshipProperties.single_path(:id => get_id(id), :property => property.keys.first),
-          :body   => property.values.first
-        }
+        set_property(RelationshipProperties, id, property)
       end
 
       def reset_relationship_properties(id, body)
@@ -209,23 +174,7 @@ module Neography
         }
       end
 
-      def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
-
-        {
-          :method => "DELETE",
-          :to     => remove_relationship_from_index_path(index, key_or_id, value_or_id, id)
-        }
-      end
-
-      def remove_relationship_from_index_path(index, key_or_id, value_or_id = nil, id = nil)
-         if id
-           RelationshipIndexes.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
-         elsif value_or_id
-           RelationshipIndexes.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
-         else
-           RelationshipIndexes.id_path(:index => index, :id => get_id(key_or_id))
-         end
-      end
+      # Cypher
 
       def execute_query(query, params = nil)
         request = {
@@ -241,6 +190,8 @@ module Neography
         request
       end
 
+      # Gremlin
+
       def execute_script(script, params = nil)
         {
           :method => "POST",
@@ -251,6 +202,68 @@ module Neography
           }
         }
       end
+
+      # Similar between nodes and relationships
+
+      def get(klass, id)
+        {
+          :method => "GET",
+          :to     => klass.base_path(:id => get_id(id))
+        }
+      end
+
+      def delete(klass, id)
+        {
+          :method => "DELETE",
+          :to     => klass.base_path(:id => get_id(id))
+        }
+      end
+
+      def add_to_index(klass, index, key, value, uri)
+        {
+          :method => "POST",
+          :to     => klass.base_path(:index => index),
+          :body   => {
+            :uri   => uri,
+            :key   => key,
+            :value => value
+          }
+        }
+      end
+
+      def get_from_index(klass, index, key, value)
+        {
+          :method => "GET",
+          :to     => klass.key_value_path(:index => index, :key => key, :value => value)
+        }
+      end
+
+      def remove_from_index(klass, index, key_or_id, value_or_id = nil, id = nil)
+        {
+          :method => "DELETE",
+          :to     => remove_from_index_path(klass, index, key_or_id, value_or_id, id)
+        }
+      end
+
+      def remove_from_index_path(klass, index, key_or_id, value_or_id = nil, id = nil)
+        if id
+          klass.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
+        elsif value_or_id
+          klass.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
+        else
+          klass.id_path(:index => index, :id => get_id(key_or_id))
+        end
+      end
+
+      def set_property(klass, id, property)
+        {
+          :method => "PUT",
+          :to     => klass.single_path(:id => get_id(id), :property => property.keys.first),
+          :body   => property.values.first
+        }
+      end
+
+      # Helper methods
 
       def build_node_uri(value)
         build_uri(value, "node")
