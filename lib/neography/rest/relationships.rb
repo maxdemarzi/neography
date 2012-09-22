@@ -1,7 +1,7 @@
 module Neography
   class Rest
     class Relationships
-      include Neography::Rest::Paths
+      extend Neography::Rest::Paths
       include Neography::Rest::Helpers
 
       add_path :base,   "/relationship/:id"

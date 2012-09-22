@@ -1,7 +1,7 @@
 module Neography
   class Rest
     class RelationshipProperties < Properties
-      include Neography::Rest::Paths
+      extend Neography::Rest::Paths
 
       add_path :all,    "/relationship/:id/properties"
       add_path :single, "/relationship/:id/properties/:property"
