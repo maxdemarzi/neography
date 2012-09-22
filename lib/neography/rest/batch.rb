@@ -44,146 +44,143 @@ module Neography
       # Nodes
 
       def get_node(id)
-        get(Nodes, id)
+        get Nodes.base_path(:id => get_id(id))
       end
 
       def delete_node(id)
-        delete(Nodes, id)
+        delete Nodes.base_path(:id => get_id(id))
       end
 
       def create_node(body)
-        {
-          :method => "POST",
-          :to     => Nodes.index_path,
-          :body   => body
-        }
+        post Nodes.index_path do
+          body
+        end
       end
 
       # NodeIndexes
 
       def create_unique_node(index, key, value, properties)
-        {
-          :method => "POST",
-          :to     => NodeIndexes.unique_path(:index => index),
-          :body   => {
+        post NodeIndexes.unique_path(:index => index) do
+          {
             :key        => key,
             :value      => value,
             :properties => properties
           }
-        }
+        end
       end
 
       def add_node_to_index(index, key, value, id)
-        uri = build_node_uri(id)
-        add_to_index(NodeIndexes, index, key, value, uri)
+        post NodeIndexes.base_path(:index => index) do
+          {
+            :uri   => build_node_uri(id),
+            :key   => key,
+            :value => value
+          }
+        end
       end
 
       def get_node_index(index, key, value)
-        get_from_index(NodeIndexes, index, key, value)
+        get NodeIndexes.key_value_path(:index => index, :key => key, :value => value)
       end
 
       def remove_node_from_index(index, key_or_id, value_or_id = nil, id = nil)
-        remove_from_index(NodeIndexes, index, key_or_id, value_or_id, id)
+        delete remove_from_index_path(NodeIndexes, index, key_or_id, value_or_id, id)
       end
 
       # NodeProperties
 
       def set_node_property(id, property)
-        set_property(NodeProperties, id, property)
+        put NodeProperties.single_path(:id => get_id(id), :property => property.keys.first) do
+          property.values.first
+        end
       end
 
       def reset_node_properties(id, body)
-        {
-          :method => "PUT",
-          :to     => NodeProperties.all_path(:id => get_id(id)),
-          :body   => body
-        }
+        put NodeProperties.all_path(:id => get_id(id)) do
+          body
+        end
       end
 
       # NodeRelationships
 
       def get_node_relationships(id, direction = nil)
-        {
-          :method => "GET",
-          :to     => NodeRelationships.direction_path(:id => get_id(id), :direction => direction || 'all'),
-        }
+        get NodeRelationships.direction_path(:id => get_id(id), :direction => direction || 'all')
       end
 
       # Relationships
 
       def get_relationship(id)
-        get(Relationships, id)
+        get Relationships.base_path(:id => get_id(id))
       end
 
       def delete_relationship(id)
-        delete(Relationships, id)
+        delete Relationships.base_path(:id => get_id(id))
       end
 
       def create_relationship(type, from, to, data)
-        {
-          :method => "POST",
-          :to     => build_node_uri(from) + "/relationships",
-          :body   => {
+        post build_node_uri(from) + "/relationships" do
+          {
             :to   => build_node_uri(to),
             :type => type,
             :data => data
           }
-        }
+        end
       end
 
       # RelationshipIndexes
 
       def create_unique_relationship(index, key, value, type, from, to)
-        {
-          :method => "POST",
-          :to     => RelationshipIndexes.unique_path(:index => index),
-          :body   => {
+        post RelationshipIndexes.unique_path(:index => index) do
+          {
             :key   => key,
             :value => value,
             :type  => type,
             :start => build_node_uri(from),
             :end   => build_node_uri(to)
           }
-        }
+        end
       end
 
       def add_relationship_to_index(index, key, value, id)
-        uri = build_relationship_uri(id)
-        add_to_index(RelationshipIndexes, index, key, value, uri)
+        post RelationshipIndexes.base_path(:index => index) do
+          {
+            :uri   => build_relationship_uri(id),
+            :key   => key,
+            :value => value
+          }
+        end
       end
 
       def get_relationship_index(index, key, value)
-        get_from_index(RelationshipIndexes, index, key, value)
+        get RelationshipIndexes.key_value_path(:index => index, :key => key, :value => value)
       end
 
       def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
-        remove_from_index(RelationshipIndexes, index, key_or_id, value_or_id, id)
+        delete remove_from_index_path(RelationshipIndexes, index, key_or_id, value_or_id, id)
       end
 
       # RelationshipProperties
 
       def set_relationship_property(id, property)
-        set_property(RelationshipProperties, id, property)
+        put RelationshipProperties.single_path(:id => get_id(id), :property => property.keys.first) do
+          property.values.first
+        end
       end
 
       def reset_relationship_properties(id, body)
-        {
-          :method => "PUT",
-          :to     => build_relationship_uri(id) + "/properties",
-          :body   => body
-        }
+        put build_relationship_uri(id) + "/properties" do
+          body
+        end
       end
 
       # Cypher
 
       def execute_query(query, params = nil)
-        request = {
-          :method => "POST",
-          :to     => @connection.cypher_path,
-          :body   => {
+        request = post @connection.cypher_path do
+          {
             :query => query
           }
-        }
+        end
 
         request[:body].merge!({ :params => params }) if params
 
@@ -193,57 +190,15 @@ module Neography
       # Gremlin
 
       def execute_script(script, params = nil)
-        {
-          :method => "POST",
-          :to => @connection.gremlin_path,
-          :body => {
+        post @connection.gremlin_path do
+          {
             :script => script,
             :params => params
           }
-        }
+        end
       end
 
       # Similar between nodes and relationships
-
-      def get(klass, id)
-        {
-          :method => "GET",
-          :to     => klass.base_path(:id => get_id(id))
-        }
-      end
-
-      def delete(klass, id)
-        {
-          :method => "DELETE",
-          :to     => klass.base_path(:id => get_id(id))
-        }
-      end
-
-      def add_to_index(klass, index, key, value, uri)
-        {
-          :method => "POST",
-          :to     => klass.base_path(:index => index),
-          :body   => {
-            :uri   => uri,
-            :key   => key,
-            :value => value
-          }
-        }
-      end
-
-      def get_from_index(klass, index, key, value)
-        {
-          :method => "GET",
-          :to     => klass.key_value_path(:index => index, :key => key, :value => value)
-        }
-      end
-
-      def remove_from_index(klass, index, key_or_id, value_or_id = nil, id = nil)
-        {
-          :method => "DELETE",
-          :to     => remove_from_index_path(klass, index, key_or_id, value_or_id, id)
-        }
-      end
 
       def remove_from_index_path(klass, index, key_or_id, value_or_id = nil, id = nil)
         if id
@@ -255,12 +210,29 @@ module Neography
         end
       end
 
-      def set_property(klass, id, property)
-        {
-          :method => "PUT",
-          :to     => klass.single_path(:id => get_id(id), :property => property.keys.first),
-          :body   => property.values.first
+      def get(to, &block)
+        request "GET", to, &block
+      end
+
+      def delete(to, &block)
+        request "DELETE", to, &block
+      end
+
+      def post(to, &block)
+        request "POST", to, &block
+      end
+
+      def put(to, &block)
+        request "PUT", to, &block
+      end
+
+      def request(method, to, &block)
+        request = {
+          :method => method,
+          :to     => to
         }
+        request.merge!({ :body => yield }) if block_given?
+        request
       end
 
       # Helper methods
