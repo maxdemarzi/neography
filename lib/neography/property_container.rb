@@ -13,5 +13,22 @@ module Neography
       end
     end
 
+    # the arguments are either a Rest instance, or something else
+    def self.split_args(*args)
+      db = other = nil
+
+      args.each do |arg|
+        case arg
+        when Rest
+          db = arg
+        else
+          other = arg
+        end
+      end
+      db ||= Neography::Rest.new
+
+      [ db, other ]
+    end
+
   end
 end

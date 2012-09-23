@@ -10,23 +10,21 @@ module Neography
 
     class << self
       def create(*args)
-        # the arguments can be an hash of properties to set or a rest instance
-        props = (args[0].respond_to?(:each_pair) && args[0]) || args[1]
-        db = (args[0].is_a?(Neography::Rest) && args[0]) || args[1] || Neography::Rest.new
+        db, props = split_args(*args)
+
         node = self.new(db.create_node(props))
         node.neo_server = db
         node
       end
 
       def load(*args)
-        # the first argument can be an hash of properties to set
-        node = !args[0].is_a?(Neography::Rest) && args[0] || args[1]
+        db, node = split_args(*args)
 
-        # a db instance can be given, it is the first argument or the second
-        db = (args[0].is_a?(Neography::Rest) && args[0]) || args[1] || Neography::Rest.new
         node = db.get_node(node)
-        node = self.new(node) unless node.nil?
-        node.neo_server = db unless node.nil?
+        if node
+          node = self.new(node)
+          node.neo_server = db
+        end
         node
       end
 

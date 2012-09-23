@@ -17,13 +17,10 @@ module Neography
       end
 
       def load(*args)
-        # the first argument can be an hash of properties to set
-        rel = !args[0].is_a?(Neography::Rest) && args[0] || args[1]
+        db, rel = split_args(*args)
 
-        # a db instance can be given, it is the first argument or the second
-        db = (args[0].is_a?(Neography::Rest) && args[0]) || args[1] || Neography::Rest.new
         rel = db.get_relationship(rel)
-        unless rel.nil?
+        if rel
           rel = Neography::Relationship.new(rel) 
           rel.start_node = Neography::Node.load(rel.start_node, db) 
           rel.end_node = Neography::Node.load(rel.end_node, db) 

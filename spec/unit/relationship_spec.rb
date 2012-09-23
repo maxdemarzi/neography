@@ -1,0 +1,83 @@
+require 'spec_helper'
+
+module Neography
+  describe Relationship do
+
+    let(:db) { stub(Rest).as_null_object }
+    let(:relationship_hash) do
+      {
+        "self" => "0",
+        "start" => "1",
+        "end" => "2",
+        "data" => {}
+      }
+    end
+
+    describe "::create" do
+      let(:from)  { stub(:neo_server => db) }
+      let(:to)    { stub(:neo_server => db) }
+      let(:props) { { :foo => "bar" } }
+
+      it "creates a new node through Rest" do
+        db.should_receive(:create_relationship).with("type", from, to, props)
+
+        Relationship.create("type", from, to, props)
+      end
+
+      it "assigns fields" do
+        db.stub(:create_relationship).and_return(relationship_hash)
+
+        rel = Relationship.create("type", from, to, props)
+
+        rel.start_node.should == from
+        rel.end_node.should   == to
+        rel.rel_type.should   == "type"
+      end
+    end
+
+    describe "::load" do
+      context "no explicit server" do
+
+        before do
+          # stub out actual connections
+          @db = stub(Rest).as_null_object
+          Rest.stub(:new) { @db }
+        end
+
+        it "load by id" do
+          @db.should_receive(:get_relationship).with(5)
+          Relationship.load(5)
+        end
+
+        it "loads by relationship" do
+          relationship = Relationship.new(relationship_hash)
+          @db.should_receive(:get_relationship).with(relationship)
+          Relationship.load(relationship)
+        end
+
+        it "loads by full server string" do
+          @db.should_receive(:get_relationship).with("http://localhost:7474/db/data/relationship/2")
+          Relationship.load("http://localhost:7474/db/data/relationship/2")
+        end
+
+      end
+
+      context "explicit server" do
+
+        it "can pass a server as the first argument, relationship as the second" do
+          @other_server = Neography::Rest.new
+          @other_server.should_receive(:get_relationship).with(42)
+          relationship = Relationship.load(@other_server, 42)
+        end
+
+        it "can pass a relationship as the first argument, server as the second" do
+          @other_server = Neography::Rest.new
+          @other_server.should_receive(:get_relationship).with(42)
+          relationship = Relationship.load(42, @other_server)
+        end
+
+      end
+    end
+
+  end
+end
