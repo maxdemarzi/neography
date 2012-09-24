@@ -11,36 +11,8 @@ module Neography
       :parser
 
     def initialize(options = ENV['NEO4J_URL'] || {})
-      options = parse_string_options(options) unless options.is_a? Hash
-      config = initial_configuration
-      config.merge!(options)
-
-      @protocol       = config[:protocol]
-      @server         = config[:server]
-      @port           = config[:port]
-      @directory      = config[:directory]
-      @cypher_path    = config[:cypher_path]
-      @gremlin_path   = config[:gremlin_path]
-      @log_file       = config[:log_file]
-      @log_enabled    = config[:log_enabled]
-      @max_threads    = config[:max_threads]
-      @parser         = config[:parser]
-      @user_agent     = { "User-Agent" => USER_AGENT }
-
-      @authentication = {}
-
-      unless config[:authentication].empty?
-        @authentication = {
-          "#{config[:authentication]}_auth".to_sym => {
-            :username => config[:username],
-            :password => config[:password]
-          }
-        }
-      end
-
-      if @log_enabled
-        @logger = Logger.new(@log_file)
-      end
+      config = merge_configuration(options)
+      save_local_configuration(config)
     end
 
     def configure(protocol, server, port, directory)
@@ -51,7 +23,7 @@ module Neography
     end
 
     def configuration
-      @protocol + @server + ':' + @port.to_s + @directory + "/db/data"
+      "#{@protocol}#{@server}:#{@port}#{@directory}/db/data"
     end
 
     def merge_options(options)
@@ -78,21 +50,56 @@ module Neography
 
     private
 
+    def merge_configuration(options)
+      options = parse_string_options(options) unless options.is_a? Hash
+      config = Neography.configuration.to_hash
+      config.merge(options)
+    end
+
+    def save_local_configuration(config)
+      @protocol       = config[:protocol]
+      @server         = config[:server]
+      @port           = config[:port]
+      @directory      = config[:directory]
+      @cypher_path    = config[:cypher_path]
+      @gremlin_path   = config[:gremlin_path]
+      @log_file       = config[:log_file]
+      @log_enabled    = config[:log_enabled]
+      @max_threads    = config[:max_threads]
+      @parser         = config[:parser]
+
+      @user_agent     = { "User-Agent" => USER_AGENT }
+
+      @authentication = {}
+      if config[:authentication]
+        @authentication = {
+          "#{config[:authentication]}_auth".to_sym => {
+            :username => config[:username],
+            :password => config[:password]
+          }
+        }
+      end
+
+      if @log_enabled
+        @logger = Logger.new(@log_file)
+      end
+    end
+
     def evaluate_response(response)
       code = response.code
       body = response.body
-      case code 
-      when 200 
+      case code
+      when 200
         @logger.debug "OK" if @log_enabled
         response.parsed_response
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
         response.parsed_response
-      when 204  
+      when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
       when 400
-        @logger.error "Invalid data sent #{body}"  if @log_enabled
+        @logger.error "Invalid data sent #{body}" if @log_enabled
         nil
       when 404
         @logger.error "Not Found #{body}" if @log_enabled
@@ -101,24 +108,6 @@ module Neography
         @logger.error "Node could not be deleted (still has relationships?)" if @log_enabled
         nil
       end
-    end
-
-    def initial_configuration
-      {
-        :protocol       => Neography::Config.protocol,
-        :server         => Neography::Config.server,
-        :port           => Neography::Config.port,
-        :directory      => Neography::Config.directory,
-        :cypher_path    => Neography::Config.cypher_path,
-        :gremlin_path   => Neography::Config.gremlin_path,
-        :log_file       => Neography::Config.log_file,
-        :log_enabled    => Neography::Config.log_enabled,
-        :max_threads    => Neography::Config.max_threads,
-        :authentication => Neography::Config.authentication,
-        :username       => Neography::Config.username,
-        :password       => Neography::Config.password,
-        :parser         => Neography::Config.parser
-      }
     end
 
     def parse_string_options(options)

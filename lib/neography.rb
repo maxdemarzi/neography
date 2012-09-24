@@ -49,3 +49,14 @@ require 'neography/railtie' if defined? Rails::Railtie
 
 find_and_require_user_defined_code
 
+module Neography
+
+  def self.configure
+    yield configuration
+  end
+
+  def self.configuration
+    @configuration ||= Config.new
+  end
+
+end

@@ -84,25 +84,49 @@ rake neo4j:install requires wget to be installed.  It will download and install 
 
 === Documentation
 
-  @neo = Neography::Rest.new({:protocol => 'http://',
-                              :server => 'localhost',
-                              :port => 7474,
-                              :directory => '',  # use '/<my directory>' or leave out for default
-                              :authentication => 'basic', # 'basic', 'digest' or leave out for default
-                              :username => 'your username', #leave out for default
-                              :password => 'your password',  #leave out for default
-                              :log_file => 'neography.log',
-                              :log_enabled => false,
-                              :max_threads => 20,
-                              :cypher_path => '/cypher',
-                              :gremlin_path => '/ext/GremlinPlugin/graphdb/execute_script'})
+Configure Neography as follows:
+
+  # these are the default values:
+  Neography.configure do |config|
+    config.protocol       = "http://"
+    config.server         = "localhost"
+    config.port           = 7474
+    config.directory      = ""  # prefix this path with '/' 
+    config.cypher_path    = "/cypher"
+    config.gremlin_path   = "/ext/GremlinPlugin/graphdb/execute_script"
+    config.log_file       = "neography.log"
+    config.log_enabled    = false
+    config.max_threads    = 20
+    config.authentication = nil  # 'basic' or 'digest'
+    config.username       = nil
+    config.password       = nil
+    config.parser         = {:parser => MultiJsonParser}
+  end
+
+Then initialize as follows:
+
+  @neo = Neography::Rest.new
+
+Or you can override the configured values as follows:
+
+  @neo = Neography::Rest.new({ :protocol       => 'http://',
+                               :server         => 'localhost',
+                               :port           => 7474,
+                               :directory      => '',
+                               :authentication => 'basic',
+                               :username       => 'your username',
+                               :password       => 'your password',
+                               :log_file       => 'neography.log',
+                               :log_enabled    => false,
+                               :max_threads    => 20,
+                               :cypher_path    => '/cypher',
+                               :gremlin_path   => '/ext/GremlinPlugin/graphdb/execute_script' })
 
 Quick initializer (assumes basic authorization if username is given):
 
   @neo = Neography::Rest.new("http://username:password@myserver.com:7474/mydirectory")
 
-
-To Use:
+Usage:
 
   @neo = Neography::Rest.new                                 # Inialize using all default parameters
 
@@ -155,6 +179,7 @@ To Use:
   @neo.find_node_index(index, query)                         # advanced query of the node index with the given query
   @neo.get_node_auto_index(key, value)                       # exact query of the node auto index with the given key/value pair
   @neo.find_node_auto_index(query)                           # advanced query of the node auto index with the given query
+
   @neo.list_relationship_indexes                             # gives names and query templates for relationship indices
   @neo.create_relationship_index(name, "fulltext", provider) # creates a relationship index with "fulltext" option
   @neo.create_relationship_auto_index("fulltext", provider)  # creates a relationship auto index with "fulltext" option
