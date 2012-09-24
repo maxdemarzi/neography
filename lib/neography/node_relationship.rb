@@ -1,6 +1,8 @@
 module Neography
   module NodeRelationship
 
+    DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
+
     def outgoing(types=nil)
       NodeTraverser.new(self).outgoing(types)
     end

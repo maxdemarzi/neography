@@ -13,8 +13,6 @@ def find_and_require_user_defined_code
   end
 end
 
-DIRECTIONS = ["incoming", "in", "outgoing", "out", "all", "both"]
-
 require 'cgi'
 require 'httparty'
 require 'json'
