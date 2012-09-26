@@ -121,7 +121,7 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 
 # Use indexes:
 @neo.add_node_to_index("people", "name", "max", node1)
-@neo.get_node_index("people", name", "max")
+@neo.get_node_index("people", "name", "max")
 
 # Cypher queries:
 @neo.execute_query("start n=node(0) return n")
