@@ -157,14 +157,14 @@ Usage:
 @neo.create_node                                           # Create an empty node
 @neo.create_node("age" => 31, "name" => "Max")             # Create a node with some properties
 @neo.create_unique_node(index_name, key, unique_value,     # Create a unique node
-                            # this needs an existing index
+                        {"age" => 31, "name" => "Max"})    # this needs an existing index
 
 @neo.get_node(node2)                                       # Get a node and its properties
 @neo.delete_node(node2)                                    # Delete an unrelated node
 @neo.delete_node!(node2)                                   # Delete a node and all its relationships
 
-@neo.reset_node_properties(node1,            # Reset a node's properties
-@neo.set_node_properties(node1,          # Set a node's properties
+@neo.reset_node_properties(node1, {"age" => 31})           # Reset a node's properties
+@neo.set_node_properties(node1, {"weight" => 200})         # Set a node's properties
 @neo.get_node_properties(node1)                            # Get just the node properties
 @neo.get_node_properties(node1, ["weight","age"])          # Get some of the node properties
 @neo.remove_node_properties(node1)                         # Remove all properties of a node
@@ -182,8 +182,8 @@ Usage:
 @neo.get_node_relationships(node1, "in", "enemies")        # Get only incoming relationships of type enemies
 @neo.delete_relationship(rel1)                             # Delete a relationship
 
-@neo.reset_relationship_properties(rel1,     # Reset a relationship's properties
-@neo.set_relationship_properties(rel1,   # Set a relationship's properties
+@neo.reset_relationship_properties(rel1, {"age" => 31})    # Reset a relationship's properties
+@neo.set_relationship_properties(rel1, {"weight" => 200})  # Set a relationship's properties
 @neo.get_relationship_properties(rel1)                     # Get just the relationship properties
 @neo.get_relationship_properties(rel1, ["since","met"])    # Get some of the relationship properties
 @neo.remove_relationship_properties(rel1)                  # Remove all properties of a relationship
@@ -318,7 +318,7 @@ Now we are returning full objects.  The properties of the node or relationship c
 The Neo4j ID is available by using node.neo_id .
 
 ```ruby
-@neo2 = Neography::Rest.new (
+@neo2 = Neography::Rest.new({:server => '192.168.10.1'})
 
 Neography::Node.create                                               # Create an empty node
 Neography::Node.create("age" => 31, "name" => "Max")                 # Create a node with some properties
@@ -428,9 +428,9 @@ Connect to the second instance in your testing environment, for example:
 
 ```ruby
 if Rails.env.development?
-  @neo  = Neography::Rest.new(
+  @neo  = Neography::Rest.new({:port => 7474})
 elsif Rails.env.test?
-  @neo  = Neography::Rest.new(
+  @neo  = Neography::Rest.new({:port => 7475})
 end
 ```
 
