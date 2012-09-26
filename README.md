@@ -300,9 +300,9 @@ Experimental:
 nodes = @neo.create_nodes(5)                                              # Create 5 empty nodes
 nodes = @neo.create_nodes_threaded(5)                                     # Create 5 empty nodes using threads
 nodes = @neo.create_node_nodes([{"age" => 31, "name" => "Max"},
-                                          # Create two nodes with properties
+                                {"age" => 24, "name" => "Alex"})          # Create two nodes with properties
 nodes = @neo.create_node_nodes_threaded([{"age" => 31, "name" => "Max"},
-                                          # Create two nodes with properties threaded
+                                         {"age" => 24, "name" => "Alex"}) # Create two nodes with properties threaded
 nodes = @neo.get_nodes([17,86,397,33])                                    # Get four nodes by their id
 
 one_set_nodes = @neo.create_nodes(3)
