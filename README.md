@@ -185,6 +185,7 @@ n1.shortest_path_to(n2).incoming(:friends).depth(4).nodes            # Gets just
 
 This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
 
+## More
 
 ### Examples
 
@@ -221,7 +222,7 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 * [Neo4j on Heroku](http://maxdemarzi.com/2012/01/13/neo4j-on-heroku-part-one/)
 
 
-### Contributing
+## Contributing
 
 [![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master)](http://travis-ci.org/maxdemarzi/neography)
 
@@ -230,13 +231,13 @@ Please create a [new issue](https://github.com/maxdemarzi/neography/issues) if y
 Contribute patches via pull requests.
 
 
-### Help
+## Help
 
 If you are just starting out, or need help send me an e-mail at maxdemarzi@gmail.com.
 Check you my blog at http://maxdemarzi.com where I have more Neography examples.
 
 
-### Licenses
+## Licenses
 
 * Neography - MIT, see the LICENSE file http://github.com/maxdemarzi/neography/tree/master/LICENSE.
 * Lucene -  Apache, see http://lucene.apache.org/java/docs/features.html
