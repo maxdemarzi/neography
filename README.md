@@ -205,7 +205,7 @@ Complement to Neography are the:
 * [Neology](https://github.com/lordkada/neology) by Carlo Alberto Degli Atti
 * [Neoid](https://github.com/elado/neoid) by Elad Ossadon
 
-An alternative is the Architect4r Gem at https://github.com/namxam/architect4r by Maximilian Schulz
+An alternative to Neography is [Architect4r](https://github.com/namxam/architect4r) by Maximilian Schulz
 
 
 ### Neography in the Wild
@@ -224,16 +224,15 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 
 ## Contributing
 
-[![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master)](http://travis-ci.org/maxdemarzi/neography)
-
 Please create a [new issue](https://github.com/maxdemarzi/neography/issues) if you run into any bugs.
 
-Contribute patches via pull requests.
+Contribute patches via [pull requests](https://github.com/maxdemarzi/neography/pulls).
 
 
 ## Help
 
 If you are just starting out, or need help send me an e-mail at maxdemarzi@gmail.com.
+
 Check you my blog at http://maxdemarzi.com where I have more Neography examples.
 
 
