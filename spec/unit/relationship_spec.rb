@@ -64,10 +64,12 @@ module Neography
 
       context "explicit server" do
 
-        it "can pass a server as the first argument, relationship as the second" do
+        it "cannot pass a server as the first argument, relationship as the second" do
           @other_server = Neography::Rest.new
-          @other_server.should_receive(:get_relationship).with(42)
-          relationship = Relationship.load(@other_server, 42)
+          @other_server.should_not_receive(:get_relationship).with(42)
+          expect {
+            relationship = Relationship.load(@other_server, 42)
+          }.to raise_error(ArgumentError)
         end
 
         it "can pass a relationship as the first argument, server as the second" do

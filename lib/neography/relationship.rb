@@ -8,7 +8,7 @@ module Neography
 
     class << self
 
-      def create(type, from_node, to_node, props=nil)
+      def create(type, from_node, to_node, props = nil)
         rel = Neography::Relationship.new(from_node.neo_server.create_relationship(type, from_node, to_node, props))
         rel.start_node = from_node
         rel.end_node = to_node
@@ -16,14 +16,14 @@ module Neography
         rel
       end
 
-      def load(*args)
-        db, rel = split_args(*args)
+      def load(rel, db = Neography::Rest.new)
+        raise ArgumentError.new("syntax deprecated") if rel.is_a?(Neography::Rest)
 
         rel = db.get_relationship(rel)
         if rel
-          rel = Neography::Relationship.new(rel) 
-          rel.start_node = Neography::Node.load(rel.start_node, db) 
-          rel.end_node = Neography::Node.load(rel.end_node, db) 
+          rel = Neography::Relationship.new(rel)
+          rel.start_node = Neography::Node.load(rel.start_node, db)
+          rel.end_node = Neography::Node.load(rel.end_node, db)
         end
         rel
       end

@@ -9,16 +9,16 @@ module Neography
     attr_accessor :neo_server
 
     class << self
-      def create(*args)
-        db, props = split_args(*args)
+      def create(props = nil, db = Neography::Rest.new)
+        raise ArgumentError.new("syntax deprecated") if props.is_a?(Neography::Rest)
 
         node = self.new(db.create_node(props))
         node.neo_server = db
         node
       end
 
-      def load(*args)
-        db, node = split_args(*args)
+      def load(node, db = Neography::Rest.new)
+        raise ArgumentError.new("syntax deprecated") if node.is_a?(Neography::Rest)
 
         node = db.get_node(node)
         if node

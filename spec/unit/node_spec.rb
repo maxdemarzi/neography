@@ -7,8 +7,7 @@ module Neography
       context "no explicit server" do
 
         before do
-          # stub out actual connections
-          @db = stub(Rest).as_null_object
+          @db = mock(Neography::Rest, :is_a? => true).as_null_object
           Rest.stub(:new) { @db }
         end
 
@@ -32,11 +31,13 @@ module Neography
 
       context "explicit server" do
 
-        it "can pass a server as the first arugment, properties as the second" do
+        it "cannot pass a server as the first argument, properties as the second (deprecated)" do
           @other_server = Neography::Rest.new
           properties = { :foo => "bar" }
-          @other_server.should_receive(:create_node).with(properties)
-          Node.create(@other_server, properties)
+          @other_server.should_not_receive(:create_node).with(properties)
+          expect {
+            Node.create(@other_server, properties)
+          }.to raise_error(ArgumentError)
         end
 
         it "can pass properties as the first argument, a server as the second" do
@@ -78,10 +79,12 @@ module Neography
 
       context "explicit server" do
 
-        it "can pass a server as the first argument, node as the second" do
+        it "cannot pass a server as the first argument, node as the second (depracted)" do
           @other_server = Neography::Rest.new
-          @other_server.should_receive(:get_node).with(42)
-          node = Node.load(@other_server, 42)
+          @other_server.should_not_receive(:get_node).with(42)
+          expect {
+            node = Node.load(@other_server, 42)
+          }.to raise_error(ArgumentError)
         end
 
         it "can pass a node as the first argument, server as the second" do

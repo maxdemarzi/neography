@@ -296,15 +296,13 @@ The Neo4j ID is available by using node.neo_id .
 
   Neography::Node.create                                               # Create an empty node
   Neography::Node.create("age" => 31, "name" => "Max")                 # Create a node with some properties
-  Neography::Node.create(@neo2, {"age" => 31, "name" => "Max"})        # Create a node on the server defined in @neo2
-  Neography::Node.create({"age" => 31, "name" => "Max"}, @neo2)        # Same as above, but different order
+  Neography::Node.create({"age" => 31, "name" => "Max"}, @neo2)        # Create a node on the server defined in @neo2
 
   Neography::Node.load(5)                                              # Get a node and its properties by id
   Neography::Node.load(existing_node)                                  # Get a node and its properties by Node
   Neography::Node.load("http://localhost:7474/db/data/node/2")         # Get a node and its properties by String
 
-  Neography::Node.load(@neo2, 5)                                       # Get a node on the server defined in @neo2
-  Neography::Node.load(5, @neo2)                                       # Same as above, but different order
+  Neography::Node.load(5, @neo2)                                       # Get a node on the server defined in @neo2
 
   n1 = Node.create
   n1.del                                                               # Deletes the node

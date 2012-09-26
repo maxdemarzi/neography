@@ -26,11 +26,11 @@ describe Neography::Node do
       new_node.age.should == 31
     end
 
-    it "can create a node with more than one property not on the default rest server the other way" do
+    it "cannot create a node with more than one property not on the default rest server the other way" do
       @neo = Neography::Rest.new
-      new_node = Neography::Node.create(@neo, {"age" => 31, "name" => "Max"})
-      new_node.name.should == "Max"
-      new_node.age.should == 31
+      expect {
+        new_node = Neography::Node.create(@neo, {"age" => 31, "name" => "Max"})
+      }.to raise_error(ArgumentError)
     end
   end
 
@@ -53,20 +53,19 @@ describe Neography::Node do
 
     it "can load a node that exists not on the default rest server" do
       @neo = Neography::Rest.new
-      new_node = Neography::Node.create(@neo)
+      new_node = Neography::Node.create({}, @neo)
       existing_node = Neography::Node.load(new_node, @neo)
       existing_node.should_not be_nil
       existing_node.neo_id.should_not be_nil
       existing_node.neo_id.should == new_node.neo_id
     end
 
-    it "can load a node that exists not on the default rest server the other way" do
+    it "cannot load a node that exists not on the default rest server the other way" do
       @neo = Neography::Rest.new
-      new_node = Neography::Node.create(@neo)
-      existing_node = Neography::Node.load(@neo, new_node)
-      existing_node.should_not be_nil
-      existing_node.neo_id.should_not be_nil
-      existing_node.neo_id.should == new_node.neo_id
+      new_node = Neography::Node.create({}, @neo)
+      expect {
+        existing_node = Neography::Node.load(@neo, new_node)
+      }.to raise_error(ArgumentError)
     end
   end
 
