@@ -44,7 +44,7 @@ require 'neography'
 
 Read the wiki for information about [dependencies](https://github.com/maxdemarzi/neography/wiki/Dependencies).
 
-[Rake tasks](https://github.com/maxdemarzi/neography/wiki/Rake-tasks) are available.
+[Rake tasks](https://github.com/maxdemarzi/neography/wiki/Rake-tasks) are available for downloading, installing and running Neo4j.
 
 
 ## Usage
@@ -89,21 +89,17 @@ It supports indexes, Gremlin scripts, Cypher queries and batch operations.
 
 Some of this functionality is shown here, but all of it is explained in the following Wiki pages:
 
-* [Nodes](https://github.com/maxdemarzi/neography/wiki/Nodes)
-* [Node properties](https://github.com/maxdemarzi/neography/wiki/Node-properties)
-* [Node relationships](https://github.com/maxdemarzi/neography/wiki/Node-relationships)
-
-* [Relationship](https://github.com/maxdemarzi/neography/wiki/Relationships)
-* [Relationship properties](https://github.com/maxdemarzi/neography/wiki/Relationship-properties)
-
-* [Node indexes](https://github.com/maxdemarzi/neography/wiki/Node-indexes)
-* [Relationship indexes](https://github.com/maxdemarzi/neography/wiki/Relationship-indexes)
-* [Auto indexes](https://github.com/maxdemarzi/neography/wiki/Node-indexes)
-
-* [Scripts and queries](https://github.com/maxdemarzi/neography/wiki/Scripts-and-queries)
-* [Paths and traversal](https://github.com/maxdemarzi/neography/wiki/Paths-and-traversal)
-* [Batch](https://github.com/maxdemarzi/neography/wiki/Batch)
-
+* [Nodes](https://github.com/maxdemarzi/neography/wiki/Nodes) - Create, get and delete nodes.
+* [Node properties](https://github.com/maxdemarzi/neography/wiki/Node-properties) - Set, get and remove node properties.
+* [Node relationships](https://github.com/maxdemarzi/neography/wiki/Node-relationships) - Create and get relationships between nodes.
+* [Relationship](https://github.com/maxdemarzi/neography/wiki/Relationships) - Get and delete relationships.
+* [Relationship properties](https://github.com/maxdemarzi/neography/wiki/Relationship-properties) - Create, get and delete relationship properties.
+* [Node indexes](https://github.com/maxdemarzi/neography/wiki/Node-indexes) - List and create node indexes. Add, remove, get and search nodes in indexes.
+* [Relationship indexes](https://github.com/maxdemarzi/neography/wiki/Relationship-indexes) - List and create relationships indexes. Add, remove, get and search relationships in indexes.
+* [Auto indexes](https://github.com/maxdemarzi/neography/wiki/Auto-indexes) - Get, set and remove auto indexes.
+* [Scripts and queries](https://github.com/maxdemarzi/neography/wiki/Scripts-and-queries) - Run Gremlin scripts and Cypher queries.
+* [Paths and traversal](https://github.com/maxdemarzi/neography/wiki/Paths-and-traversal) - Paths between nodes and path traversal.
+* [Batch](https://github.com/maxdemarzi/neography/wiki/Batch) - Execute multiple calls at once.
 * [Experimental](https://github.com/maxdemarzi/neography/wiki/Experimental)
 
 
@@ -124,8 +120,8 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 @neo.get_node_relationships(node2, "in", "coding_buddies")
 
 # Use indexes:
-@neo.add_node_to_index('people', 'name', 'max', node1)
-@neo.get_node_index('people', name', 'max')
+@neo.add_node_to_index("people", "name", "max", node1)
+@neo.get_node_index("people", name", "max")
 
 # Cypher queries:
 @neo.execute_query("start n=node(0) return n")
