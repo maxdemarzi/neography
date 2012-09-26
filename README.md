@@ -72,7 +72,7 @@ Neography.configure do |config|
 end
 ```
 
-Then initialize as follows:
+Then initialize a `Rest` instance:
 
 ```ruby
 @neo = Neography::Rest.new
@@ -84,7 +84,7 @@ For overriding these default and other initialization methods, see the
 
 ### REST API
 
-Neography supports the creation and retrieval of nodes and relationships through the Neo4j interface.
+Neography supports the creation and retrieval of nodes and relationships through the Neo4j REST interface.
 It supports indexes, Gremlin scripts, Cypher queries and batch operations.
 
 Some of this functionality is shown here, but all of it is explained in the following Wiki pages:
@@ -138,8 +138,8 @@ This is just a small sample of the full API, see the [Wiki documentation](https:
 
 Trying to mimic the [Neo4j.rb API](https://github.com/andreasronge/neo4j/wiki/Neo4j%3A%3ACore-Nodes-Properties-Relationships).
 
-Now we are returning full objects.  The properties of the node or relationship can be accessed directly (node.name).
-The Neo4j ID is available by using node.neo_id .
+Now we are returning full objects. The properties of the node or relationship can be accessed directly (`node.name`).
+The Neo4j ID is available by using `node.neo_id`.
 
 Some of this functionality is shown here, but all of it is explained in the following Wiki pages:
 
