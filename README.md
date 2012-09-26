@@ -228,9 +228,9 @@ Usage:
 @neo.remove_relationship_auto_index_property(property)     # remove from auto indexed relationship properties
 
 @neo.execute_script("g.v(0)")                              # sends a Groovy script (through the Gremlin plugin)
-@neo.execute_script("g.v(id)",                  # sends a parameterized Groovy script (optimized for repeated calls)
+@neo.execute_script("g.v(id)", {:id => 3})                 # sends a parameterized Groovy script (optimized for repeated calls)
 @neo.execute_query("start n=node(0) return n")             # sends a Cypher query (through the Cypher plugin)
-@neo.execute_query("start n=node( # sends a parameterized Cypher query (optimized for repeated calls)
+@neo.execute_query("start n=node({id}) return n", {:id => 3}) # sends a parameterized Cypher query (optimized for repeated calls)
 
 @neo.get_path(node1, node2, relationships, depth=4, algorithm="shortestPath") # finds the shortest path between two nodes
 @neo.get_paths(node1, node2, relationships, depth=3, algorithm="allPaths")    # finds all paths between two nodes
