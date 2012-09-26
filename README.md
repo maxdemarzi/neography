@@ -134,139 +134,67 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
 
 
-### Phase 2
+## *Phase 2*
 
-Trying to mimic the Neo4j.rb API.
+Trying to mimic the [Neo4j.rb API](https://github.com/andreasronge/neo4j/wiki/Neo4j%3A%3ACore-Nodes-Properties-Relationships).
 
 Now we are returning full objects.  The properties of the node or relationship can be accessed directly (node.name).
 The Neo4j ID is available by using node.neo_id .
 
+Some of this functionality is shown here, but all of it is explained in the following Wiki pages:
+
+* [Nodes](https://github.com/maxdemarzi/neography/wiki/Phase-2-Nodes) - Create, load and delete nodes.
+* [Node properties](https://github.com/maxdemarzi/neography/wiki/Phase-2-Node-properties) - Add, get and remove node properties.
+* [Node relationships](https://github.com/maxdemarzi/neography/wiki/Phase-2-Node-relationships) - Create and retrieve node relationships.
+* [Node paths](https://github.com/maxdemarzi/neography/wiki/Phase-2-Node-paths) - Gets paths between nodes.
+
+
 ```ruby
-@neo2 = Neography::Rest.new({:server => '192.168.10.1'})
+# create two nodes:
+n1 = Neography::Node.create("age" => 31, "name" => "Max")
+n2 = Neography::Node.create("age" => 33, "name" => "Roel")
 
-Neography::Node.create                                               # Create an empty node
-Neography::Node.create("age" => 31, "name" => "Max")                 # Create a node with some properties
-Neography::Node.create({"age" => 31, "name" => "Max"}, @neo2)        # Create a node on the server defined in @neo2
+n1.exist? # => true
 
-Neography::Node.load(5)                                              # Get a node and its properties by id
-Neography::Node.load(existing_node)                                  # Get a node and its properties by Node
-Neography::Node.load("http://localhost:7474/db/data/node/2")         # Get a node and its properties by String
+# get and change some properties:
+n1[:age]         # => 31
+n1.name          # => "Max"
+n1[:age]  = 32   # change property
+n1.weight = 190  # new property
+n1.age    = nil  # remove property
 
-Neography::Node.load(5, @neo2)                                       # Get a node on the server defined in @neo2
+# add a relationship between nodes:
+new_rel = Neography::Relationship.create(:coding_buddies, n1, n2)
 
-n1 = Node.create
-n1.del                                                               # Deletes the node
-n1.exist?                                                            # returns true/false if node exists in Neo4j
+# remove a relationship:
+new_rel.del
 
-n1 = Node.create("age" => 31, "name" => "Max")
-n1[:age] #returns 31                                                 # Get a node property using [:key]
-n1.name  #returns "Max"                                              # Get a node property as a method
-n1[:age] = 24                                                        # Set a node property using [:key] =
-n1.name = "Alex"                                                     # Set a node property as a method
-n1[:hair] = "black"                                                  # Add a node property using [:key] =
-n1.weight = 190                                                      # Add a node property as a method
-n1[:name] = nil                                                      # Delete a node property using [:key] = nil
-n1.name = nil                                                        # Delete a node property by setting it to nil
+# add a relationship on nodes:
+n1.outgoing(:coding_buddies) << n2
 
-n2 = Neography::Node.create
-new_rel = Neography::Relationship.create(:family, n1, n2)            # Create a relationship from my_node to node2
-new_rel.start_node                                                   # Get the start/from node of a relationship
-new_rel.end_node                                                     # Get the end/to node of a relationship
-new_rel.other_node(n2)                                               # Get the other node of a relationship
-new_rel.attributes                                                   # Get the attributes of the relationship as an array
-
-existing_rel = Neography::Relationship.load(12)                      # Get an existing relationship by id
-existing_rel.del                                                     # Delete a relationship
-
-Neography::Relationship.create(:friends, n1, n2)
-n1.outgoing(:friends) << n2                                          # Create outgoing relationship
-n1.incoming(:friends) << n2                                          # Create incoming relationship
-n1.both(:friends) << n2                                              # Create both relationships
-
-n1.outgoing                                                          # Get nodes related by outgoing relationships
-n1.incoming                                                          # Get nodes related by incoming relationships
-n1.both                                                              # Get nodes related by any relationships
-
+# more advanced relationship traversal:
 n1.outgoing(:friends)                                                # Get nodes related by outgoing friends relationship
-n1.incoming(:friends)                                                # Get nodes related by incoming friends relationship
-n1.both(:friends)                                                    # Get nodes related by friends relationship
-
-n1.outgoing(:friends).incoming(:enemies)                             # Get nodes related by one of multiple relationships
-n1.outgoing(:friends).depth(2)                                       # Get nodes related by friends and friends of friends
-n1.outgoing(:friends).depth(:all)                                    # Get nodes related by friends until the end of the graph
 n1.outgoing(:friends).depth(2).include_start_node                    # Get n1 and nodes related by friends and friends of friends
 
-n1.outgoing(:friends).prune("position.endNode().getProperty('name') == 'Tom';")
-n1.outgoing(:friends).filter("position.length() == 2;")
-
-n1.rel?(:friends)                                                    # Has a friends relationship
 n1.rel?(:outgoing, :friends)                                         # Has outgoing friends relationship
-n1.rel?(:friends, :outgoing)                                         # same, just the other way
-n1.rel?(:outgoing)                                                   # Has any outgoing relationships
-n1.rel?(:both)                                                       # Has any relationships
-n1.rel?(:all)                                                        # same as above
-n1.rel?                                                              # same as above
-
-n1.rels                                                              # Get node relationships
-n1.rels(:friends)                                                    # Get friends relationships
-n1.rels(:friends).outgoing                                           # Get outgoing friends relationships
-n1.rels(:friends).incoming                                           # Get incoming friends relationships
-n1.rels(:friends,:work)                                              # Get friends and work relationships
 n1.rels(:friends,:work).outgoing                                     # Get outgoing friends and work relationships
 
 n1.all_paths_to(n2).incoming(:friends).depth(4)                      # Gets all paths of a specified type
-n1.all_simple_paths_to(n2).incoming(:friends).depth(4)               # for the relationships defined
-n1.all_shortest_paths_to(n2).incoming(:friends).depth(4)             # at a maximum depth
-n1.path_to(n2).incoming(:friends).depth(4)                           # Same as above, but just one path.
-n1.simple_path_to(n2).incoming(:friends).depth(4)
-n1.shortest_path_to(n2).incoming(:friends).depth(4)
-
-n1.shortest_path_to(n2).incoming(:friends).depth(4).rels             # Gets just relationships in path
 n1.shortest_path_to(n2).incoming(:friends).depth(4).nodes            # Gets just nodes in path
 ```
 
-See Neo4j API for:
-* [Order](http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/Traverser.Order.html)
-* [Uniqueness](http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/kernel/Uniqueness.html)
-* [Prune Evaluator](http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/StopEvaluator.html)
-* [Return Filter](http://components.neo4j.org/neo4j-examples/1.2.M04/apidocs/org/neo4j/graphdb/ReturnableEvaluator.html)
+This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
+
 
 ### Examples
 
-A couple of examples borrowed from Matthew Deiters's Neo4jr-social:
+Some [example code](https://github.com/maxdemarzi/neography/wiki/Examples).
 
-*  [Facebook](https://github.com/maxdemarzi/neography/blob/master/examples/facebook.rb)
-*  [Linked In](https://github.com/maxdemarzi/neography/blob/master/examples/linkedin.rb)
-
-Phase 2 way of doing these:
-
-*  [Facebook](https://github.com/maxdemarzi/neography/blob/master/examples/facebook_v2.rb)
-*  [Linked In](https://github.com/maxdemarzi/neography/blob/master/examples/linkedin_v2.rb)
 
 ### Testing
 
-To run testing locally you will need to have two instances of the server running. There is some
-good advice on how to set up the a second instance on the
-[neo4j site](http://docs.neo4j.org/chunked/stable/server-installation.html#_multiple_server_instances_on_one_machine).
-Connect to the second instance in your testing environment, for example:
+Some [tips about testing](https://github.com/maxdemarzi/neography/wiki/Testing).
 
-```ruby
-if Rails.env.development?
-  @neo  = Neography::Rest.new({:port => 7474})
-elsif Rails.env.test?
-  @neo  = Neography::Rest.new({:port => 7475})
-end
-```
-
-Install the test-delete-db-extension plugin, as mentioned in the neo4j.org docs, if you want to use
-the Rest clean_database method to empty your database between tests. In Rspec, for example,
-put this in your spec_helper.rb:
-
-```ruby
-config.before(:each) do
-  @neo.clean_database("yes_i_really_want_to_clean_the_database")
-end
-```
 
 ### Related Neo4j projects
 
@@ -278,11 +206,13 @@ Complement to Neography are the:
 
 An alternative is the Architect4r Gem at https://github.com/namxam/architect4r by Maximilian Schulz
 
+
 ### Neography in the Wild
 
 * [Vouched](http://getvouched.com)
 * [Neovigator](http://neovigator.herokuapp.com) fork it at https://github.com/maxdemarzi/neovigator
 * [Neoflix](http://neoflix.herokuapp.com) fork it at  https://github.com/maxdemarzi/neoflix
+
 
 ### Getting started with Neography
 
@@ -290,26 +220,21 @@ An alternative is the Architect4r Gem at https://github.com/namxam/architect4r b
 * [Graph visualization with Neo4j](http://maxdemarzi.com/2012/01/11/graph-visualization-and-neo4j/)
 * [Neo4j on Heroku](http://maxdemarzi.com/2012/01/13/neo4j-on-heroku-part-one/)
 
-### To-do
-
-* Batch functions
-* Phase 2 Index functionality
-* Phase 2 Unit Tests
-* More Examples
-* Mixins ?
 
 ### Contributing
 
-[![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png)](http://travis-ci.org/maxdemarzi/neography)
+[![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master)](http://travis-ci.org/maxdemarzi/neography)
 
 Please create a [new issue](https://github.com/maxdemarzi/neography/issues) if you run into any bugs.
 
 Contribute patches via pull requests.
 
+
 ### Help
 
 If you are just starting out, or need help send me an e-mail at maxdemarzi@gmail.com.
 Check you my blog at http://maxdemarzi.com where I have more Neography examples.
+
 
 ### Licenses
 
