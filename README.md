@@ -100,7 +100,6 @@ Some of this functionality is shown here, but all of it is explained in the foll
 * [Scripts and queries](https://github.com/maxdemarzi/neography/wiki/Scripts-and-queries) - Run Gremlin scripts and Cypher queries.
 * [Paths and traversal](https://github.com/maxdemarzi/neography/wiki/Paths-and-traversal) - Paths between nodes and path traversal.
 * [Batch](https://github.com/maxdemarzi/neography/wiki/Batch) - Execute multiple calls at once.
-* [Experimental](https://github.com/maxdemarzi/neography/wiki/Experimental)
 
 
 Some example usage:
