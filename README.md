@@ -100,6 +100,7 @@ Some of this functionality is shown here, but all of it is explained in the foll
 * [Scripts and queries](https://github.com/maxdemarzi/neography/wiki/Scripts-and-queries) - Run Gremlin scripts and Cypher queries.
 * [Paths and traversal](https://github.com/maxdemarzi/neography/wiki/Paths-and-traversal) - Paths between nodes and path traversal.
 * [Batch](https://github.com/maxdemarzi/neography/wiki/Batch) - Execute multiple calls at once.
+* [Errors](https://github.com/maxdemarzi/neography/wiki/Errors) - Errors raised if REST API calls fail.
 
 
 Some example usage:
@@ -131,6 +132,8 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 ```
 
 This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
+
+Neography raises REST API errors as Ruby errors, see the wiki page about [errors](https://github.com/maxdemarzi/neography/wiki/Errors).
 
 
 ## *Phase 2*
