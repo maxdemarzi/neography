@@ -1,10 +1,11 @@
 module Neography
 
   class NeographyError < StandardError
-    attr_reader :message, :stacktrace
+    attr_reader :message, :code, :stacktrace
 
     def initialize(message = nil, code = nil, stacktrace = nil)
-      @message = message
+      @message    = message
+      @code       = code
       @stacktrace = stacktrace
     end
   end
