@@ -16,7 +16,7 @@ describe Neography::Rest do
       batch_result.first.should have_key("from")
       batch_result.first["body"]["self"].split('/').last.should == new_node[:id]
     end
-    
+
     it "can get multiple nodes" do
       node1 = @neo.create_node
       node1[:id] = node1["self"].split('/').last
@@ -133,7 +133,7 @@ describe Neography::Rest do
       batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
       batch_result.first["body"]["self"].should == new_relationship["self"]
     end
-    
+
     it "can create a single relationship" do
       node1 = @neo.create_node
       node2 = @neo.create_node
@@ -205,14 +205,13 @@ describe Neography::Rest do
       new_node = @neo.create_node
       key = generate_text(6)
       value = generate_text
-      new_index = @neo.get_node_index(index_name, key, value) 
       batch_result = @neo.batch [:add_node_to_index, index_name, key, value, new_node]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
-      existing_index = @neo.find_node_index(index_name, key, value) 
+      existing_index = @neo.find_node_index(index_name, key, value)
       existing_index.should_not be_nil
       existing_index.first["self"].should == new_node["self"]
-      @neo.remove_node_from_index(index_name, key, value, new_node) 
+      @neo.remove_node_from_index(index_name, key, value, new_node)
     end
 
     it "can get a node index" do
@@ -251,7 +250,7 @@ describe Neography::Rest do
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"]["self"].split('/').last.should == "0"
-    end  
+    end
 
     it "can batch gremlin with parameters" do
       new_node = @neo.create_node
@@ -260,14 +259,14 @@ describe Neography::Rest do
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"]["self"].split('/').last.should == id
-    end  
+    end
 
     it "can batch cypher" do
       batch_result = @neo.batch [:execute_query, "start n=node(0) return n"]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == "0"
-    end  
+    end
 
     it "can batch cypher with parameters" do
       new_node = @neo.create_node
@@ -276,18 +275,20 @@ describe Neography::Rest do
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == id
-    end  
-  
+    end
+
 	it "can delete a node in batch" do
-		
 		node1 = @neo.create_node
 		node2 = @neo.create_node
 		id1 = node1['self'].split('/').last
 		id2 = node2['self'].split('/').last
 		batch_result = @neo.batch [:delete_node, id1 ], [:delete_node, id2]
-		@neo.get_node(node1).should be_nil
-		@neo.get_node(node2).should be_nil
-
+    expect {
+      @neo.get_node(node1).should be_nil
+    }.to raise_error Neography::NodeNotFoundException
+    expect {
+      @neo.get_node(node2).should be_nil
+    }.to raise_error Neography::NodeNotFoundException
 	end
 
 	it "can remove a node from an index in batch " do
@@ -295,16 +296,16 @@ describe Neography::Rest do
 		key = generate_text(6)
 		value1 = generate_text
 		value2 = generate_text
-		value3 = generate_text  
-		
+		value3 = generate_text
+
 		node1 = @neo.create_unique_node(index, key, value1, { "name" => "Max" })
 		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" }) 
 		node3 = @neo.create_unique_node(index, key, value3, { "name" => "Samir"})
-		
+
 		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ], 
 		                          [:remove_node_from_index, index, key, node2 ],
 		                          [:remove_node_from_index, index, node3 ]
-		
+
 		@neo.get_node_index(index, key, value1).should be_nil
 		@neo.get_node_index(index, key, value2).should be_nil
 		@neo.get_node_index(index, key, value3).should be_nil
@@ -398,12 +399,12 @@ describe Neography::Rest do
       key = generate_text(6)
       value = generate_text
 
-      batch_result = @neo.batch [:create_node, {"name" => "Max"}], 
-                                [:create_node, {"name" => "Marc"}],                           
+      batch_result = @neo.batch [:create_node, {"name" => "Max"}],
+                                [:create_node, {"name" => "Marc"}],
                                 [:add_node_to_index, "test_node_index", key, value, "{0}"]
                                 [:add_node_to_index, "test_node_index", key, value, "{1}"]
-                                [:create_relationship, "friends", "{0}", "{1}", {:since => "college"}]                        
-                                [:add_relationship_to_index, "test_relationship_index", key, value, "{4}"] 
+                                [:create_relationship, "friends", "{0}", "{1}", {:since => "college"}]
+                                [:add_relationship_to_index, "test_relationship_index", key, value, "{4}"]
       batch_result.should_not be_nil
     end
 
@@ -428,7 +429,7 @@ describe Neography::Rest do
       batch_result = @neo.batch [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                 [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                 [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
-                                [:create_relationship, "has", "{0}", "{2}", {}]   
+                                [:create_relationship, "has", "{0}", "{2}", {}]
       batch_result.should_not be_nil
 
 
@@ -442,5 +443,5 @@ describe Neography::Rest do
     end
 
   end
-  
+
 end

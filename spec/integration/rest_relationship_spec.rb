@@ -30,7 +30,7 @@ describe Neography::Rest do
       new_relationship["data"]["since"].should == '10-1-2010'
       new_relationship["data"]["met"].should == "college"
     end
-    
+
     it "can create a unique node with more than one property" do
       index_name = generate_text(6)
       key = generate_text(6)
@@ -40,7 +40,7 @@ describe Neography::Rest do
       new_node["data"]["name"].should == "Max"
       new_node["data"]["age"].should == 31
     end
-    
+
     it "can create a unique relationship" do
       index_name = generate_text(6)
       key = generate_text(6)
@@ -51,7 +51,6 @@ describe Neography::Rest do
       new_relationship["data"][key].should == value
     end
 
-    
   end
 
   describe "get_relationship" do
@@ -65,13 +64,14 @@ describe Neography::Rest do
       existing_relationship["self"].should == new_relationship["self"]
     end
 
-    it "returns nil if it tries to get a relationship that does not exist" do
+    it "raises error if it tries to get a relationship that does not exist" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      existing_relationship = @neo.get_relationship(fake_relationship)
-      existing_relationship.should be_nil
+      expect {
+        existing_relationship = @neo.get_relationship(fake_relationship)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 
@@ -93,9 +93,9 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      @neo.set_relationship_properties(fake_relationship, {"since" => '10-1-2010', "met" => "college"})
-      relationship_properties = @neo.get_relationship_properties(fake_relationship)
-      relationship_properties.should be_nil
+      expect {
+        @neo.set_relationship_properties(fake_relationship, {"since" => '10-1-2010', "met" => "college"})
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 
@@ -117,9 +117,9 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      @neo.reset_relationship_properties(fake_relationship, {"since" => '10-1-2010', "met" => "college"})
-      relationship_properties = @neo.get_relationship_properties(fake_relationship)
-      relationship_properties.should be_nil
+      expect {
+        @neo.reset_relationship_properties(fake_relationship, {"since" => '10-1-2010', "met" => "college"})
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 
@@ -151,21 +151,23 @@ describe Neography::Rest do
       relationship_properties.should be_nil
     end
 
-    it "returns nil if it tries to get some of the properties on a relationship that does not have any" do
+    it "raises error if it tries to get some of the properties on a relationship that does not have any" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
-      relationship_properties = @neo.get_relationship_properties(new_relationship, ["since", "roommates"])
-      relationship_properties.should be_nil
+      expect {
+        @neo.get_relationship_properties(new_relationship, ["since", "roommates"])
+      }.to raise_error Neography::NoSuchPropertyException
     end
 
-    it "returns nil if it fails to get properties on a relationship that does not exist" do
+    it "raises error if it fails to get properties on a relationship that does not exist" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      relationship_properties = @neo.get_relationship_properties(fake_relationship)
-      relationship_properties.should be_nil
+      expect {
+        @neo.get_relationship_properties(fake_relationship)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 
@@ -178,13 +180,14 @@ describe Neography::Rest do
       @neo.get_relationship_properties(new_relationship).should be_nil
     end
 
-    it "returns nil if it fails to remove the properties of a relationship that does not exist" do
+    it "raises error if it fails to remove the properties of a relationship that does not exist" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college"})
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      @neo.remove_relationship_properties(fake_relationship).should be_nil
-      @neo.get_relationship_properties(fake_relationship).should be_nil
+      expect {
+        @neo.remove_relationship_properties(fake_relationship)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
 
     it "can remove a specific relationship property" do
@@ -192,7 +195,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college"})
       @neo.remove_relationship_properties(new_relationship, "met")
-      relationship_properties = @neo.get_relationship_properties(new_relationship, ["met", "since"])
+      relationship_properties = @neo.get_relationship_properties(new_relationship)
       relationship_properties["met"].should be_nil
       relationship_properties["since"].should == '10-1-2010'
     end
@@ -202,7 +205,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college", "roommates" => "no"})
       @neo.remove_relationship_properties(new_relationship, ["met", "since"])
-      relationship_properties = @neo.get_relationship_properties(new_relationship, ["since", "met", "roommates"])
+      relationship_properties = @neo.get_relationship_properties(new_relationship)
       relationship_properties["met"].should be_nil
       relationship_properties["since"].should be_nil
       relationship_properties["roommates"].should == "no"
@@ -219,13 +222,14 @@ describe Neography::Rest do
       relationships.should be_nil
     end
 
-    it "returns nil if it tries to delete a relationship that does not exist" do
+    it "raises error if it tries to delete a relationship that does not exist" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college"})
       fake_relationship = new_relationship["self"].split('/').last.to_i + 1000
-      existing_relationship = @neo.delete_relationship(fake_relationship)
-      existing_relationship.should be_nil
+      expect {
+        existing_relationship = @neo.delete_relationship(fake_relationship)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
 
     it "returns nil if it tries to delete a relationship that has already been deleted" do
@@ -234,8 +238,9 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college"})
       existing_relationship = @neo.delete_relationship(new_relationship)
       existing_relationship.should be_nil
-      existing_relationship = @neo.delete_relationship(new_relationship)
-      existing_relationship.should be_nil
+      expect {
+        existing_relationship = @neo.delete_relationship(new_relationship)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 

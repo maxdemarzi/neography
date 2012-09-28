@@ -32,11 +32,16 @@ module Neography
     end
 
     def del
-      self.neo_server.delete_node!(self.neo_id)
+      neo_server.delete_node!(self.neo_id)
     end
 
     def exist?
-      !self.neo_server.get_node(self.neo_id).nil?
+      begin
+        neo_server.get_node(self.neo_id)
+        true
+      rescue NodeNotFoundException
+        false
+      end
     end
 
   end

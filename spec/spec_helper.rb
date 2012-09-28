@@ -23,3 +23,14 @@ def json_content_type
   {"Content-Type"=>"application/json"}
 end
 
+def error_response(attributes)
+  stub(
+    code: attributes[:code],
+    body: {
+    message:   attributes[:message],
+    exception: attributes[:exception],
+    stacktrace: attributes[:stacktrace]
+  }.reject { |k,v| v.nil? }.to_json
+  )
+end
+

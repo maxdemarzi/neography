@@ -367,7 +367,9 @@ describe Neography::NodeRelationship do
       p2 = Neography::Node.create
       new_rel = Neography::Relationship.create(:family, p1, p2)
       new_rel.del
-      Neography::Relationship.load(new_rel).should be_nil
+      expect {
+        Neography::Relationship.load(new_rel)
+      }.to raise_error Neography::RelationshipNotFoundException
     end
   end
 

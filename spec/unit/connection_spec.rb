@@ -130,6 +130,74 @@ module Neography
         connection.get("/foo/bar", :headers => {})
       end
 
+      context "errors" do
+
+        it "raises NodeNotFoundException" do
+          response = error_response(code: 404, message: "a message", exception: "NodeNotFoundException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error NodeNotFoundException
+        end
+
+        it "raises OperationFailureException" do
+          response = error_response(code: 409, message: "a message", exception: "OperationFailureException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error OperationFailureException
+        end
+
+        it "raises PropertyValueException" do
+          response = error_response(code: 400, message: "a message", exception: "PropertyValueException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error PropertyValueException
+        end
+
+        it "raises NoSuchPropertyException" do
+          response = error_response(code: 404, message: "a message", exception: "NoSuchPropertyException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error NoSuchPropertyException
+        end
+
+        it "raises RelationshipNotFoundException" do
+          response = error_response(code: 404, message: "a message", exception: "RelationshipNotFoundException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error RelationshipNotFoundException
+        end
+
+        it "raises BadInputException" do
+          response = error_response(code: 400, message: "a message", exception: "BadInputException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error BadInputException
+        end
+
+        it "raises UnauthorizedError" do
+          response = error_response(code: 401)
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error UnauthorizedError
+        end
+
+        it "raises NeographyError in all other cases" do
+          response = error_response(code: 418, message: "I'm a teapot.")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error NeographyError
+        end
+
+      end
+
     end
   end
 end

@@ -36,23 +36,28 @@ module Neography
       @rel_type = hash["type"]
       neo_server = server
     end
-    
+
     def neo_server
       @neo_server ||= self.start_node.neo_server
     end
-    
+
     def neo_server=(server)
       @neo_server = server
     end
 
     def del
-      self.start_node.neo_server.delete_relationship(self.neo_id)
+      start_node.neo_server.delete_relationship(neo_id)
     end
 
     def exist?
-      !self.start_node.neo_server.get_relationship(self.neo_id).nil?
+      begin
+        start_node.neo_server.get_relationship(neo_id)
+        true
+      rescue Neography::RelationshipNotFoundException
+        false
+      end
     end
-    
+
     def attributes
       attrs = self.methods - OpenStruct.instance_methods - Neography::Relationship.instance_methods
       attrs.values_at(*attrs.each_index.select {|i| i.even?})

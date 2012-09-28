@@ -44,11 +44,12 @@ describe Neography::Node do
       existing_node.neo_id.should == new_node.neo_id
     end
 
-    it "returns nil if it tries to load a node that does not exist" do
+    it "raises an error if it tries to load a node that does not exist" do
       new_node = Neography::Node.create
       fake_node = new_node.neo_id.to_i + 1000
-      existing_node = Neography::Node.load(fake_node)
-      existing_node.should be_nil
+      expect {
+        existing_node = Neography::Node.load(fake_node)
+      }.to raise_error Neography::NodeNotFoundException
     end
 
     it "can load a node that exists not on the default rest server" do
@@ -74,15 +75,16 @@ describe Neography::Node do
       new_node = Neography::Node.create
       node_id = new_node.neo_id
       new_node.del
-      deleted_node = Neography::Node.load(node_id)
-      deleted_node.should be_nil
+      expect {
+        Neography::Node.load(node_id)
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
   describe "exists?" do
     it "can tell if it exists" do
       new_node = Neography::Node.create
-      new_node.exist?.should be_true 
+      new_node.exist?.should be_true
     end
 
     it "can tell if does not exists" do

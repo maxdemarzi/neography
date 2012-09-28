@@ -64,11 +64,12 @@ describe Neography::Rest do
       existing_node["self"].split('/').last.should == new_node[:id]
     end
 
-    it "returns nil if it tries to get a node that does not exist" do
+    it "raises an error if it tries to get a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      existing_node = @neo.get_node(fake_node)
-      existing_node.should be_nil
+      expect {
+        @neo.get_node(fake_node)
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
@@ -84,9 +85,9 @@ describe Neography::Rest do
     it "it fails to set properties on a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.set_node_properties(fake_node, {"weight" => 150, "hair" => "blonde"})
-      node_properties = @neo.get_node_properties(fake_node)
-      node_properties.should be_nil
+      expect {
+        @neo.set_node_properties(fake_node, {"weight" => 150, "hair" => "blonde"})
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
@@ -104,9 +105,9 @@ describe Neography::Rest do
     it "it fails to reset properties on a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.reset_node_properties(fake_node, {"weight" => 170, "eyes" => "green"})
-      node_properties = @neo.get_node_properties(fake_node)
-      node_properties.should be_nil
+      expect {
+        @neo.reset_node_properties(fake_node, {"weight" => 170, "eyes" => "green"})
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
@@ -131,15 +132,19 @@ describe Neography::Rest do
       @neo.get_node_properties(new_node).should be_nil
     end
 
-    it "returns nil if it tries to get some of the properties on a node that does not have any" do
+    it "raises error if it tries to get some of the properties on a node that does not have any" do
       new_node = @neo.create_node
-      @neo.get_node_properties(new_node, ["weight", "height"]).should be_nil
+      expect {
+        @neo.get_node_properties(new_node, ["weight", "height"]).should be_nil
+      }.to raise_error Neography::NoSuchPropertyException
     end
 
-    it "returns nil if it fails to get properties on a node that does not exist" do
+    it "raises error if it fails to get properties on a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.get_node_properties(fake_node).should be_nil
+      expect {
+        @neo.get_node_properties(fake_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
@@ -150,10 +155,12 @@ describe Neography::Rest do
       @neo.get_node_properties(new_node).should be_nil
     end
 
-    it "returns nil if it fails to remove the properties of a node that does not exist" do
+    it "raises error if it fails to remove the properties of a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.remove_node_properties(fake_node).should be_nil
+      expect {
+        @neo.remove_node_properties(fake_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
 
     it "can remove a specific node property" do
@@ -177,35 +184,39 @@ describe Neography::Rest do
     it "can delete an unrelated node" do
       new_node = @neo.create_node
       @neo.delete_node(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
+      expect {
+        @neo.get_node(new_node)
+      }.to raise_error Neography::NodeNotFoundException
     end
 
     it "cannot delete a node that has relationships" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       @neo.create_relationship("friends", new_node1, new_node2)
-      @neo.delete_node(new_node1).should be_nil
+      expect {
+        @neo.delete_node(new_node1).should be_nil
+      }.to raise_error Neography::OperationFailureException
       existing_node = @neo.get_node(new_node1)
       existing_node.should_not be_nil
     end
 
-    it "returns nil if it tries to delete a node that does not exist" do
+    it "raises error if it tries to delete a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.delete_node(fake_node).should be_nil
-      existing_node = @neo.get_node(fake_node)
-      existing_node.should be_nil
+      expect {
+        @neo.delete_node(fake_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
 
-    it "returns nil if it tries to delete a node that has already been deleted" do
+    it "raises error if it tries to delete a node that has already been deleted" do
       new_node = @neo.create_node
       @neo.delete_node(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
-      @neo.delete_node(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
+      expect {
+        existing_node = @neo.get_node(new_node)
+      }.to raise_error Neography::NodeNotFoundException
+      expect {
+        @neo.delete_node(new_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 
@@ -213,8 +224,9 @@ describe Neography::Rest do
     it "can delete an unrelated node" do
       new_node = @neo.create_node
       @neo.delete_node!(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
+      expect {
+        existing_node = @neo.get_node(new_node)
+      }.to raise_error Neography::NodeNotFoundException
     end
 
     it "can delete a node that has relationships" do
@@ -222,26 +234,28 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       @neo.create_relationship("friends", new_node1, new_node2)
       @neo.delete_node!(new_node1).should be_nil
-      existing_node = @neo.get_node(new_node1)
-      existing_node.should be_nil
+      expect {
+        existing_node = @neo.get_node(new_node1)
+      }.to raise_error Neography::NodeNotFoundException
     end
 
-    it "returns nil if it tries to delete a node that does not exist" do
+    it "raises error if it tries to delete a node that does not exist" do
       new_node = @neo.create_node
       fake_node = new_node["self"].split('/').last.to_i + 1000
-      @neo.delete_node!(fake_node).should be_nil
-      existing_node = @neo.get_node(fake_node)
-      existing_node.should be_nil
+      expect {
+        @neo.delete_node!(fake_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
 
-    it "returns nil if it tries to delete a node that has already been deleted" do
+    it "raises error if it tries to delete a node that has already been deleted" do
       new_node = @neo.create_node
       @neo.delete_node!(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
-      @neo.delete_node!(new_node).should be_nil
-      existing_node = @neo.get_node(new_node)
-      existing_node.should be_nil
+      expect {
+        existing_node = @neo.get_node(new_node)
+      }.to raise_error Neography::NodeNotFoundException
+      expect {
+        @neo.delete_node!(new_node).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
     end
   end
 

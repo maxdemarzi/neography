@@ -83,9 +83,9 @@ describe Neography::Rest do
       @neo.create_relationship("friends", new_node3, new_node4)
       @neo.create_relationship("friends", new_node4, new_node5)
       @neo.create_relationship("friends", new_node3, new_node5)
-      path = @neo.get_path(new_node1, new_node5, {"type"=> "friends", "direction" => "out"}, depth=2, algorithm="shortestPath")
-      path["start"].should be_nil
-      path["end"].should be_nil
+      expect {
+        @neo.get_path(new_node1, new_node5, {"type"=> "friends", "direction" => "out"}, depth=2, algorithm="shortestPath")
+      }.to raise_error Neography::NotFoundException
     end
 
     it "can get a path between two nodes of a specific relationship" do

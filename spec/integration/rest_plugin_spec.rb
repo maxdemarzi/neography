@@ -62,6 +62,12 @@ describe Neography::Rest do
       existing_node["data"][0][0]["self"].split('/').last.should == id
     end
 
+    it "throws an error for an invalid query" do
+      expect {
+        @neo.execute_query("this is not a query")
+      }.to raise_error(Neography::SyntaxException)
+    end
+
   end
 
 end

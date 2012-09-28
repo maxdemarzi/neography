@@ -22,6 +22,9 @@ require 'neography/rest/cypher'
 require 'neography/rest/gremlin'
 require 'neography/rest/batch'
 require 'neography/rest/clean'
+
+require 'neography/errors'
+
 require 'neography/connection'
 
 module Neography

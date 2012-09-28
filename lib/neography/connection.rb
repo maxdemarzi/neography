@@ -98,15 +98,38 @@ module Neography
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
-      when 400
-        @logger.error "Invalid data sent #{body}" if @log_enabled
+      when 400...500
+        handle_4xx_response(code, body)
         nil
-      when 404
-        @logger.error "Not Found #{body}" if @log_enabled
-        nil
+      end
+    end
+
+    def handle_4xx_response(code, body)
+      parsed_body = JSON.parse(body)
+      message = parsed_body["message"]
+      stacktrace = parsed_body["stacktrace"]
+
+      @logger.error "#{code} error: #{body}" if @log_enabled
+
+      case code
+      when 400, 404
+        case parsed_body["exception"]
+        when "SyntaxException"               ; raise SyntaxException.new(message, code, stacktrace)
+        when "PropertyValueException"        ; raise PropertyValueException.new(message, code, stacktrace)
+        when "BadInputException"             ; raise BadInputException.new(message, code, stacktrace)
+        when "NodeNotFoundException"         ; raise NodeNotFoundException.new(message, code, stacktrace)
+        when "NoSuchPropertyException"       ; raise NoSuchPropertyException.new(message, code, stacktrace)
+        when "RelationshipNotFoundException" ; raise RelationshipNotFoundException.new(message, code, stacktrace)
+        when "NotFoundException"             ; raise NotFoundException.new(message, code, stacktrace)
+        else
+          raise NeographyError.new(message, code, stacktrace)
+        end
+      when 401
+        raise UnauthorizedError.new(message, code, stacktrace)
       when 409
-        @logger.error "Node could not be deleted (still has relationships?)" if @log_enabled
-        nil
+        raise OperationFailureException.new(message, code, stacktrace)
+      else
+        raise NeographyError.new(message, code, stacktrace)
       end
     end
 
