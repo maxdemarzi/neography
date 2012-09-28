@@ -355,14 +355,13 @@ describe Neography::Rest do
     it "can add a newly created node to an index" do
       key = generate_text(6)
       value = generate_text
-      new_index = @neo.get_node_index("test_node_index", key, value) 
       batch_result = @neo.batch [:create_node, {"name" => "Max"}], [:add_node_to_index, "test_node_index", key, value, "{0}"]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
-      existing_index = @neo.find_node_index("test_node_index", key, value) 
+      existing_index = @neo.find_node_index("test_node_index", key, value)
       existing_index.should_not be_nil
       existing_index.first["self"].should == batch_result.first["body"]["self"]
-      @neo.remove_node_from_index("test_node_index", key, value, batch_result.first["body"]["self"].split('/').last) 
+      @neo.remove_node_from_index("test_node_index", key, value, batch_result.first["body"]["self"].split('/').last)
     end
 
     it "can add a newly created relationship to an index" do
