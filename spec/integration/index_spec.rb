@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+require 'spec_helper'
 
 describe Neography::Index do
 
@@ -6,7 +6,7 @@ describe Neography::Index do
     new_node = Neography::Node.create
     key = generate_text(6)
     value = generate_text
-    new_node.add_to_index("node_test_index", key, value)      
+    new_node.add_to_index("node_test_index", key, value)
   end
 
   it "can add a relationship to an index" do
@@ -17,5 +17,5 @@ describe Neography::Index do
     value = generate_text
     r.add_to_index("relationship_test_index", key, value)
   end
-  
+
 end
