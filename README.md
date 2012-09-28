@@ -134,6 +134,7 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
 
 Neography raises REST API errors as Ruby errors, see the wiki page about [errors](https://github.com/maxdemarzi/neography/wiki/Errors).
+(**Note**: older versions of Neography did not raise any errors!)
 
 
 ## *Phase 2*
