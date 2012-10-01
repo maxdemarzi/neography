@@ -27,13 +27,13 @@ module Neography
       end
 
       it "gets properties as accessor" do
-        @db.stub(:"set_node_properties").with(42, { "key" => "value" })
+        @db.stub(:"set_node_properties")
         node.key = "value"
         node.key.should == "value"
       end
 
       it "gets properties as array entry" do
-        @db.stub(:"set_node_properties").with(42, { "key" => "value" })
+        @db.stub(:"set_node_properties")
         node["key"] = "value"
         node["key"].should == "value"
       end
@@ -84,13 +84,13 @@ module Neography
       end
 
       it "gets properties as accessor" do
-        @db.stub(:"set_relationship_properties").with(42, { "key" => "value" })
+        @db.stub(:"set_relationship_properties")
         relationship.key = "value"
         relationship.key.should == "value"
       end
 
       it "gets properties as array entry" do
-        @db.stub(:"set_relationship_properties").with(42, { "key" => "value" })
+        @db.stub(:"set_relationship_properties")
         relationship["key"] = "value"
         relationship["key"].should == "value"
       end
