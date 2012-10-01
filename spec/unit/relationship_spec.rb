@@ -81,6 +81,21 @@ module Neography
       end
     end
 
+    describe "#del" do
+
+      before do
+        db.stub(:create_relationship) { relationship_hash }
+      end
+
+      subject(:relationship) { Relationship.create("type", from, to, props) }
+
+      it "deletes a node" do
+        db.should_receive(:delete_relationship).with("0")
+        relationship.del
+      end
+
+    end
+
     describe "#other_node" do
 
       before do
