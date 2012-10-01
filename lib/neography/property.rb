@@ -2,25 +2,27 @@ module Neography
   module Property
 
     def [](key)
+      key = key.to_sym
       return unless respond_to?(key)
       @table[key]
     end
 
     def []=(key, value)
-      k = key.to_s
+      key = key.to_sym
+      k_str = key.to_s
       if value.nil?
         if self.is_a? Neography::Node
-          neo_server.remove_node_properties(self.neo_id, [k])
+          neo_server.remove_node_properties(self.neo_id, [k_str])
         else
-          neo_server.remove_relationship_properties(self.neo_id, [k])
+          neo_server.remove_relationship_properties(self.neo_id, [k_str])
         end
       else
         if self.is_a? Neography::Node
-          neo_server.set_node_properties(self.neo_id, {k => value})
+          neo_server.set_node_properties(self.neo_id, {k_str => value})
         else
-          neo_server.set_relationship_properties(self.neo_id, {k => value})
+          neo_server.set_relationship_properties(self.neo_id, {k_str => value})
         end
-        new_ostruct_member(k) unless self.respond_to?(key)
+        new_ostruct_member(key) unless self.respond_to?(key)
       end
       @table[key] = value
     end
@@ -48,6 +50,10 @@ module Neography
       else
         super
       end
+    end
+
+    def attributes
+      @table.keys
     end
 
   end

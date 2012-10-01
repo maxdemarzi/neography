@@ -60,6 +60,13 @@ module Neography
         node.key = "value2"
       end
 
+      it "knows its attributes" do
+        @db.stub(:"set_node_properties")
+        node.key = "value"
+        node["key2"] = "value"
+        node.attributes.should =~ [ :key, :key2 ]
+      end
+
     end
 
     context "Relationship" do
@@ -115,6 +122,13 @@ module Neography
 
         @db.should_receive(:"set_relationship_properties").with(42, { "key" => "value2" })
         relationship.key = "value2"
+      end
+
+      it "knows its attributes" do
+        @db.stub(:"set_relationship_properties")
+        relationship.key = "value"
+        relationship["key2"] = "value"
+        relationship.attributes.should =~ [ :key, :key2 ]
       end
 
     end

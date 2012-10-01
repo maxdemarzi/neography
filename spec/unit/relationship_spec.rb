@@ -83,17 +83,8 @@ module Neography
 
     describe "#other_node" do
 
-      let(:rel) do
-        {
-          "self" => "/1",
-          "start" => "/2",
-          "end" => "/3",
-          "data" => {}
-        }
-      end
-
       before do
-        db.stub(:create_relationship) { rel }
+        db.stub(:create_relationship) { relationship_hash }
       end
 
       subject(:relationship) { Relationship.create("type", from, to, props) }
