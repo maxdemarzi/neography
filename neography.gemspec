@@ -19,13 +19,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec", ">= 2.0"
   s.add_development_dependency "net-http-spy", "0.2.1"
-  s.add_development_dependency "rake"
+  s.add_development_dependency "rake", ">= 0.8.7"
   s.add_dependency "httparty", ">= 0.8.1"
-  s.add_dependency "rake"
-  s.add_dependency "json"
-  s.add_dependency "os"
-  s.add_dependency "rubyzip"
-  s.add_dependency "multi_json"
+  s.add_dependency "rake", ">= 0.8.7"
+  s.add_dependency "json", ">= 1.6.0"
+  s.add_dependency "os", ">= 0.9.6"
+  s.add_dependency "rubyzip", ">= 0.9.7"
+  s.add_dependency "multi_json", ">= 1.3.2" 
 end
