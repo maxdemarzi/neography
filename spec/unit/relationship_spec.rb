@@ -13,11 +13,11 @@ module Neography
       }
     end
 
-    describe "::create" do
-      let(:from)  { stub(:neo_server => db) }
-      let(:to)    { stub(:neo_server => db) }
-      let(:props) { { :foo => "bar" } }
+    let(:from)  { stub(:neo_server => db) }
+    let(:to)    { stub(:neo_server => db) }
+    let(:props) { { :foo => "bar" } }
 
+    describe "::create" do
       it "creates a new node through Rest" do
         db.should_receive(:create_relationship).with("type", from, to, props)
 
@@ -79,6 +79,33 @@ module Neography
         end
 
       end
+    end
+
+    describe "#other_node" do
+
+      let(:rel) do
+        {
+          "self" => "/1",
+          "start" => "/2",
+          "end" => "/3",
+          "data" => {}
+        }
+      end
+
+      before do
+        db.stub(:create_relationship) { rel }
+      end
+
+      subject(:relationship) { Relationship.create("type", from, to, props) }
+
+      it "knows the other node based on from" do
+        relationship.other_node(from).should == to
+      end
+
+      it "knows the other node based on to" do
+        relationship.other_node(to).should == from
+      end
+
     end
 
   end
