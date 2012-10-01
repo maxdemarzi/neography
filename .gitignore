@@ -6,3 +6,4 @@ pkg/*
 .bundle
 log/*
 .rvmrc
+Gemfile.lock
