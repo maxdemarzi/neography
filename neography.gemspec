@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = "maxdemarzi@gmail.com"
   s.homepage    = "http://rubygems.org/gems/neography"
   s.summary     = "ruby wrapper to Neo4j Rest API"
-  s.description = "A Ruby wrapper to the Neo4j Rest API see http://components.neo4j.org/neo4j-rest/ for more details."
+  s.description = "A Ruby wrapper to the Neo4j Rest API see http://docs.neo4j.org/chunked/stable/rest-api.html for more details."
 
   s.rubyforge_project = "neography"
 
