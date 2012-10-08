@@ -114,13 +114,14 @@ module Neography
       case code
       when 400, 404
         case parsed_body["exception"]
-        when "SyntaxException"               ; raise SyntaxException.new(message, code, stacktrace)
-        when "PropertyValueException"        ; raise PropertyValueException.new(message, code, stacktrace)
-        when "BadInputException"             ; raise BadInputException.new(message, code, stacktrace)
-        when "NodeNotFoundException"         ; raise NodeNotFoundException.new(message, code, stacktrace)
-        when "NoSuchPropertyException"       ; raise NoSuchPropertyException.new(message, code, stacktrace)
-        when "RelationshipNotFoundException" ; raise RelationshipNotFoundException.new(message, code, stacktrace)
-        when "NotFoundException"             ; raise NotFoundException.new(message, code, stacktrace)
+        when /SyntaxException/               ; raise SyntaxException.new(message, code, stacktrace)
+        when /this is not a query/           ; raise SyntaxException.new(message, code, stacktrace)
+        when /PropertyValueException/        ; raise PropertyValueException.new(message, code, stacktrace)
+        when /BadInputException/             ; raise BadInputException.new(message, code, stacktrace)
+        when /NodeNotFoundException/         ; raise NodeNotFoundException.new(message, code, stacktrace)
+        when /NoSuchPropertyException/       ; raise NoSuchPropertyException.new(message, code, stacktrace)
+        when /RelationshipNotFoundException/ ; raise RelationshipNotFoundException.new(message, code, stacktrace)
+        when /NotFoundException/             ; raise NotFoundException.new(message, code, stacktrace)
         else
           raise NeographyError.new(message, code, stacktrace)
         end
