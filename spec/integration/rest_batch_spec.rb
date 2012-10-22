@@ -134,6 +134,16 @@ describe Neography::Rest do
       batch_result.first["body"]["self"].should == new_relationship["self"]
     end
 
+    it "can create a single relationship without properties" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      batch_result = @neo.batch [:create_relationship, "friends", node1, node2]
+      batch_result.first["body"]["type"].should == "friends"
+      batch_result.first["body"]["data"]["since"].should be_nil
+      batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
+    end
+
     it "can create a single relationship" do
       node1 = @neo.create_node
       node2 = @neo.create_node

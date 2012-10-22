@@ -117,7 +117,7 @@ module Neography
         delete Relationships.base_path(:id => get_id(id))
       end
 
-      def create_relationship(type, from, to, data)
+      def create_relationship(type, from, to, data = nil)
         post build_node_uri(from) + "/relationships" do
           {
             :to   => build_node_uri(to),
