@@ -62,6 +62,15 @@ describe Neography::Rest do
       existing_node["data"][0][0]["self"].split('/').last.should == id
     end
 
+    it "can delete everything but start node" do
+      @neo.execute_query("START n=node(*) MATCH n-[r?]-() WHERE ID(n) <> 0 DELETE n,r")
+      expect { 
+        @neo.execute_query("start n=node({id}) return n", {:id => 1})
+      }.to raise_error(Neography::BadInputException)
+      root_node = @neo.execute_query("start n=node({id}) return n", {:id => 0})
+      root_node.should_not be_nil
+    end 
+
     it "throws an error for an invalid query" do
       expect {
         @neo.execute_query("this is not a query")
