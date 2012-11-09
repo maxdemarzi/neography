@@ -196,8 +196,15 @@ module Neography
           }.to raise_error NeographyError
         end
 
-      end
+        it "raises BadInputException" do
+          response = error_response(code: 500, message: "a message", exception: "JsonParseException")
+          HTTParty.stub(:get).and_return(response)
+          expect {
+            connection.get("/foo/bar")
+          }.to raise_error NeographyError
+        end
 
+      end
     end
   end
 end

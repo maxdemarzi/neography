@@ -98,13 +98,13 @@ module Neography
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
-      when 400...500
-        handle_4xx_response(code, body)
+      when 400..500
+        handle_4xx_500_response(code, body)
         nil
       end
     end
 
-    def handle_4xx_response(code, body)
+    def handle_4xx_500_response(code, body)
       parsed_body = JSON.parse(body)
       message = parsed_body["message"]
       stacktrace = parsed_body["stacktrace"]
