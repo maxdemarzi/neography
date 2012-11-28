@@ -11,10 +11,12 @@ module Neography
       key = key.to_sym
       k_str = key.to_s
       if value.nil?
-        if self.is_a? Neography::Node
-          neo_server.remove_node_properties(self.neo_id, [k_str])
-        else
-          neo_server.remove_relationship_properties(self.neo_id, [k_str])
+        unless @table[key].nil?
+          if self.is_a? Neography::Node
+            neo_server.remove_node_properties(self.neo_id, [k_str])
+          else
+            neo_server.remove_relationship_properties(self.neo_id, [k_str])
+          end
         end
       else
         if self.is_a? Neography::Node
@@ -33,7 +35,6 @@ module Neography
         meta = class << self; self; end
         meta.send(:define_method, name) { @table[name] }
         meta.send(:define_method, "#{name}=") do |value|
-          @table[name] = value
           self[name.to_sym] = value
         end
       end
