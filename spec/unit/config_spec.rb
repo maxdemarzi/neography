@@ -3,7 +3,7 @@ require 'spec_helper'
 module Neography
   describe Config do
 
-    subject(:config)
+    subject{Config.new}
 
     context "defaults" do
 
@@ -37,7 +37,7 @@ module Neography
           :password       => nil,
           :parser         => { :parser => MultiJsonParser }
         }
-        config.to_hash.should == expected_hash
+        subject.to_hash.should == expected_hash
       end
 
     end
