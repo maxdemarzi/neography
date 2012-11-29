@@ -37,7 +37,7 @@ module Neography
           :password       => nil,
           :parser         => { :parser => MultiJsonParser }
         }
-        config.to_hash.should == expected_hash
+        subject.to_hash.should == expected_hash
       end
 
     end
