@@ -40,11 +40,13 @@ module Neography
 
       it "resets properties as accessor" do
         @db.should_receive(:"remove_node_properties").with(42, ["key"])
+        node.key = "value"
         node.key = nil
       end
 
       it "resets properties as array entry" do
         @db.should_receive(:"remove_node_properties").with(42, ["key"])
+        node["key"] = "value"
         node["key"] = nil
       end
 
@@ -104,11 +106,13 @@ module Neography
 
       it "resets properties as accessor" do
         @db.should_receive(:"remove_relationship_properties").with(42, ["key"])
+        relationship.key = "value"
         relationship.key = nil
       end
 
       it "resets properties as array entry" do
         @db.should_receive(:"remove_relationship_properties").with(42, ["key"])
+        relationship["key"] = "value"
         relationship["key"] = nil
       end
 
