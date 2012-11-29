@@ -3,7 +3,7 @@ require 'spec_helper'
 module Neography
   describe Connection do
 
-    subject(:connection)
+    subject(:connection) { Connection.new }
 
     context "defaults" do
 
