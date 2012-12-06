@@ -21,7 +21,7 @@ module Neography
 
         rel = db.get_relationship(rel)
         if rel
-          rel = Neography::Relationship.new(rel)
+          rel = Neography::Relationship.new(rel, db)
           rel.start_node = Neography::Node.load(rel.start_node, db)
           rel.end_node = Neography::Node.load(rel.end_node, db)
         end
