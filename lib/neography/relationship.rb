@@ -34,7 +34,7 @@ module Neography
       @start_node = hash["start"].split('/').last
       @end_node = hash["end"].split('/').last
       @rel_type = hash["type"]
-      neo_server = server
+      self.neo_server = server
     end
 
     def neo_server
