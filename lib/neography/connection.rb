@@ -122,6 +122,7 @@ module Neography
         when /NoSuchPropertyException/       ; raise NoSuchPropertyException.new(message, code, stacktrace)
         when /RelationshipNotFoundException/ ; raise RelationshipNotFoundException.new(message, code, stacktrace)
         when /NotFoundException/             ; raise NotFoundException.new(message, code, stacktrace)
+        when /UniquePathNotUniqueException/  ; raise UniquePathNotUniqueException.new(message, code, stacktrace)
         else
           raise NeographyError.new(message, code, stacktrace)
         end

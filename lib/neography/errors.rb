@@ -39,4 +39,7 @@ module Neography
   # A path could not be found by node traversal
   class NotFoundException < NeographyError; end
 
+  # Thrown when CREATE UNIQUE matches multiple paths.
+  class UniquePathNotUniqueException < NeographyError; end
+
 end

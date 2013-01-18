@@ -64,17 +64,33 @@ describe Neography::Rest do
 
     it "can delete everything but start node" do
       @neo.execute_query("START n=node(*) MATCH n-[r?]-() WHERE ID(n) <> 0 DELETE n,r")
-      expect { 
+      expect {
         @neo.execute_query("start n=node({id}) return n", {:id => 1})
       }.to raise_error(Neography::BadInputException)
       root_node = @neo.execute_query("start n=node({id}) return n", {:id => 0})
       root_node.should_not be_nil
-    end 
+    end
 
     it "throws an error for an invalid query" do
       expect {
         @neo.execute_query("this is not a query")
       }.to raise_error(Neography::SyntaxException)
+    end
+
+    it "throws an error for not unique paths in unique path creation" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+
+      id1 = node1["self"].split('/').last.to_i
+      id2 = node2["self"].split('/').last.to_i
+
+      # create two 'FOO' relationships
+      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
+      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
+
+      expect {
+        @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE UNIQUE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
+      }.to raise_error(Neography::UniquePathNotUniqueException)
     end
 
   end
