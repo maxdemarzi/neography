@@ -20,6 +20,7 @@ require 'neography/rest/relationship_indexes'
 require 'neography/rest/relationship_auto_indexes'
 require 'neography/rest/cypher'
 require 'neography/rest/gremlin'
+require 'neography/rest/extensions'
 require 'neography/rest/batch'
 require 'neography/rest/clean'
 
@@ -56,6 +57,7 @@ module Neography
 
       @cypher                    = Cypher.new(@connection)
       @gremlin                   = Gremlin.new(@connection)
+      @extensions                = Extensions.new(@connection)
       @batch                     = Batch.new(@connection)
       @clean                     = Clean.new(@connection)
     end
@@ -332,6 +334,16 @@ module Neography
 
     def execute_script(script, params = {})
       @gremlin.execute(script, params)
+    end
+
+    # unmanaged extensions
+
+    def post_extension(path, params = {})
+      @extensions.post(path, params)
+    end
+
+    def get_extension(path)
+      @extensions.get(path)
     end
 
     # batch
