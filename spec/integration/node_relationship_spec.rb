@@ -157,6 +157,11 @@ describe Neography::NodeRelationship do
       b.outgoing.should include(c)
     end
 
+    it "#both returns an empty array for unconnected nodes" do
+      a = Neography::Node.create
+      a.both.size.should == 0
+    end
+
     it "#both(type) should return both incoming and outgoing nodes of the given type of depth one" do
       a,b,c,d,e,f = create_nodes
 
