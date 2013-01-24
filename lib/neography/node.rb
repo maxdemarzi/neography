@@ -29,6 +29,11 @@ module Neography
       end
 
       #alias_method :new, :create
+    end    
+
+    def find(*args)
+      node = self.new
+      node.find(args)
     end
 
     def del
