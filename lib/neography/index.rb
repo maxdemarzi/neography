@@ -27,7 +27,7 @@ module Neography
 
         if self.inspect == "Neography::Node"
           nodes = []
-          results = args.size > 1 ? db.find_node_index(*args) : db.get_node_index(*args)
+          results = db.find_node_index(*args)
           return nil unless results
           results.each do |r|
             node = self.new(r)
@@ -37,7 +37,7 @@ module Neography
           nodes.size > 1 ? nodes : nodes.first
         else
           rels = []
-          results = args.size > 1 ? db.find_relationship_index(*args) : db.get_relationship_index(*args)
+          results = db.find_relationship_index(*args)
           return nil unless results
           results.each do |r|
             rel = self.new(r, db)
