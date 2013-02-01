@@ -105,9 +105,15 @@ module Neography
     end
 
     def handle_4xx_500_response(code, body)
-      parsed_body = JSON.parse(body)
-      message = parsed_body["message"]
-      stacktrace = parsed_body["stacktrace"]
+      if body
+        parsed_body = JSON.parse(body)
+        message = parsed_body["message"]
+        stacktrace = parsed_body["stacktrace"]
+      else
+        parsed_body = {}
+        message = "No error message returned from server."
+        stacktrace = ""
+      end
 
       @logger.error "#{code} error: #{body}" if @log_enabled
 

@@ -167,6 +167,16 @@ describe Neography::Rest do
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
       new_index.should be_nil
     end
+
+    it "throws an error when there is an empty string in the value when removing a node" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
+      new_index.should_not be_nil
+      expect { @neo.remove_node_from_index("test_node_index", key, "", new_node) }.to raise_error
+    end
   end
 
   describe "get index" do
