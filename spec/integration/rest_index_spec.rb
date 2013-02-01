@@ -175,7 +175,7 @@ describe Neography::Rest do
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
       new_index.should_not be_nil
-      expect { @neo.remove_node_from_index("test_node_index", key, "", new_node) }.to raise_error
+      expect { @neo.remove_node_from_index("test_node_index", key, "", new_node) }.to raise_error Neography::NeographyError
     end
   end
 
