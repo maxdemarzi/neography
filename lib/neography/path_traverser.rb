@@ -14,7 +14,8 @@ module Neography
         @relationships << {"type" => type.to_s, "direction" => dir.to_s }
       end unless types.nil?
       @get = ["node","rel"]
-      @loaded = Array.new
+      @loaded_nodes = Array.new
+      @loaded_rels = Array.new
     end
 
     def nodes
@@ -62,15 +63,15 @@ module Neography
 
         if @get.include?("node")
           path["nodes"].each_with_index do |n, i|
-            @loaded[n.split('/').last.to_i] = Neography::Node.load(n) if @loaded.at(n.split('/').last.to_i).nil?
-            paths[i * 2] =  @loaded[n.split('/').last.to_i]
+            @loaded_nodes[n.split('/').last.to_i] = Neography::Node.load(n) if @loaded_nodes.at(n.split('/').last.to_i).nil?
+            paths[i * 2] =  @loaded_nodes[n.split('/').last.to_i]
           end
         end
 
         if @get.include?("rel") 
           path["relationships"].each_with_index do |r, i|
-            @loaded[r.split('/').last.to_i] = Neography::Relationship.load(r) if @loaded.at(r.split('/').last.to_i).nil?
-            paths[i * 2 + 1] =  @loaded[r.split('/').last.to_i] 
+            @loaded_rels[r.split('/').last.to_i] = Neography::Relationship.load(r)  if @loaded_rels.at(r.split('/').last.to_i).nil?
+            paths[i * 2 + 1] =  @loaded_rels[r.split('/').last.to_i]
           end
         end
  
