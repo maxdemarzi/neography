@@ -1,5 +1,6 @@
 # borrowed from architect4r
 require 'os'
+require 'httparty'
 
 namespace :neo4j do
   desc "Install Neo4j"
@@ -41,7 +42,7 @@ namespace :neo4j do
       end
 
     else    
-      %x[wget http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
+      %x[curl -O http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
       %x[tar -xvzf neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
       %x[mv neo4j-#{args[:edition]}-#{args[:version]} neo4j]
       %x[rm neo4j-#{args[:edition]}-#{args[:version]}-unix.tar.gz]
