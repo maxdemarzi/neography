@@ -1,6 +1,7 @@
 # borrowed from architect4r
 require 'os'
 require 'httparty'
+require 'zip/zip'
 
 namespace :neo4j do
   desc "Install Neo4j"
