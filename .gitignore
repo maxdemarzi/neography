@@ -1,3 +1,5 @@
+TAGS
+*.rbc
 Gemfile.lock
 .idea
 *.iml
