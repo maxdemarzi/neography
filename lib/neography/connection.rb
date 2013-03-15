@@ -1,4 +1,6 @@
 module Neography
+  module WasCreated
+  end
   class Connection
 
     USER_AGENT = "Neography/#{Neography::VERSION}"
@@ -94,7 +96,9 @@ module Neography
         response.parsed_response
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
-        response.parsed_response
+        r=response.parsed_response
+        r.extend(WasCreated)
+        r
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
