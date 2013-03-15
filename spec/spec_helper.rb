@@ -1,6 +1,8 @@
 require 'neography'
 require 'benchmark'
 require 'matchers'
+require 'coveralls'
+Coveralls.wear!
 
 # If you want to see more, uncomment the next few lines
 # require 'net-http-spy'

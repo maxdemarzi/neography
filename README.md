@@ -1,5 +1,10 @@
-[![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master)](http://travis-ci.org/maxdemarzi/neography)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/maxdemarzi/neography)
+Neography
+=========
+
+- [![Gem Version](https://badge.fury.io/rb/neography.png)](https://rubygems.org/gems/neography)
+- [![Build Status](https://secure.travis-ci.org/maxdemarzi/neography.png?branch=master)](http://travis-ci.org/maxdemarzi/neography)
+- [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/maxdemarzi/neography)
+- [![Coverage Status](https://coveralls.io/repos/maxdemarzi/neography/badge.png?branch=master)](https://coveralls.io/r/maxdemarzi/neography)
 
 ## Welcome to Neography 
 
