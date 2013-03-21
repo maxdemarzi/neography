@@ -19,7 +19,7 @@ module Neography
       its(:authentication) { should == nil }
       its(:username)       { should == nil }
       its(:password)       { should == nil }
-      its(:parser)         { should == { :parser => MultiJsonParser } }
+      its(:parser)         { should == MultiJsonParser}
 
       it "has a hash representation" do
         expected_hash = {
@@ -35,7 +35,7 @@ module Neography
           :authentication => nil,
           :username       => nil,
           :password       => nil,
-          :parser         => { :parser => MultiJsonParser }
+          :parser         => MultiJsonParser
         }
         config.to_hash.should == expected_hash
       end

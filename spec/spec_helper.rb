@@ -5,9 +5,9 @@ require 'coveralls'
 Coveralls.wear!
 
 # If you want to see more, uncomment the next few lines
- require 'net-http-spy'
+# require 'net-http-spy'
 # Net::HTTP.http_logger_options = {:body => true}    # just the body
- Net::HTTP.http_logger_options = {:verbose => true} # see everything
+# Net::HTTP.http_logger_options = {:verbose => true} # see everything
 
 def generate_text(length=8)
   chars = 'abcdefghjkmnpqrstuvwxyz'

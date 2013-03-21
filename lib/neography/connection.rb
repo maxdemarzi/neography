@@ -27,7 +27,7 @@ module Neography
     end
 
     def merge_options(options)
-      merged_options = options.merge!(@authentication).merge!(@parser)
+      merged_options = options.merge!(@authentication)#.merge!(@parser)
       merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
       merged_options
     end
@@ -101,10 +101,10 @@ module Neography
       case code
       when 200
         @logger.debug "OK" if @log_enabled
-        MultiJsonParser.json(body) #response.parsed_response
+        @parser.json(body) #response.parsed_response
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
-        MultiJsonParser.json(body) #response.parsed_response
+        @parser.json(body) #response.parsed_response
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
@@ -120,7 +120,7 @@ module Neography
         message = "No error message returned from server."
         stacktrace = ""
       else
-        parsed_body = JSON.parse(body)
+        parsed_body = @parser.json(body)
         message = parsed_body["message"]
         stacktrace = parsed_body["stacktrace"]
       end
