@@ -1,6 +1,5 @@
 module Neography
   class Connection
-
     USER_AGENT = "Neography/#{Neography::VERSION}"
 
     attr_accessor :protocol, :server, :port, :directory,
@@ -8,11 +7,12 @@ module Neography
       :log_file, :log_enabled, :logger,
       :max_threads,
       :authentication, :username, :password,
-      :parser
+      :parser, :client
 
     def initialize(options = ENV['NEO4J_URL'] || {})
       config = merge_configuration(options)
       save_local_configuration(config)
+      @client = HTTPClient.new
     end
 
     def configure(protocol, server, port, directory)
@@ -33,21 +33,31 @@ module Neography
     end
 
     def get(path, options={})
-      evaluate_response(HTTParty.get(configuration + path, merge_options(options)))
+      authenticate(configuration + path)
+      evaluate_response(@client.get(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
     def post(path, options={})
-      evaluate_response(HTTParty.post(configuration + path, merge_options(options)))
+      authenticate(configuration + path)
+      evaluate_response(@client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
     def put(path, options={})
-      evaluate_response(HTTParty.put(configuration + path, merge_options(options)))
+      authenticate(configuration + path)
+      evaluate_response(@client.put(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
     def delete(path, options={})
-      evaluate_response(HTTParty.delete(configuration + path, merge_options(options)))
+      authenticate(configuration + path)
+      evaluate_response(@client.delete(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
+    def authenticate(path)
+      @client.set_auth(path, 
+                       @authentication[@authentication.keys.first][:username], 
+                       @authentication[@authentication.keys.first][:password]) unless @authentication.empty?
+    end
+    
     private
 
     def merge_configuration(options)
@@ -91,10 +101,10 @@ module Neography
       case code
       when 200
         @logger.debug "OK" if @log_enabled
-        response.parsed_response
+        MultiJsonParser.json(body) #response.parsed_response
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
-        response.parsed_response
+        MultiJsonParser.json(body) #response.parsed_response
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil

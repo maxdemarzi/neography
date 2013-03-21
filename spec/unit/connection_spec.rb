@@ -78,22 +78,22 @@ module Neography
     context "requests" do
 
       it "does a GET request" do
-        HTTParty.should_receive(:get).with("http://localhost:7474/db/data/foo/bar", { :parser => MultiJsonParser }) { stub.as_null_object }
+        connection.client.should_receive(:get).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
         connection.get("/foo/bar")
       end
 
       it "does a POST request" do
-        HTTParty.should_receive(:post).with("http://localhost:7474/db/data/foo/bar", { :parser => MultiJsonParser }) { stub.as_null_object }
+        connection.client.should_receive(:post).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
         connection.post("/foo/bar")
       end
 
       it "does a PUT request" do
-        HTTParty.should_receive(:put).with("http://localhost:7474/db/data/foo/bar", { :parser => MultiJsonParser }) { stub.as_null_object }
+        connection.client.should_receive(:put).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
         connection.put("/foo/bar")
       end
 
       it "does a DELETE request" do
-        HTTParty.should_receive(:delete).with("http://localhost:7474/db/data/foo/bar", { :parser => MultiJsonParser }) { stub.as_null_object }
+        connection.client.should_receive(:delete).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
         connection.delete("/foo/bar")
       end
 
@@ -107,25 +107,24 @@ module Neography
         end
 
         it "does requests with authentication" do
-          HTTParty.should_receive(:get).with(
+          connection.client.should_receive(:set_auth).with(
             "http://localhost:7474/db/data/foo/bar",
-            { :parser => MultiJsonParser,
-              :basic_auth => {
-                :username => "foo",
-                :password => "bar"
-              }
-            }) { stub.as_null_object }
+             "foo",
+             "bar") { stub.as_null_object }
+
+          connection.client.should_receive(:get).with(
+            "http://localhost:7474/db/data/foo/bar", nil, nil
+            ) { stub.as_null_object }
 
           connection.get("/foo/bar")
         end
       end
 
       it "adds the User-Agent to the headers" do
-        HTTParty.should_receive(:get).with(
+        connection.client.should_receive(:get).with(
           "http://localhost:7474/db/data/foo/bar",
-          { :parser => MultiJsonParser,
-            :headers => { "User-Agent" => "Neography/#{Neography::VERSION}" }
-          }) { stub.as_null_object }
+          nil, { "User-Agent" => "Neography/#{Neography::VERSION}" }
+          ) { stub.as_null_object }
 
         connection.get("/foo/bar", :headers => {})
       end
@@ -134,7 +133,7 @@ module Neography
 
         it "raises NodeNotFoundException" do
           response = error_response(code: 404, message: "a message", exception: "NodeNotFoundException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error NodeNotFoundException
@@ -142,7 +141,7 @@ module Neography
 
         it "raises OperationFailureException" do
           response = error_response(code: 409, message: "a message", exception: "OperationFailureException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error OperationFailureException
@@ -150,7 +149,7 @@ module Neography
 
         it "raises PropertyValueException" do
           response = error_response(code: 400, message: "a message", exception: "PropertyValueException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error PropertyValueException
@@ -158,7 +157,7 @@ module Neography
 
         it "raises NoSuchPropertyException" do
           response = error_response(code: 404, message: "a message", exception: "NoSuchPropertyException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error NoSuchPropertyException
@@ -166,7 +165,7 @@ module Neography
 
         it "raises RelationshipNotFoundException" do
           response = error_response(code: 404, message: "a message", exception: "RelationshipNotFoundException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error RelationshipNotFoundException
@@ -174,7 +173,7 @@ module Neography
 
         it "raises BadInputException" do
           response = error_response(code: 400, message: "a message", exception: "BadInputException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error BadInputException
@@ -182,7 +181,7 @@ module Neography
 
         it "raises UnauthorizedError" do
           response = error_response(code: 401)
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error UnauthorizedError
@@ -190,7 +189,7 @@ module Neography
 
         it "raises NeographyError in all other cases" do
           response = error_response(code: 418, message: "I'm a teapot.")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error NeographyError
@@ -198,7 +197,7 @@ module Neography
 
         it "raises BadInputException" do
           response = error_response(code: 500, message: "a message", exception: "JsonParseException")
-          HTTParty.stub(:get).and_return(response)
+          connection.client.stub(:get).and_return(response)
           expect {
             connection.get("/foo/bar")
           }.to raise_error NeographyError

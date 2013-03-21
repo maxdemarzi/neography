@@ -31,7 +31,6 @@ require 'neography/connection'
 module Neography
 
   class Rest
-    include HTTParty
     include Helpers
     extend Forwardable
 

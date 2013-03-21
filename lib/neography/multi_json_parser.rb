@@ -1,6 +1,5 @@
-class MultiJsonParser < HTTParty::Parser
+class MultiJsonParser
 
-  protected
 
     # I know this looks pretty ugly, but we have issues with Neo4j returning true, false,
     # plain numbers and plain strings, which is considered by some JSON libraries to be
@@ -8,7 +7,7 @@ class MultiJsonParser < HTTParty::Parser
     # This ugly hack deals with the problem.  Send me a Pull Request if you
     # come up with a nicer solution... please!
     #
-    def json
+    def self.json(body)
       begin
         MultiJson.load(body)
       rescue MultiJson::DecodeError, ArgumentError

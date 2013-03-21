@@ -1,5 +1,5 @@
 require 'cgi'
-require 'httparty'
+require 'httpclient'
 require 'json'
 require 'multi_json'
 require 'logger'

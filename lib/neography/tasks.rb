@@ -1,6 +1,6 @@
 # borrowed from architect4r
 require 'os'
-require 'httparty'
+require 'httpclient'
 require 'zip/zip'
 
 namespace :neo4j do
@@ -14,7 +14,7 @@ namespace :neo4j do
       unless File.exist?('neo4j.zip')
         df = File.open('neo4j.zip', 'wb')
         begin
-          df << HTTParty.get("http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-windows.zip")
+          df << HTTPClient.new.get("http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-windows.zip")
         ensure
           df.close()
         end

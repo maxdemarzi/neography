@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "net-http-spy", "0.2.1"
   s.add_development_dependency "rake", ">= 0.8.7"
   s.add_development_dependency "coveralls"
-  s.add_dependency "httparty", ">= 0.8.1"
+  s.add_dependency "httpclient", ">= 2.3.3"
   s.add_dependency "rake", ">= 0.8.7"
   s.add_dependency "json", ">= 1.6.0"
   s.add_dependency "os", ">= 0.9.6"
