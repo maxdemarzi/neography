@@ -73,7 +73,7 @@ Neography.configure do |config|
   config.authentication = nil  # 'basic' or 'digest'
   config.username       = nil
   config.password       = nil
-  config.parser         = {:parser => MultiJsonParser}
+  config.parser         = MultiJsonParser
 end
 ```
 
