@@ -15,6 +15,7 @@ module Neography
       config = merge_configuration(options)
       save_local_configuration(config)
       @client = HTTPClient.new
+      @client.send_timeout = 1200 # 10 minutes
     end
 
     def configure(protocol, server, port, directory)
