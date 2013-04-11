@@ -57,14 +57,15 @@ namespace :neo4j do
     puts "Starting Neo4j..."
     if OS::Underlying.windows? 
       if %x[reg query "HKU\\S-1-5-19"].size > 0 
-        %x[neo4j/bin/Neo4j.bat start]  #start service
+        value = %x[neo4j/bin/Neo4j.bat start]  #start service
       else
         puts "Starting Neo4j directly, not as a service."
-        %x[neo4j/bin/Neo4j.bat]
+        value = %x[neo4j/bin/Neo4j.bat]
       end      
     else
-      %x[neo4j/bin/neo4j start]  
+     value = %x[neo4j/bin/neo4j start]       
     end
+     puts value
   end
   
   desc "Stop the Neo4j Server"
@@ -72,13 +73,14 @@ namespace :neo4j do
     puts "Stopping Neo4j..."
     if OS::Underlying.windows? 
       if %x[reg query "HKU\\S-1-5-19"].size > 0
-         %x[neo4j/bin/Neo4j.bat stop]  #stop service
+        value = %x[neo4j/bin/Neo4j.bat stop]  #stop service
       else
         puts "You do not have administrative rights to stop the Neo4j Service"   
       end
     else  
-      %x[neo4j/bin/neo4j stop]
+      value = %x[neo4j/bin/neo4j stop]
     end
+    puts value
   end
 
   desc "Restart the Neo4j Server"
