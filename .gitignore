@@ -1,5 +1,7 @@
 coverage
 .DS_Store
+TAGS
+*.rbc
 Gemfile.lock
 .idea
 *.iml
