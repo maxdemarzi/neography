@@ -452,5 +452,5 @@ describe Neography::Rest do
     end
 
   end
-
+  
 end

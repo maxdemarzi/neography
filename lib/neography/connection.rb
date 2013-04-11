@@ -44,6 +44,15 @@ module Neography
       evaluate_response(@client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
+    def post_chunked(path, options={})
+      authenticate(configuration + path)
+      result = ""
+      response = @client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]) do |chunk|
+        result << chunk
+      end
+      evaluate_chunk_response(response, result)
+    end
+
     def put(path, options={})
       authenticate(configuration + path)
       evaluate_response(@client.put(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
@@ -97,9 +106,18 @@ module Neography
       end
     end
 
+    def evaluate_chunk_response(response, result)
+      code = response.code
+      return_result(code, result)
+    end
+
     def evaluate_response(response)
       code = response.code
       body = response.body
+      return_result(code, body)
+    end
+    
+    def return_result(code, body)
       case code
       when 200
         @logger.debug "OK" if @log_enabled
@@ -115,7 +133,7 @@ module Neography
       when 400..500
         handle_4xx_500_response(code, body)
         nil
-      end
+      end      
     end
 
     def handle_4xx_500_response(code, body)

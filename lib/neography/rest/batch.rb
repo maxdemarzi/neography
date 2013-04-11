@@ -29,8 +29,11 @@ module Neography
           :body => batch.to_json,
           :headers => json_content_type.merge(accept_header)
         }
-
-        @connection.post(batch_path, options)
+        if accept_header.empty?
+          @connection.post(batch_path, options)
+        else
+          @connection.post_chunked(batch_path, options)
+        end
       end
 
       def get_batch(args)
