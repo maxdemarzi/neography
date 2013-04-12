@@ -452,5 +452,28 @@ describe Neography::Rest do
     end
 
   end
-  
+
+  describe "broken queries" do
+    it "should return errors when bad syntax is passed in batch" do
+
+      batch_commands = []
+      batch_commands << [ :create_unique_node, "person", "ssn", "000-00-0001", {:foo => "bar"} ]
+    
+      # this doesn't raise error
+      batch_commands << [ :execute_query, "start person_n=node:person(ssn = '000-00-0001')
+                                         set bar = {foo}",
+                        { :other => "what" }
+                      ]
+
+      # this does raise error
+      expect { 
+          @neo.execute_query("start person_n=node:person(ssn = '000-00-0001')
+                              set bar = {foo}",
+                        { :other => "what" })
+      }.to raise_exception Neography::SyntaxException
+                                
+      batch_result = @neo.batch *batch_commands
+    end    
+  end
+
 end
