@@ -466,9 +466,11 @@ describe Neography::Rest do
                       ]
 
       # this does raise error
-      @neo.execute_query("start person_n=node:person(ssn = '000-00-0001')
-                                         set bar = {foo}",
-                        { :other => "what" })        
+      expect { 
+          @neo.execute_query("start person_n=node:person(ssn = '000-00-0001')
+                              set bar = {foo}",
+                        { :other => "what" })
+      }.to raise_exception Neography::SyntaxException
                                 
       batch_result = @neo.batch *batch_commands
     end    
