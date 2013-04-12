@@ -10,6 +10,7 @@ require 'neography/rest/auto_indexes'
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
 require 'neography/rest/node_relationships'
+require 'neography/rest/other_node_relationships'
 require 'neography/rest/node_indexes'
 require 'neography/rest/node_auto_indexes'
 require 'neography/rest/node_traversal'
@@ -44,6 +45,7 @@ module Neography
       @nodes                     = Nodes.new(@connection)
       @node_properties           = NodeProperties.new(@connection)
       @node_relationships        = NodeRelationships.new(@connection)
+      @other_node_relationships  = OtherNodeRelationships.new(@connection)
       @node_indexes              = NodeIndexes.new(@connection)
       @node_auto_indexes         = NodeAutoIndexes.new(@connection)
       @node_traversal            = NodeTraversal.new(@connection)
@@ -142,7 +144,7 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end
-
+    
     # relationship properties
 
     def get_relationship_properties(id, *properties)
@@ -165,6 +167,10 @@ module Neography
 
     def get_node_relationships(id, dir = nil, types = nil)
       @node_relationships.get(id, dir, types)
+    end
+
+    def get_node_relationships_to(id, other_id, dir = "all", types = nil)
+      @other_node_relationships.get(id, other_id, dir, Array(types || [nil]))
     end
 
     def create_relationship(type, from, to, props = nil)
