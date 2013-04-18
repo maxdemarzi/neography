@@ -48,10 +48,18 @@ module Neography
     def post_chunked(path, options={})
       authenticate(configuration + path)
       result = ""
+
       response = @client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]) do |chunk|
         result << chunk
       end
-      evaluate_chunk_response(response, result)
+
+      r = evaluate_chunk_response(response, result)
+
+      if r.last["status"] > 399
+        handle_4xx_500_response(r.last["status"], r.last["body"] || r.last )
+      end
+      
+      r
     end
 
     def put(path, options={})
@@ -142,6 +150,10 @@ module Neography
         parsed_body = {}
         message = "No error message returned from server."
         stacktrace = ""
+      elsif body.is_a? Hash
+        parsed_body = body
+        message = parsed_body["message"]
+        stacktrace = parsed_body["stacktrace"]
       else
         parsed_body = @parser.json(body)
         message = parsed_body["message"]

@@ -441,7 +441,6 @@ describe Neography::Rest do
                                 [:create_relationship, "has", "{0}", "{2}", {}]
       batch_result.should_not be_nil
 
-
       batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
                                 [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                 [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
@@ -457,13 +456,14 @@ describe Neography::Rest do
     it "should return errors when bad syntax is passed in batch" do
 
       batch_commands = []
-      batch_commands << [ :create_unique_node, "person", "ssn", "000-00-0001", {:foo => "bar"} ]
+      # batch_commands << [ :create_unique_node, "person", "ssn", "000-00-0002", {:foo => "bar"} ]
     
       # this doesn't raise error
-      batch_commands << [ :execute_query, "start person_n=node:person(ssn = '000-00-0001')
-                                         set bar = {foo}",
+      batch_commands << [ :execute_query, "start person_n=node:person(ssn = '000-00-0002')
+                                         set bar1 = {foo}",
                         { :other => "what" }
                       ]
+
 
       # this does raise error
       expect { 
@@ -471,8 +471,11 @@ describe Neography::Rest do
                               set bar = {foo}",
                         { :other => "what" })
       }.to raise_exception Neography::SyntaxException
-                                
-      batch_result = @neo.batch *batch_commands
+                      
+      expect { 
+        batch_result = @neo.batch *batch_commands
+      }.to raise_exception Neography::SyntaxException          
+      
     end    
   end
 
