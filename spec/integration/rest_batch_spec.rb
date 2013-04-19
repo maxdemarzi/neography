@@ -441,13 +441,15 @@ describe Neography::Rest do
                                 [:create_relationship, "has", "{0}", "{2}", {}]
       batch_result.should_not be_nil
 
-      batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
-                                [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
-                                [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
-                                [:create_relationship, "has", "{0}", "{2}", {}]
       # create_unique_node is returning an index result, not a node, so we can't do this yet.
       # See https://github.com/neo4j/community/issues/697
-      batch_result.should_not be_nil
+
+      expect {
+        batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
+                                  [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
+                                  [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
+                                  [:create_relationship, "has", "{0}", "{2}", {}]
+      }.to raise_error(Neography::BadInputException)
     end
 
   end
