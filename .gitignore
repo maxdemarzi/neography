@@ -10,3 +10,4 @@ pkg/*
 log/*
 .rvmrc
 Gemfile.lock
+*.swp

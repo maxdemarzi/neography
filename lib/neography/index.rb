@@ -5,9 +5,9 @@ module Neography
       base.extend(ClassMethods)
     end
   
-    def add_to_index(index, key, value)
+    def add_to_index(index, key, value, unique = false)
       if self.is_a? Neography::Node
-        self.neo_server.add_node_to_index(index, key, value, self.neo_id)
+        self.neo_server.add_node_to_index(index, key, value, self.neo_id, unique)
       else
         self.neo_server.add_relationship_to_index(index, key, value, self.neo_id)
       end

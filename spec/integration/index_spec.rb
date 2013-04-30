@@ -9,6 +9,13 @@ describe Neography::Index do
     new_node.add_to_index("node_test_index", key, value)
   end
 
+  it "can add a node to an index uniquely" do
+    new_node = Neography::Node.create
+    key = generate_text(6)
+    value = generate_text
+    new_node.add_to_index("node_test_index", key, value, true)
+  end
+
   it "can add a relationship to an index" do
     node1 = Neography::Node.create
     node2 = Neography::Node.create
