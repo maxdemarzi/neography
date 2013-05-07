@@ -72,8 +72,9 @@ module Neography
         end
       end
 
-      def add_node_to_index(index, key, value, id)
-        post NodeIndexes.base_path(:index => index) do
+      def add_node_to_index(index, key, value, id, unique = false)
+        path = unique ? NodeIndexes.unique_path(:index => index) : NodeIndexes.base_path(:index => index)
+        post path do
           {
             :uri   => build_node_uri(id),
             :key   => key,

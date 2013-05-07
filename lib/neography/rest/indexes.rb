@@ -31,7 +31,7 @@ module Neography
         create("#{@index_type}_auto_index", type, provider)
       end
 
-      def add(index, key, value, id)
+      def add(index, key, value, id, unique = false)
         options = {
           :body => (
             { :uri   => @connection.configuration + "/#{@index_type}/#{get_id(id)}",
@@ -41,8 +41,8 @@ module Neography
           ).to_json,
           :headers => json_content_type
         }
-
-        @connection.post(base_path(:index => index), options)
+        path = unique ? unique_path(:index => index) : base_path(:index => index)
+        @connection.post(path, options)
       end
 
       def get(index, key, value)

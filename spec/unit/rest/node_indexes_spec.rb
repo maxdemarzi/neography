@@ -51,6 +51,16 @@ module Neography
         subject.create_unique("some_index", "key", "value", "properties")
       end
 
+      it "gets or creates a unique node in an index" do
+        expected_body = {
+          "properties" => "properties",
+          "key" => "key",
+          "value" => "value"
+        }
+        connection.should_receive(:post).with("/index/node/some_index?uniqueness=get_or_create", json_match(:body, expected_body))
+        subject.get_or_create_unique("some_index", "key", "value", "properties")
+      end
+
       it "adds a node to an index" do
         expected_body = {
           "uri" => "http://configuration/node/42",
