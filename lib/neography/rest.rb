@@ -196,8 +196,8 @@ module Neography
       @node_indexes.create_unique(index, key, value, props)
     end
 
-    def add_node_to_index(index, key, value, id)
-      @node_indexes.add(index, key, value, id)
+    def add_node_to_index(index, key, value, id, unique=false)
+      @node_indexes.add(index, key, value, id, unique)
     end
     alias_method :add_to_index, :add_node_to_index
 

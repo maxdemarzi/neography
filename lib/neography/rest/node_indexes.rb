@@ -7,6 +7,7 @@ module Neography
       add_path :all,       "/index/node"
       add_path :base,      "/index/node/:index"
       add_path :unique,    "/index/node/:index?unique"
+      add_path :uniqueness,    "/index/node/:index?uniqueness=:function"
       add_path :id,        "/index/node/:index/:id"
       add_path :key,       "/index/node/:index/:key/:id"
       add_path :value,     "/index/node/:index/:key/:value/:id"
@@ -28,6 +29,20 @@ module Neography
           :headers => json_content_type
         }
         @connection.post(unique_path(:index => index), options)
+      end
+
+      def get_or_create_unique(index, key, value, properties = {})
+        options = {
+          :body => (
+            { :properties => properties,
+              :key => key,
+              :value => value
+            }
+          ).to_json,
+          :headers => json_content_type
+        }
+        @connection.post(uniqueness_path(:index => index, :function => 'get_or_create'), options)
+        
       end
 
     end
