@@ -67,6 +67,22 @@ namespace :neo4j do
     end
      puts value
   end
+
+  desc "Start the Neo4j Server in the background"
+  task :start_no_wait do
+    puts "Starting Neo4j in the background..."
+    if OS::Underlying.windows? 
+      if %x[reg query "HKU\\S-1-5-19"].size > 0 
+        value = %x[neo4j/bin/Neo4j.bat start-no-wait]  #start service
+      else
+        puts "Starting Neo4j directly, not as a service."
+        value = %x[neo4j/bin/Neo4j.bat start-no-wait]
+      end      
+    else
+     value = %x[neo4j/bin/neo4j start-no-wait]       
+    end
+     puts value
+  end
   
   desc "Stop the Neo4j Server"
   task :stop do
