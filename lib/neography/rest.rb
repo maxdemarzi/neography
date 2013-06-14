@@ -19,6 +19,7 @@ require 'neography/rest/relationships'
 require 'neography/rest/relationship_properties'
 require 'neography/rest/relationship_indexes'
 require 'neography/rest/relationship_auto_indexes'
+require 'neography/rest/relationship_types'
 require 'neography/rest/cypher'
 require 'neography/rest/gremlin'
 require 'neography/rest/extensions'
@@ -55,6 +56,7 @@ module Neography
       @relationship_properties   = RelationshipProperties.new(@connection)
       @relationship_indexes      = RelationshipIndexes.new(@connection)
       @relationship_auto_indexes = RelationshipAutoIndexes.new(@connection)
+      @relationship_types        = RelationshipTypes.new(@connection)
 
       @cypher                    = Cypher.new(@connection)
       @gremlin                   = Gremlin.new(@connection)
@@ -63,6 +65,12 @@ module Neography
       @clean                     = Clean.new(@connection)
     end
 
+    # meta-data
+
+    def list_relationship_types
+      @relationship_types.list
+    end
+    
     # nodes
 
     def get_root

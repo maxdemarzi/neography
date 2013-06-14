@@ -99,6 +99,7 @@ Some of this functionality is shown here, but all of it is explained in the foll
 * [Node relationships](https://github.com/maxdemarzi/neography/wiki/Node-relationships) - Create and get relationships between nodes.
 * [Relationship](https://github.com/maxdemarzi/neography/wiki/Relationships) - Get and delete relationships.
 * [Relationship properties](https://github.com/maxdemarzi/neography/wiki/Relationship-properties) - Create, get and delete relationship properties.
+* [Relationship types](https://github.com/maxdemarzi/neography/wiki/Relationship-types) - List relationship types.
 * [Node indexes](https://github.com/maxdemarzi/neography/wiki/Node-indexes) - List and create node indexes. Add, remove, get and search nodes in indexes.
 * [Relationship indexes](https://github.com/maxdemarzi/neography/wiki/Relationship-indexes) - List and create relationships indexes. Add, remove, get and search relationships in indexes.
 * [Auto indexes](https://github.com/maxdemarzi/neography/wiki/Auto-indexes) - Get, set and remove auto indexes.
