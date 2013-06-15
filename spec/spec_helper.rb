@@ -26,7 +26,14 @@ def json_content_type
 end
 
 def error_response(attributes)
+  request_uri = double()
+  request_uri.stub(:request_uri).and_return("")
+  
+  http_header = double()
+  http_header.stub(:request_uri).and_return(request_uri)
+  
   stub(
+    http_header: http_header,
     code: attributes[:code],
     body: {
     message:   attributes[:message],

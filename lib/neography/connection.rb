@@ -30,8 +30,9 @@ module Neography
     end
 
     def merge_options(options)
-      merged_options = options.merge!(@authentication)#.merge!(@parser)
+      merged_options = options.merge!(@authentication)
       merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
+      merged_options[:headers].merge!('X-Stream' => true) if merged_options[:headers]
       merged_options
     end
 
@@ -121,19 +122,36 @@ module Neography
     end
 
     def evaluate_response(response)
-      code = response.code
-      body = response.body
-      return_result(code, body)
+      if response.http_header.request_uri.request_uri == "/db/data/batch"
+        code, body, parsed = handle_batch(response)
+      else
+        code = response.code
+        body = response.body
+        parsed = false
+      end
+      return_result(code, body, parsed)
+    end
+
+    def handle_batch(response)
+      code = 200
+      body = @parser.json(response.body)
+      body.each do |result|
+        if result["status"] >= 400
+          code = result["status"] 
+          break
+        end
+      end
+      return code, body, true
     end
     
-    def return_result(code, body)
+    def return_result(code, body, parsed)
       case code
       when 200
-        @logger.debug "OK" if @log_enabled
-        @parser.json(body) #response.parsed_response
+        @logger.debug "OK, created #{body}" if @log_enabled
+        parsed ? body : @parser.json(body)
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
-        r = @parser.json(body) #response.parsed_response
+        r = parsed ? body : @parser.json(body)
         r.extend(WasCreated)
         r
       when 204
@@ -147,18 +165,23 @@ module Neography
 
     def handle_4xx_500_response(code, body)
       if body.nil? or body == ""
-        parsed_body = {}
-        message = "No error message returned from server."
-        stacktrace = ""
+        parsed_body = {"message" => "No error message returned from server.",
+                       "stacktrace" => "No stacktrace returned from server." }
       elsif body.is_a? Hash
         parsed_body = body
-        message = parsed_body["message"]
-        stacktrace = parsed_body["stacktrace"]
+      elsif body.is_a? Array
+        body.each do |result|
+          if result["status"] >= 400
+            parsed_body = result["body"] || result
+            break
+          end
+        end        
       else
         parsed_body = @parser.json(body)
-        message = parsed_body["message"]
-        stacktrace = parsed_body["stacktrace"]
       end
+
+      message = parsed_body["message"]
+      stacktrace = parsed_body["stacktrace"]
 
       @logger.error "#{code} error: #{body}" if @log_enabled
 

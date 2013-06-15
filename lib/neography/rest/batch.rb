@@ -11,29 +11,21 @@ module Neography
       end
 
       def execute(*args)
-        batch({'Accept' => 'application/json;stream=true'}, *args)
-      end
-
-      def not_streaming(*args)
-        batch({}, *args)
+        batch(*args)
       end
 
       private
 
-      def batch(accept_header, *args)
+      def batch(*args)
         batch = []
         Array(args).each_with_index do |c, i|
           batch << {:id => i }.merge(get_batch(c))
         end
         options = {
           :body => batch.to_json,
-          :headers => json_content_type.merge(accept_header)
+          :headers => json_content_type
         }
-        if accept_header.empty?
-          @connection.post(batch_path, options)
-        else
-          @connection.post_chunked(batch_path, options)
-        end
+        @connection.post(batch_path, options)
       end
 
       def get_batch(args)

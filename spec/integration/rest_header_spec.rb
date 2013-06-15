@@ -8,7 +8,7 @@ describe Neography::Connection do
 
   it "should add a content type if there's existing headers" do
     subject.merge_options({:headers => {'Content-Type' => 'foo/bar'}})[:headers].should ==
-      {'Content-Type' => "foo/bar",  "User-Agent"   => "Neography/#{Neography::VERSION}"}
+      {'Content-Type' => "foo/bar",  "User-Agent"   => "Neography/#{Neography::VERSION}" , "X-Stream"=>true}
   end
 
 end

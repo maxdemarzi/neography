@@ -123,7 +123,7 @@ module Neography
       it "adds the User-Agent to the headers" do
         connection.client.should_receive(:get).with(
           "http://localhost:7474/db/data/foo/bar",
-          nil, { "User-Agent" => "Neography/#{Neography::VERSION}" }
+          nil, { "User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true}
           ) { stub.as_null_object }
 
         connection.get("/foo/bar", :headers => {})
