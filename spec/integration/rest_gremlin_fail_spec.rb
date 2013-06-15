@@ -6,7 +6,7 @@ describe Neography::Rest do
   end
 
   describe "don't break gremlin" do
-    it "can handle node and relationship indexes" do
+    it "can handle node and relationship indexes", :gremlin => true  do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
@@ -16,7 +16,7 @@ describe Neography::Rest do
       @neo.add_relationship_to_index("test_index2", key, value, new_relationship) 
     end
 
-    it "gremlin works" do
+    it "gremlin works", :gremlin => true  do
       root_node = @neo.execute_script("g.v(0)")
       root_node.should have_key("self")
       root_node["self"].split('/').last.should == "0"
@@ -25,7 +25,7 @@ describe Neography::Rest do
 
 
   describe "break gremlin" do
-    it "can can't handle node and relationship indexes with the same name", :break_gremlin => true do
+    it "can can't handle node and relationship indexes with the same name", :gremlin => true do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
@@ -35,7 +35,7 @@ describe Neography::Rest do
       @neo.add_relationship_to_index("test_index3", key, value, new_relationship) 
     end
 
-    it "gremlin works" do
+    it "gremlin works", :gremlin => true  do
       root_node = @neo.execute_script("g.v(0)")
       root_node.should have_key("self")
       root_node["self"].split('/').last.should == "0"

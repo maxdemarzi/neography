@@ -255,14 +255,14 @@ describe Neography::Rest do
       batch_result.first["body"].first["end"].split('/').last.should == node2["self"].split('/').last
     end
 
-    it "can batch gremlin" do
+    it "can batch gremlin", :gremlin => true  do
       batch_result = @neo.batch [:execute_script, "g.v(0)"]
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"]["self"].split('/').last.should == "0"
     end
 
-    it "can batch gremlin with parameters" do
+    it "can batch gremlin with parameters", :gremlin => true  do
       new_node = @neo.create_node
       id = new_node["self"].split('/').last
       batch_result = @neo.batch [:execute_script, "g.v(id)", {:id => id.to_i}]
@@ -449,7 +449,7 @@ describe Neography::Rest do
                                   [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                   [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                   [:create_relationship, "has", "{0}", "{2}", {}]
-      }.to raise_error(Neography::BadInputException)
+      }.to raise_error(Neography::NeographyError)
     end
 
   end
