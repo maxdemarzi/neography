@@ -6,6 +6,7 @@ require 'neography/rest/paths'
 require 'neography/rest/properties'
 require 'neography/rest/indexes'
 require 'neography/rest/auto_indexes'
+require 'neography/rest/schema_indexes'
 
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
@@ -49,6 +50,7 @@ module Neography
       @other_node_relationships  = OtherNodeRelationships.new(@connection)
       @node_indexes              = NodeIndexes.new(@connection)
       @node_auto_indexes         = NodeAutoIndexes.new(@connection)
+      @schema_indexes            = SchemaIndexes.new(@connection)
       @node_traversal            = NodeTraversal.new(@connection)
       @node_paths                = NodePaths.new(@connection)
 
@@ -69,6 +71,18 @@ module Neography
 
     def list_relationship_types
       @relationship_types.list
+    end
+
+    def get_schema_index(label)
+      @schema_indexes.list(label)
+    end
+    
+    def create_schema_index(label, properties)
+      @schema_indexes.create(label, properties)
+    end
+    
+    def delete_schema_index(label, property)
+      @schema_indexes.drop(label, property)
     end
     
     # nodes
