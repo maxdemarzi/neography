@@ -63,15 +63,15 @@ module Neography
 
         if @get.include?("node")
           path["nodes"].each_with_index do |n, i|
-            @loaded_nodes[n.split('/').last.to_i] = Neography::Node.load(n) if @loaded_nodes.at(n.split('/').last.to_i).nil?
-            paths[i * 2] =  @loaded_nodes[n.split('/').last.to_i]
+            @loaded_nodes[get_id(n)] = Neography::Node.load(n) if @loaded_nodes.at(get_id(n)).nil?
+            paths[i * 2] =  @loaded_nodes[get_id(n)]
           end
         end
 
         if @get.include?("rel") 
           path["relationships"].each_with_index do |r, i|
-            @loaded_rels[r.split('/').last.to_i] = Neography::Relationship.load(r)  if @loaded_rels.at(r.split('/').last.to_i).nil?
-            paths[i * 2 + 1] =  @loaded_rels[r.split('/').last.to_i]
+            @loaded_rels[get_id(r)] = Neography::Relationship.load(r)  if @loaded_rels.at(get_id(r)).nil?
+            paths[i * 2 + 1] =  @loaded_rels[get_id(r)]
           end
         end
  
@@ -89,6 +89,11 @@ module Neography
       else
         @from.neo_server.get_paths(@from, @to, @relationships, @depth, @algorithm)
       end
+    end
+    
+    private 
+    def get_id(object)
+      object.split('/').last.to_i
     end
 
   end

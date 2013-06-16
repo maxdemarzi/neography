@@ -21,6 +21,18 @@ module Neography
         {'Content-Type' => 'application/json'}
       end
 
+      def parse_direction(direction)
+        case direction
+          when :incoming, "incoming", :in, "in"
+            "in"
+          when :outgoing, "outgoing", :out, "out"
+            "out"
+          else
+            "all"
+        end
+      end
+
+
     end
   end
 end

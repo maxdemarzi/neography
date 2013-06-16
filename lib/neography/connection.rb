@@ -47,23 +47,6 @@ module Neography
       evaluate_response(@client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
     end
 
-    def post_chunked(path, options={})
-      authenticate(configuration + path)
-      result = ""
-
-      response = @client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]) do |chunk|
-        result << chunk
-      end
-
-      r = evaluate_chunk_response(response, result)
-
-      if r.last["status"] > 399
-        handle_4xx_500_response(r.last["status"], r.last["body"] || r.last )
-      end
-      
-      r
-    end
-
     def put(path, options={})
       authenticate(configuration + path)
       evaluate_response(@client.put(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
@@ -185,10 +168,13 @@ module Neography
       stacktrace = parsed_body["stacktrace"]
 
       @logger.error "#{code} error: #{body}" if @log_enabled
-
+      raise_errors(code, parsed_body["exception"], message, stacktrace)
+    end
+    
+    def raise_errors(code, exception, message, stacktrace)
       case code
       when 400, 404
-        case parsed_body["exception"]
+        case exception
         when /SyntaxException/               ; raise SyntaxException.new(message, code, stacktrace)
         when /this is not a query/           ; raise SyntaxException.new(message, code, stacktrace)
         when /PropertyValueException/        ; raise PropertyValueException.new(message, code, stacktrace)
@@ -208,6 +194,7 @@ module Neography
       else
         raise NeographyError.new(message, code, stacktrace)
       end
+      
     end
 
     def parse_string_options(options)

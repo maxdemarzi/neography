@@ -36,22 +36,11 @@ module Neography
                     }.merge(relationships).to_json,
           :headers => json_content_type
         }
-        #puts options.inspect
+
         node_relationships = @connection.post(base_path(:id => get_id(id)), options) || []
 
         return nil if node_relationships.empty?
         node_relationships
-      end
-
-      def parse_direction(direction)
-        case direction
-          when :incoming, "incoming", :in, "in"
-            "in"
-          when :outgoing, "outgoing", :out, "out"
-            "out"
-          else
-            "all"
-        end
       end
 
     end
