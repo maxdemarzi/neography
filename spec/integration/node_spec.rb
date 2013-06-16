@@ -68,6 +68,19 @@ describe Neography::Node do
         existing_node = Neography::Node.load(@neo, new_node)
       }.to raise_error(ArgumentError)
     end
+
+    it "can get a node that exists via cypher" do
+      new_node = Neography::Node.create("age" => 31, "name" => "Max")
+      cypher = "START n = node({id}) return n"
+      @neo = Neography::Rest.new
+      results = @neo.execute_query(cypher, {:id => new_node.neo_id.to_i})
+      existing_node = Neography::Node.load(results)
+      existing_node.should_not be_nil
+      existing_node.neo_id.should_not be_nil
+      existing_node.neo_id.should == new_node.neo_id
+    end
+
+
   end
 
   describe "del" do

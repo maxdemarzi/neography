@@ -66,7 +66,7 @@ module Neography
 
         it "loads by node" do
           node = Node.new
-          @db.should_receive(:get_node).with(node)
+          @db.should_not_receive(:get_node).with(node)
           Node.load(node)
         end
 
