@@ -353,8 +353,8 @@ module Neography
 
     # cypher query
 
-    def execute_query(query, params = {})
-      @cypher.query(query, params)
+    def execute_query(query, params = {}, cypher_options = nil)
+      @cypher.query(query, params, cypher_options)
     end
 
     # gremlin script

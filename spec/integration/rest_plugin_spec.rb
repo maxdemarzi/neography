@@ -62,6 +62,35 @@ describe Neography::Rest do
       existing_node["data"][0][0]["self"].split('/').last.should == id
     end
 
+    it "can get the stats of a cypher query" do
+      root_node = @neo.execute_query("start n=node(0) return n", nil, {:stats => true})
+      root_node.should have_key("data")
+      root_node.should have_key("columns")
+      root_node.should have_key("stats")
+      root_node["data"][0][0].should have_key("self")
+      root_node["data"][0][0]["self"].split('/').last.should == "0"
+    end
+
+    it "can get the profile of a cypher query" do
+      root_node = @neo.execute_query("start n=node(0) return n", nil, {:profile => true})
+      root_node.should have_key("data")
+      root_node.should have_key("columns")
+      root_node.should have_key("plan")
+      root_node["data"][0][0].should have_key("self")
+      root_node["data"][0][0]["self"].split('/').last.should == "0"
+    end
+
+    it "can get the stats and profile of a cypher query" do
+      root_node = @neo.execute_query("start n=node(0) return n", nil, {:stats => true, :profile => true})
+      root_node.should have_key("data")
+      root_node.should have_key("columns")
+      root_node.should have_key("stats")
+      root_node.should have_key("plan")
+      root_node["data"][0][0].should have_key("self")
+      root_node["data"][0][0]["self"].split('/').last.should == "0"
+    end
+
+
     it "can delete everything but start node" do
       @neo.execute_query("START n=node(*) MATCH n-[r?]-() WHERE ID(n) <> 0 DELETE n,r")
       expect {
