@@ -16,6 +16,7 @@ require 'neography/rest/node_indexes'
 require 'neography/rest/node_auto_indexes'
 require 'neography/rest/node_traversal'
 require 'neography/rest/node_paths'
+require 'neography/rest/node_labels'
 require 'neography/rest/relationships'
 require 'neography/rest/relationship_properties'
 require 'neography/rest/relationship_indexes'
@@ -53,6 +54,7 @@ module Neography
       @schema_indexes            = SchemaIndexes.new(@connection)
       @node_traversal            = NodeTraversal.new(@connection)
       @node_paths                = NodePaths.new(@connection)
+      @node_labels               = NodeLabels.new(@connection)
 
       @relationships             = Relationships.new(@connection)
       @relationship_properties   = RelationshipProperties.new(@connection)
@@ -72,7 +74,39 @@ module Neography
     def list_relationship_types
       @relationship_types.list
     end
+    
+    # labels
+    
+    def list_labels
+      @node_labels.list
+    end
+    
+    def add_label(id, label)
+      @node_labels.add(id, label)
+    end
 
+    def set_label(id, label)
+      @node_labels.set(id, label)
+    end
+
+    def delete_label(id, label)
+      @node_labels.delete(id, label)
+    end
+    
+    def get_node_labels(id)
+      @node_labels.get(id)
+    end
+    
+    def get_nodes_labeled(label)
+      @node_labels.get_nodes(label)
+    end
+
+    def find_nodes_labeled(label, hash)
+      @node_labels.find_nodes(label, hash)
+    end
+
+    # schema indexes
+ 
     def get_schema_index(label)
       @schema_indexes.list(label)
     end
