@@ -17,9 +17,9 @@ describe Neography::Rest do
       batch_result.last["body"]["data"]["name"].should == "Max 999"
     end  
 
-    it "can send a 10000 item batch" do
+    it "can send a 5000 item batch" do
       commands = []
-      10000.times do |x|
+      5000.times do |x|
         commands << [:get_node, 0]
       end
       batch_result = @neo.batch *commands
