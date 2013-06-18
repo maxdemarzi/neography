@@ -27,6 +27,7 @@ require 'neography/rest/gremlin'
 require 'neography/rest/extensions'
 require 'neography/rest/batch'
 require 'neography/rest/clean'
+require 'neography/rest/transactions'
 
 require 'neography/errors'
 
@@ -67,6 +68,7 @@ module Neography
       @extensions                = Extensions.new(@connection)
       @batch                     = Batch.new(@connection)
       @clean                     = Clean.new(@connection)
+      @transactions              = Transactions.new(@connection)
     end
 
     # meta-data
@@ -118,6 +120,32 @@ module Neography
     def delete_schema_index(label, property)
       @schema_indexes.drop(label, property)
     end
+
+    # transactions
+    
+    def begin_transaction(statements=nil)
+      @transactions.begin(statements)
+    end
+    
+    def in_transaction(tx, statements)
+      @transactions.add(tx, statements)    
+    end
+    
+    def keep_transaction(tx)
+      @transactions.add(tx)    
+    end
+
+    def commit_transaction(tx, statements=[])
+      if tx.is_a?(Array)
+        @transactions.begin(tx, "commit")
+      else
+        @transactions.commit(tx, statements)    
+      end
+    end
+    
+    def rollback_transaction(tx)
+      @transactions.add(tx)    
+    end    
     
     # nodes
 
