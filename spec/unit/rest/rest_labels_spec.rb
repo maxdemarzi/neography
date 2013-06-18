@@ -23,7 +23,7 @@ module Neography
       end
 
       it "find nodes for labels and property" do
-        connection.should_receive(:get).with("/label/person/nodes?name=\"max\"")
+        connection.should_receive(:get).with("/label/person/nodes?name=%22max%22")
         subject.find_nodes("person", {:name => "max"})
       end
 

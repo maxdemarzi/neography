@@ -7,7 +7,7 @@ module Neography
       add_path :base,      "/labels"
       add_path :node,      "/node/:id/labels"
       add_path :nodes,     "/label/:label/nodes"
-      add_path :find,      "/label/:label/nodes?:property=\":value\""
+      add_path :find,      "/label/:label/nodes?:property=%22:value%22"
       add_path :delete,    "/node/:id/labels/:label"
 
       def initialize(connection)
