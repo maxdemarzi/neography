@@ -113,7 +113,6 @@ describe Neography::Rest do
     it "can find a node with a label and a property" do
       new_node = @neo.create_node(:name => "max")
       new_node_id = new_node["self"].split('/').last
-      puts new_node_id
       @neo.set_label(new_node_id, "clown")
       nodes = @neo.find_nodes_labeled("clown", { :name => "max" })
       nodes.last["self"].split('/').last.should == new_node_id
@@ -122,7 +121,6 @@ describe Neography::Rest do
     it "returns an empty array on non-existing label property" do
       new_node = @neo.create_node(:name => "max")
       new_node_id = new_node["self"].split('/').last
-      puts new_node_id
       @neo.set_label(new_node_id, "clown")
       nodes = @neo.find_nodes_labeled("clown", { :name => "does_not_exist" })
       nodes.should == []
