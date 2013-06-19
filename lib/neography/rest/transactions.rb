@@ -43,9 +43,8 @@ module Neography
       end
       
       def rollback(tx)
-        @connection.delete(tx_path(:id => get_id(tx)), options)
+        @connection.delete(tx_path(:id => get_id(tx)))
       end
-
 
       private
       
