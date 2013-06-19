@@ -74,6 +74,28 @@ describe Neography::Rest do
       existing_tx.should have_key("results")
       existing_tx["results"].should_not be_empty
     end
+
+    it "can commit an new transaction right away" do
+      tx = @neo.commit_transaction(["start n=node(0) return n"])
+      tx.should_not have_key("transaction")
+      tx.should have_key("results")
+      tx["results"].should_not be_empty
+    end
+    
+    it "can commit an new transaction right away with parameters" do
+      tx = @neo.commit_transaction(["start n=node({id}) return n", {:id => 0}])
+      tx.should_not have_key("transaction")
+      tx.should have_key("results")
+      tx["results"].should_not be_empty
+    end
+
+    it "can commit an new transaction right away without parameters" do
+      tx = @neo.commit_transaction("start n=node(0) return n")
+      tx.should_not have_key("transaction")
+      tx.should have_key("results")
+      tx["results"].should_not be_empty
+    end
+    
   end
 
   describe "rollback a transaction" do

@@ -94,6 +94,14 @@ It supports indexes, Gremlin scripts, Cypher queries and batch operations.
 
 Some of this functionality is shown here, but all of it is explained in the following Wiki pages:
 
+2.0 Only features:
+
+* [Schema indexes](https://github.com/maxdemarzi/neography/wiki/Schema-indexes) - Create, get and delete schema indexes.
+* [Node labels](https://github.com/maxdemarzi/neography/wiki/Node-labels) - Create, get and delete node labels.
+* [Transactions](https://github.com/maxdemarzi/neography/wiki/Transactions) - Begin, add to, commit, rollback transactions.
+
+1.8+ features:
+
 * [Nodes](https://github.com/maxdemarzi/neography/wiki/Nodes) - Create, get and delete nodes.
 * [Node properties](https://github.com/maxdemarzi/neography/wiki/Node-properties) - Set, get and remove node properties.
 * [Node relationships](https://github.com/maxdemarzi/neography/wiki/Node-relationships) - Create and get relationships between nodes.

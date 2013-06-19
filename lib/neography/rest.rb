@@ -136,10 +136,10 @@ module Neography
     end
 
     def commit_transaction(tx, statements=[])
-      if tx.is_a?(Array)
-        @transactions.begin(tx, "commit")
-      else
+      if (tx.is_a?(Hash) || tx.is_a?(Integer))
         @transactions.commit(tx, statements)    
+      else
+        @transactions.begin(tx, "/commit")
       end
     end
     
