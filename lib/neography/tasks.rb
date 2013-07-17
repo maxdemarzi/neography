@@ -2,6 +2,7 @@
 require 'os'
 require 'httpclient'
 require 'zip/zip'
+require 'net/http'
 
 namespace :neo4j do
   desc "Install Neo4j"
@@ -14,7 +15,13 @@ namespace :neo4j do
       unless File.exist?('neo4j.zip')
         df = File.open('neo4j.zip', 'wb')
         begin
-          df << HTTPClient.new.get("http://dist.neo4j.org/neo4j-#{args[:edition]}-#{args[:version]}-windows.zip")
+          Net::HTTP.start("dist.neo4j.org") do |http|
+            http.request_get("/neo4j-#{args[:edition]}-#{args[:version]}-windows.zip") do |resp|
+                resp.read_body do |segment|
+                    df.write(segment)
+                end
+            end
+          end
         ensure
           df.close()
         end
