@@ -19,7 +19,7 @@ module Neography
 
       def load(node, db = Neography::Rest.new)
         raise ArgumentError.new("syntax deprecated") if node.is_a?(Neography::Rest)
-
+        node = node.first if node.kind_of?(Array)
         node = db.get_node(node) if (node.to_s.match(/^\d+$/) or node.to_s.split("/").last.match(/^\d+$/))
         if node
           node = self.new(node)

@@ -69,6 +69,19 @@ describe Neography::Node do
       }.to raise_error(ArgumentError)
     end
 
+    it "can get a node from an index" do
+      @neo = Neography::Rest.new
+      new_node = Neography::Node.create("age" => 31, "name" => "Max")
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      node_from_index = @neo.get_node_index("test_node_index", key, value) 
+      existing_node = Neography::Node.load(node_from_index)
+      existing_node.should_not be_nil
+      existing_node.neo_id.should_not be_nil
+      existing_node.neo_id.should == new_node.neo_id
+    end
+
     it "can get a node that exists via cypher" do
       new_node = Neography::Node.create("age" => 31, "name" => "Max")
       cypher = "START n = node({id}) return n"
