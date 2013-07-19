@@ -13,7 +13,7 @@ Neography is a thin Ruby wrapper to the Neo4j Rest API, for more information:
 * [Getting Started with Neo4j Server](http://neo4j.org/community/)
 * [Neo4j Rest API Reference](http://docs.neo4j.org/chunked/milestone/rest-api.html)
 
-If you want to the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j by Andreas Ronge
+If you want to utilize the full power of Neo4j, you will want to use JRuby and the excellent Neo4j.rb gem at https://github.com/andreasronge/neo4j by Andreas Ronge
 
 
 ## Installation
