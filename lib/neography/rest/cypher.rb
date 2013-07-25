@@ -13,7 +13,7 @@ module Neography
             :query => query,
             :params => parameters
           }.to_json,
-          :headers => json_content_type.merge({'Accept' => 'application/json;stream=true'})
+          :headers => json_content_type.merge({'Accept' => 'application/json;stream=true;charset=UTF-8'})
         }
         
         @connection.post(optioned_path(cypher_options), options)

@@ -1,3 +1,5 @@
+# Encoding: utf-8
+
 require 'spec_helper'
 
 describe Neography::Rest do
@@ -70,6 +72,16 @@ describe Neography::Rest do
       expect {
         @neo.get_node(fake_node)
       }.to raise_error Neography::NodeNotFoundException
+    end
+    
+    it "can get a node with a tilde" do
+      new_node = @neo.create_node("name" => "Ateísmo Sureño")
+      new_node[:id] = new_node["self"].split('/').last
+      existing_node = @neo.get_node(new_node)
+      existing_node.should_not be_nil
+      existing_node.should have_key("self")
+      existing_node["self"].split('/').last.should == new_node[:id]
+      existing_node["data"]["name"].should == "Ateísmo Sureño"
     end
   end
 
