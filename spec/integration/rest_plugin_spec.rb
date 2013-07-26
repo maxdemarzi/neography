@@ -1,3 +1,5 @@
+# Encoding: utf-8
+
 require 'spec_helper'
 
 describe Neography::Rest do
@@ -49,6 +51,17 @@ describe Neography::Rest do
       existing_node.should have_key("columns")
       existing_node["data"][0][0].should have_key("self")
       existing_node["data"][0][0]["self"].split('/').last.should == id
+    end
+
+    it "can get a node with a tilde" do
+      new_node = @neo.create_node("name" => "Ateísmo Sureño")
+      id = new_node["self"].split('/').last
+      existing_node = @neo.execute_query("start n=node(#{id}) return n")
+      existing_node.should_not be_nil
+      existing_node.should have_key("data")
+      existing_node.should have_key("columns")
+      existing_node["data"][0][0]["self"].split('/').last.should == id
+      existing_node["data"][0][0]["data"]["name"].should == "Ateísmo Sureño"
     end
 
     it "can get the a node with a variable" do
