@@ -110,7 +110,7 @@ module Neography
         code, body, parsed = handle_batch(response)
       else
         code = response.code
-        body = response.body
+        body = response.body.force_encoding("UTF-8")
         parsed = false
       end
       return_result(code, body, parsed)
@@ -118,7 +118,7 @@ module Neography
 
     def handle_batch(response)
       code = 200
-      body = @parser.json(response.body)
+      body = @parser.json(response.body.force_encoding("UTF-8"))
       body.each do |result|
         if result["status"] >= 400
           code = result["status"] 
