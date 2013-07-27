@@ -44,7 +44,7 @@ describe Neography::Node do
       existing_node.last_name.should == "池水"
     end
 
-    it "can get a node that exists via cypher" do
+    it "can get a node with UTF-8 encoded properties that exists via cypher" do
       new_node = Neography::Node.create("first_name" => "美都", "last_name" => "池水")
       cypher = "START n = node({id}) return n"
       @neo = Neography::Rest.new
@@ -57,9 +57,8 @@ describe Neography::Node do
       existing_node.last_name.should == "池水"
     end
 
-    it "can get columns of data from a node that exists via cypher" do
+    it "can get columns of data from a node with UTF-8 encoded properties that exists via cypher" do
       new_node = Neography::Node.create("first_name" => "美都", "last_name" => "池水")
-      #cypher = "START n = node({id}) return n"
       cypher = "START me = node({id})
                     RETURN me.first_name, me.last_name"
       @neo = Neography::Rest.new
