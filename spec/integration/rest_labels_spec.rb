@@ -16,9 +16,8 @@ describe Neography::Rest do
   describe "add_label" do
     it "can add a label to a node" do
       new_node = @neo.create_node
-      new_node_id = new_node["self"].split('/').last
-      @neo.add_label(new_node_id, "Person")
-      labels = @neo.get_node_labels(new_node_id)
+      @neo.add_label(new_node, "Person")
+      labels = @neo.get_node_labels(new_node)
       labels.should == ["Person"]
     end
 
@@ -51,10 +50,9 @@ describe Neography::Rest do
 
     it "can set a label to a node that already had a label" do
       new_node = @neo.create_node
-      new_node_id = new_node["self"].split('/').last
-      @neo.add_label(new_node_id, "Actor")
-      @neo.set_label(new_node_id, "Director")
-      labels = @neo.get_node_labels(new_node_id)
+      @neo.add_label(new_node, "Actor")
+      @neo.set_label(new_node, "Director")
+      labels = @neo.get_node_labels(new_node)
       labels.should == ["Director"]
     end
 
@@ -70,10 +68,9 @@ describe Neography::Rest do
   describe "delete_label" do
     it "can delete a label from a node" do
       new_node = @neo.create_node
-      new_node_id = new_node["self"].split('/').last
-      @neo.set_label(new_node_id, ["Actor", "Director"])
-      @neo.delete_label(new_node_id, "Actor")
-      labels = @neo.get_node_labels(new_node_id)
+      @neo.set_label(new_node, ["Actor", "Director"])
+      @neo.delete_label(new_node, "Actor")
+      labels = @neo.get_node_labels(new_node)
       labels.should == ["Director"]
     end
 
