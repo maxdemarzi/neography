@@ -39,7 +39,7 @@ describe Neography::Rest do
       labels.should == ["Actor", "Director"]
     end
   end
-  
+
   describe "set_label" do
     it "can set a label to a node" do
       new_node = @neo.create_node
@@ -47,7 +47,7 @@ describe Neography::Rest do
       @neo.set_label(new_node_id, "Person")
       labels = @neo.get_node_labels(new_node_id)
       labels.should == ["Person"]
-    end  
+    end
 
     it "can set a label to a node that already had a label" do
       new_node = @neo.create_node
@@ -56,8 +56,8 @@ describe Neography::Rest do
       @neo.set_label(new_node_id, "Director")
       labels = @neo.get_node_labels(new_node_id)
       labels.should == ["Director"]
-    end  
-    
+    end
+
     it "can set multiple labels to a node" do
       new_node = @neo.create_node
       new_node_id = new_node["self"].split('/').last
@@ -75,7 +75,7 @@ describe Neography::Rest do
       @neo.delete_label(new_node_id, "Actor")
       labels = @neo.get_node_labels(new_node_id)
       labels.should == ["Director"]
-    end  
+    end
 
     it "can delete a label from a node that doesn't have one" do
       new_node = @neo.create_node
@@ -83,15 +83,15 @@ describe Neography::Rest do
       @neo.delete_label(new_node_id, "Actor")
       labels = @neo.get_node_labels(new_node_id)
       labels.should == []
-    end  
+    end
 
     it "cannot delete a label from a node that doesn't exist" do
       new_node = @neo.create_node
       new_node_id = new_node["self"].split('/').last
-      expect {      
+      expect {
         @neo.delete_label(new_node_id.to_i + 1, "Actor")
       }.to raise_error Neography::NodeNotFoundException
-    end  
+    end
   end
 
   describe "get_nodes_labeled" do
@@ -101,14 +101,14 @@ describe Neography::Rest do
       @neo.set_label(new_node_id, ["Actor", "Director"])
       nodes = @neo.get_nodes_labeled("Actor")
       nodes.last["self"].split('/').last.should == new_node_id
-    end  
+    end
 
     it "returns an empty array on non-existing label" do
       nodes = @neo.get_nodes_labeled("do_not_exist")
       nodes.should == []
-    end  
+    end
   end
-  
+
   describe "find_nodes_labeled" do
     it "can find a node with a label and a property" do
       new_node = @neo.create_node(:name => "max")
@@ -116,7 +116,7 @@ describe Neography::Rest do
       @neo.set_label(new_node_id, "clown")
       nodes = @neo.find_nodes_labeled("clown", { :name => "max" })
       nodes.last["self"].split('/').last.should == new_node_id
-    end  
+    end
 
     it "returns an empty array on non-existing label property" do
       new_node = @neo.create_node(:name => "max")
@@ -124,8 +124,8 @@ describe Neography::Rest do
       @neo.set_label(new_node_id, "clown")
       nodes = @neo.find_nodes_labeled("clown", { :name => "does_not_exist" })
       nodes.should == []
-    end  
+    end
 
-  end  
-  
+  end
+
 end
