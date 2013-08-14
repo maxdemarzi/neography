@@ -17,11 +17,11 @@ module Neography
       def list
         @connection.get(base_path)
       end
-      
+
       def get(id)
-        @connection.get(node_path(:id => id))
+        @connection.get(node_path(:id => get_id(id)))
       end
-      
+
       def get_nodes(label)
         @connection.get(nodes_path(:label => label))
       end
@@ -37,9 +37,9 @@ module Neography
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(node_path(:id => id), options)
+        @connection.post(node_path(:id => get_id(id)), options)
       end
-      
+
       def set(id, label)
         options = {
           :body => (
@@ -47,11 +47,11 @@ module Neography
           ).to_json,
           :headers => json_content_type
         }
-        @connection.put(node_path(:id => id), options)
-      end      
+        @connection.put(node_path(:id => get_id(id)), options)
+      end
 
       def delete(id, label)
-        @connection.delete(delete_path(:id => id, :label => label))
+        @connection.delete(delete_path(:id => get_id(id), :label => label))
       end
 
 
