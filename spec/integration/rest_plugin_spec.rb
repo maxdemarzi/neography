@@ -53,6 +53,43 @@ describe Neography::Rest do
       existing_node["data"][0][0]["self"].split('/').last.should == id
     end
 
+    it "can perform a range query" do
+      name = generate_text(6)
+      new_node = @neo.create_node({:number => 3})
+      id = new_node["self"].split('/').last
+      @neo.create_node_index(name, "fulltext","lucene")
+      @neo.add_node_to_index(name, "number", 3, new_node) 
+      existing_node = @neo.find_node_index(name, "number:[1 TO 5]")
+      existing_node.first["self"].should == new_node["self"]
+      existing_node.first.should_not be_nil
+      existing_node.first["data"]["number"].should == 3
+      existing_node = @neo.execute_query("start n=node:#{name}(\"number:[1 TO 5]\") return n")
+      existing_node.should have_key("data")
+      existing_node.should have_key("columns")
+      existing_node["data"][0][0].should have_key("self")
+      existing_node["data"][0][0]["self"].split('/').last.should == id
+    end
+
+    it "can perform a range query with a term" do
+      name = generate_text(6)
+      new_node = @neo.create_node({:number => 3, :name => "Max"})
+      id = new_node["self"].split('/').last
+      @neo.create_node_index(name, "fulltext","lucene")
+      @neo.add_node_to_index(name, "number", 3, new_node) 
+      @neo.add_node_to_index(name, "name", "max", new_node) 
+      existing_node = @neo.find_node_index(name, "name:max AND number:[1 TO 5]")
+      existing_node.first["self"].should == new_node["self"]
+      existing_node.first.should_not be_nil
+      existing_node.first["data"]["number"].should == 3
+      existing_node.first["data"]["name"].should == "Max"
+      existing_node = @neo.execute_query("start n=node:#{name}(\"name:max AND number:[1 TO 5]\") return n")
+      existing_node.should have_key("data")
+      existing_node.should have_key("columns")
+      existing_node["data"][0][0].should have_key("self")
+      existing_node["data"][0][0]["self"].split('/').last.should == id
+    end
+
+
     it "can get a node with a tilde" do
       new_node = @neo.create_node("name" => "Ateísmo Sureño")
       id = new_node["self"].split('/').last
