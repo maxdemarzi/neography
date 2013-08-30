@@ -439,4 +439,30 @@ describe Neography::Rest do
 
   end
 
+  describe "drop index" do
+    it "can drop a node index" do
+      new_node = @neo.create_node
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_node_to_index("test_node_index", key, value, new_node) 
+      new_index = @neo.get_node_index("test_node_index", key, value) 
+      new_index.should_not be_nil
+      @neo.drop_node_index("test_node_index")
+      expect { @neo.get_node_index("test_node_index", key, value) }.to raise_error Neography::NotFoundException
+    end
+
+    it "can get a relationship index" do
+      new_node1 = @neo.create_node
+      new_node2 = @neo.create_node
+      new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
+      key = generate_text(6)
+      value = generate_text
+      @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
+      new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
+      new_index.should_not be_nil
+      @neo.drop_relationship_index("test_relationship_index") 
+      expect { @neo.get_relationship_index("test_relationship_index", key, value) }.to raise_error Neography::NotFoundException
+    end
+  end
+
 end

@@ -92,6 +92,9 @@ module Neography
         @connection.delete(value_path(:index => index, :id => get_id(id), :key => key, :value => value))
       end
 
+      def drop(index)
+        @connection.delete(base_path(:index => index))
+      end
     end
   end
 end

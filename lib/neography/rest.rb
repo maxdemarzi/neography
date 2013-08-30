@@ -299,6 +299,10 @@ module Neography
       @node_indexes.find(index, key_or_query, value)
     end
 
+    def drop_node_index(index)
+      @node_indexes.drop(index)
+    end
+
     # auto node indexes
 
     def get_node_auto_index(key, value)
@@ -362,6 +366,10 @@ module Neography
     def find_relationship_index(index, key_or_query, value = nil)
       @relationship_indexes.find(index, key_or_query, value)
     end
+    
+    def drop_relationship_index(index)
+      @relationship_indexes.drop(index)
+    end    
 
     # relationship auto indexes
 

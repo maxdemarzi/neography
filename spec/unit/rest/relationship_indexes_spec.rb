@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe RelationshipIndexes do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { RelationshipIndexes.new(connection) }
 
       it "lists all indexes" do
@@ -123,6 +123,10 @@ module Neography
         subject.remove_by_value("some_index", "42", "some_key", "some_value")
       end
 
+      it "drops an index" do
+        connection.should_receive(:delete).with("/index/relationship/some_index")
+        subject.drop("some_index")
+      end
     end
   end
 end
