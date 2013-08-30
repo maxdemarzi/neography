@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe NodePaths do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { NodePaths.new(connection) }
 
       it "gets a shortest path between two nodes" do

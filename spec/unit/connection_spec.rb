@@ -78,22 +78,22 @@ module Neography
     context "requests" do
 
       it "does a GET request" do
-        connection.client.should_receive(:get).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
+        connection.client.should_receive(:get).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
         connection.get("/foo/bar")
       end
 
       it "does a POST request" do
-        connection.client.should_receive(:post).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
+        connection.client.should_receive(:post).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
         connection.post("/foo/bar")
       end
 
       it "does a PUT request" do
-        connection.client.should_receive(:put).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
+        connection.client.should_receive(:put).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
         connection.put("/foo/bar")
       end
 
       it "does a DELETE request" do
-        connection.client.should_receive(:delete).with("http://localhost:7474/db/data/foo/bar", nil, nil) { stub.as_null_object }
+        connection.client.should_receive(:delete).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
         connection.delete("/foo/bar")
       end
 
@@ -110,11 +110,11 @@ module Neography
           connection.client.should_receive(:set_auth).with(
             "http://localhost:7474/db/data/foo/bar",
              "foo",
-             "bar") { stub.as_null_object }
+             "bar") { double.as_null_object }
 
           connection.client.should_receive(:get).with(
             "http://localhost:7474/db/data/foo/bar", nil, nil
-            ) { stub.as_null_object }
+            ) { double.as_null_object }
 
           connection.get("/foo/bar")
         end
@@ -124,7 +124,7 @@ module Neography
         connection.client.should_receive(:get).with(
           "http://localhost:7474/db/data/foo/bar",
           nil, { "User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true}
-          ) { stub.as_null_object }
+          ) { double.as_null_object }
 
         connection.get("/foo/bar", :headers => {})
       end

@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Nodes do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { Nodes.new(connection) }
 
       context "get nodes" do
@@ -141,7 +141,7 @@ module Neography
 
       context "#create_multiple_threaded" do
 
-        let(:connection) { stub(:max_threads => 2) }
+        let(:connection) { double(:max_threads => 2) }
 
         it "creates multiple with attributes" do
           options1 = {

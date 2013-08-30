@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Cypher do
 
-      let(:connection) { stub(:cypher_path => "/cypher") }
+      let(:connection) { double(:cypher_path => "/cypher") }
       subject { Cypher.new(connection) }
 
       it "executes a cypher query" do

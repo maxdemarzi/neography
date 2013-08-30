@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Clean do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { Clean.new(connection) }
 
       it "cleans the database" do

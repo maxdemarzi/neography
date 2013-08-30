@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Gremlin do
 
-      let(:connection) { stub(:gremlin_path => "/gremlin") }
+      let(:connection) { double(:gremlin_path => "/gremlin") }
       subject { Gremlin.new(connection) }
 
       it "executes a gremlin script" do

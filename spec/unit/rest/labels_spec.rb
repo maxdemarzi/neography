@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe NodeLabels do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { NodeLabels.new(connection) }
 
       it "list node labels" do

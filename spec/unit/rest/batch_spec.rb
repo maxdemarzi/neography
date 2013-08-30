@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Batch do
 
-      let(:connection) { stub(:gremlin_path => "/gremlin", :cypher_path => "/cypher") }
+      let(:connection) { double(:gremlin_path => "/gremlin", :cypher_path => "/cypher") }
       subject { Batch.new(connection) }
 
       it "gets nodes" do

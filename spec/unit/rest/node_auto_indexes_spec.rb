@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe NodeAutoIndexes do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { NodeAutoIndexes.new(connection) }
 
       it "gets a node from an auto index" do

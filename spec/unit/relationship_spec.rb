@@ -3,7 +3,7 @@ require 'spec_helper'
 module Neography
   describe Relationship do
 
-    let(:db) { stub(Rest).as_null_object }
+    let(:db) { double(Rest).as_null_object }
     let(:relationship_hash) do
       {
         "self" => "0",
@@ -13,8 +13,8 @@ module Neography
       }
     end
 
-    let(:from)  { stub(:neo_server => db) }
-    let(:to)    { stub(:neo_server => db) }
+    let(:from)  { double(:neo_server => db) }
+    let(:to)    { double(:neo_server => db) }
     let(:props) { { :foo => "bar" } }
 
     describe "::create" do
@@ -40,7 +40,7 @@ module Neography
 
         before do
           # stub out actual connections
-          @db = stub(Rest).as_null_object
+          @db = double(Rest).as_null_object
           Rest.stub(:new) { @db }
         end
 

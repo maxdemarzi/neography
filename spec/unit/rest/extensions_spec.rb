@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Extensions do
 
-      let(:connection)  { stub }
+      let(:connection)  { double }
       subject { Extensions.new(connection) }
 
       it "executes an extensions get query" do

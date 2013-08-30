@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe NodeRelationships do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { NodeRelationships.new(connection) }
 
       it "creates a relationship" do

@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe RelationshipTypes do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { RelationshipTypes.new(connection) }
 
       it "lists all relationship types" do

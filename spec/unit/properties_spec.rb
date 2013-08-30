@@ -4,7 +4,7 @@ module Neography
   describe "Properties" do
 
     before do
-      @db = mock(Neography::Rest, :is_a? => true).as_null_object
+      @db = double(Neography::Rest, :is_a? => true).as_null_object
       Rest.stub(:new) { @db }
     end
 

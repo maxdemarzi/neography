@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe SchemaIndexes do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { SchemaIndexes.new(connection) }
 
       it "create schema indexes" do

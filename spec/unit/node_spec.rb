@@ -7,7 +7,7 @@ module Neography
       context "no explicit server" do
 
         before do
-          @db = mock(Neography::Rest, :is_a? => true).as_null_object
+          @db = double(Neography::Rest, :is_a? => true).as_null_object
           Rest.stub(:new) { @db }
         end
 
@@ -55,7 +55,7 @@ module Neography
 
         before do
           # stub out actual connections
-          @db = stub(Rest).as_null_object
+          @db = double(Rest).as_null_object
           Rest.stub(:new) { @db }
         end
 

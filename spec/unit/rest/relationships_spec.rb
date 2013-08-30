@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Relationships do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { Relationships.new(connection) }
 
       it "gets a relationship" do

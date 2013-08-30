@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe NodeTraversal do
 
-      let(:connection) { stub }
+      let(:connection) { double }
       subject { NodeTraversal.new(connection) }
 
       it "traverses" do

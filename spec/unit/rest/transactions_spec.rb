@@ -4,7 +4,7 @@ module Neography
   class Rest
     describe Transactions do
 
-      let(:connection) { stub(:configuration => "http://configuration") }
+      let(:connection) { double(:configuration => "http://configuration") }
       subject { Transactions.new(connection) }
 
       it "can create new transactions" do

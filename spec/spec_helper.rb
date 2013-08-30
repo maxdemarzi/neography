@@ -32,7 +32,7 @@ def error_response(attributes)
   http_header = double()
   http_header.stub(:request_uri).and_return(request_uri)
   
-  stub(
+  double(
     http_header: http_header,
     code: attributes[:code],
     body: {
