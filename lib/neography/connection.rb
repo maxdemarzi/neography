@@ -161,8 +161,13 @@ module Neography
     
     def raise_errors(code, exception, message, stacktrace)
       case code
-      when 400, 404
-        case exception
+        when 401
+          raise UnauthorizedError.new(message, code, stacktrace)
+        when 409
+          raise OperationFailureException.new(message, code, stacktrace)
+      end
+
+      case exception
         when /SyntaxException/               ; raise SyntaxException.new(message, code, stacktrace)
         when /this is not a query/           ; raise SyntaxException.new(message, code, stacktrace)
         when /PropertyValueException/        ; raise PropertyValueException.new(message, code, stacktrace)
@@ -172,17 +177,9 @@ module Neography
         when /RelationshipNotFoundException/ ; raise RelationshipNotFoundException.new(message, code, stacktrace)
         when /NotFoundException/             ; raise NotFoundException.new(message, code, stacktrace)
         when /UniquePathNotUniqueException/  ; raise UniquePathNotUniqueException.new(message, code, stacktrace)
-        else
-          raise NeographyError.new(message, code, stacktrace)
-        end
-      when 401
-        raise UnauthorizedError.new(message, code, stacktrace)
-      when 409
-        raise OperationFailureException.new(message, code, stacktrace)
-      else
-        raise NeographyError.new(message, code, stacktrace)
       end
       
+      raise NeographyError.new(message, code, stacktrace)      
     end
 
     def parse_string_options(options)
