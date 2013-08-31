@@ -160,26 +160,29 @@ module Neography
     end
     
     def raise_errors(code, exception, message, stacktrace)
+      error = nil
       case code
         when 401
-          raise UnauthorizedError.new(message, code, stacktrace)
+          error = UnauthorizedError
         when 409
-          raise OperationFailureException.new(message, code, stacktrace)
+          error = OperationFailureException
       end
 
-      case exception
-        when /SyntaxException/               ; raise SyntaxException.new(message, code, stacktrace)
-        when /this is not a query/           ; raise SyntaxException.new(message, code, stacktrace)
-        when /PropertyValueException/        ; raise PropertyValueException.new(message, code, stacktrace)
-        when /BadInputException/             ; raise BadInputException.new(message, code, stacktrace)
-        when /NodeNotFoundException/         ; raise NodeNotFoundException.new(message, code, stacktrace)
-        when /NoSuchPropertyException/       ; raise NoSuchPropertyException.new(message, code, stacktrace)
-        when /RelationshipNotFoundException/ ; raise RelationshipNotFoundException.new(message, code, stacktrace)
-        when /NotFoundException/             ; raise NotFoundException.new(message, code, stacktrace)
-        when /UniquePathNotUniqueException/  ; raise UniquePathNotUniqueException.new(message, code, stacktrace)
+      error ||= case exception
+        when /SyntaxException/               ; SyntaxException
+        when /this is not a query/           ; SyntaxException
+        when /PropertyValueException/        ; PropertyValueException
+        when /BadInputException/             ; BadInputException
+        when /NodeNotFoundException/         ; NodeNotFoundException
+        when /NoSuchPropertyException/       ; NoSuchPropertyException
+        when /RelationshipNotFoundException/ ; RelationshipNotFoundException
+        when /NotFoundException/             ; NotFoundException
+        when /UniquePathNotUniqueException/  ; UniquePathNotUniqueException
+        else
+          NeographyError
       end
       
-      raise NeographyError.new(message, code, stacktrace)      
+      raise error.new(message, code, stacktrace)      
     end
 
     def parse_string_options(options)
