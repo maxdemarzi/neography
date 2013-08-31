@@ -3,7 +3,8 @@ module Neography
   end
   class Connection
     USER_AGENT = "Neography/#{Neography::VERSION}"
-
+    ACTIONS = ["get", "post", "put", "delete"]
+    
     attr_accessor :protocol, :server, :port, :directory,
       :cypher_path, :gremlin_path,
       :log_file, :log_enabled, :logger,
@@ -27,7 +28,7 @@ module Neography
     end
 
     def configuration
-      "#{@protocol}#{@server}:#{@port}#{@directory}/db/data"
+      @configuration ||= "#{@protocol}#{@server}:#{@port}#{@directory}/db/data"
     end
 
     def merge_options(options)
@@ -37,24 +38,11 @@ module Neography
       merged_options
     end
 
-    def get(path, options={})
-      authenticate(configuration + path)
-      evaluate_response(@client.get(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
-    end
-
-    def post(path, options={})
-      authenticate(configuration + path)
-      evaluate_response(@client.post(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
-    end
-
-    def put(path, options={})
-      authenticate(configuration + path)
-      evaluate_response(@client.put(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
-    end
-
-    def delete(path, options={})
-      authenticate(configuration + path)
-      evaluate_response(@client.delete(configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))
+    ACTIONS.each do |action|
+      define_method(action) do |path, options = {}|
+        authenticate(configuration + path)
+        evaluate_response(@client.send(action.to_sym, configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))    
+      end 
     end
 
     def authenticate(path)
