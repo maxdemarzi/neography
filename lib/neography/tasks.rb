@@ -1,7 +1,7 @@
 # borrowed from architect4r
 require 'os'
 require 'httpclient'
-require 'zip/zip'
+require 'zip'
 require 'net/http'
 
 namespace :neo4j do
@@ -29,7 +29,7 @@ namespace :neo4j do
 
       # Extract and move to neo4j directory
       unless File.exist?('neo4j')
-        Zip::ZipFile.open('neo4j.zip') do |zip_file|
+        Zip::File.open('neo4j.zip') do |zip_file|
           zip_file.each do |f|
            f_path=File.join(".", f.name)
            FileUtils.mkdir_p(File.dirname(f_path))
