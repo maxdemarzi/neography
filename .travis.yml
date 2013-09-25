@@ -1,4 +1,4 @@
-script: "bundle exec rake neo4j:install['enterprise','2.0.0-M04'] neo4j:start spec --trace"
+script: "bundle exec rake neo4j:install['enterprise','2.0.0-M05'] neo4j:start spec --trace"
 language: ruby
 rvm:
   - 1.9.3
