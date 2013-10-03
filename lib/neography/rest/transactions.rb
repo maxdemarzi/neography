@@ -60,24 +60,43 @@ module Neography
         query = nil
         parameters = nil
         Array(statements).each do |statement|
-          if query && parameters
-            array << {:statement => query, :parameters => {:props => parameters}}
-            query = statement
-            parameters = nil            
-          elsif query && statement.is_a?(String)
-            array << {:statement => query}
-            query = statement
-            parameters = nil 
-          elsif query && statement.is_a?(Hash)
-            array << {:statement => query, :parameters => {:props => parameters}}
-            query = nil
-            parameters = nil            
+          case 
+            when query && parameters && statement.is_a?(Array)
+              then
+                array << {:statement => query, :parameters => parameters, :resultDataContents => statement }
+                query = nil
+                parameters = nil        
+            when query && parameters && statement.is_a?(String)
+              then
+                array << {:statement => query, :parameters => parameters}
+                query = statement
+                parameters = nil                 
+            when query && statement.is_a?(Hash)
+              then
+                parameters = statement            
+            when query && statement.is_a?(Array)
+              then
+                array << {:statement => query, :resultDataContents => statement }
+                query = nil
+                parameters = nil                       
+            else
+              query = statement
           end
-          query = statement
+
         end
-        array << {:statement => query} if query
+        
+        if query && parameters
+          array << {:statement => query, :parameters => parameters}
+          query = nil
+        end
+        
+        if query
+          array << {:statement => query}
+        end
+        
         { :statements => array }
       end
+
     end
   end
 end
