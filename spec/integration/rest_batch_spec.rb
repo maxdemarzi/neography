@@ -235,7 +235,7 @@ describe Neography::Rest do
       batch_result.first.should have_key("id")
       batch_result.first.should have_key("from")
       batch_result.first["body"].first["self"].should == new_node["self"]
-      @neo.remove_node_from_index(index_name, key, value, new_node) 
+      @neo.remove_node_from_index(index_name, key, value, new_node)
     end
 
     it "can get a relationship index" do
@@ -309,10 +309,10 @@ describe Neography::Rest do
 		value3 = generate_text
 
 		node1 = @neo.create_unique_node(index, key, value1, { "name" => "Max" })
-		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" }) 
+		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" })
 		node3 = @neo.create_unique_node(index, key, value3, { "name" => "Samir"})
 
-		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ], 
+		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ],
 		                          [:remove_node_from_index, index, key, node2 ],
 		                          [:remove_node_from_index, index, node3 ]
 
@@ -384,7 +384,7 @@ describe Neography::Rest do
       batch_result.first["body"]["data"]["since"].should == "high school"
       batch_result.first["body"]["start"].split('/').last.should == node1["self"].split('/').last
       batch_result.first["body"]["end"].split('/').last.should == node2["self"].split('/').last
-      existing_index = @neo.find_relationship_index("test_relationship_index", key, value) 
+      existing_index = @neo.find_relationship_index("test_relationship_index", key, value)
       existing_index.should_not be_nil
       existing_index.first["self"].should == batch_result.first["body"]["self"]
     end
@@ -424,6 +424,7 @@ describe Neography::Rest do
       new_relationship1 = @neo.create_relationship("friends", node1, node2)
       new_relationship2 = @neo.create_relationship("brothers", node1, node3)
       batch_result = @neo.batch [:get_node_relationships, node1]
+      batch_result.first["body"].length.should be(2)
       batch_result.first["body"][0]["type"].should == "friends"
       batch_result.first["body"][0]["start"].split('/').last.should == node1["self"].split('/').last
       batch_result.first["body"][0]["end"].split('/').last.should == node2["self"].split('/').last
@@ -432,6 +433,20 @@ describe Neography::Rest do
       batch_result.first["body"][1]["start"].split('/').last.should == node1["self"].split('/').last
       batch_result.first["body"][1]["end"].split('/').last.should == node3["self"].split('/').last
       batch_result.first["body"][1]["self"].should == new_relationship2["self"]
+    end
+
+    it "can get relationships of specific type" do
+      node1 = @neo.create_node
+      node2 = @neo.create_node
+      node3 = @neo.create_node
+      new_relationship1 = @neo.create_relationship("friends", node1, node2)
+      new_relationship2 = @neo.create_relationship("brothers", node1, node3)
+      batch_result = @neo.batch [:get_node_relationships, node1, "out", "friends"]
+      batch_result.first["body"].length.should be(1)
+      batch_result.first["body"][0]["type"].should == "friends"
+      batch_result.first["body"][0]["start"].split('/').last.should == node1["self"].split('/').last
+      batch_result.first["body"][0]["end"].split('/').last.should == node2["self"].split('/').last
+      batch_result.first["body"][0]["self"].should == new_relationship1["self"]
     end
 
     it "can create a relationship from a unique node" do
@@ -449,7 +464,7 @@ describe Neography::Rest do
                                         [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
                                         [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                         [:create_relationship, "has", "{0}", "{2}", {}]
-            }.to raise_error(Neography::NeographyError)                               
+            }.to raise_error(Neography::NeographyError)
     end
 
   end
@@ -457,24 +472,24 @@ describe Neography::Rest do
   describe "broken queries" do
     it "should return errors when bad syntax is passed in batch" do
       batch_commands = []
-    
+
       batch_commands << [ :execute_query, "start person_n=node:person(ssn = '000-00-0002')
                                            set bar1 = {foo}",
                         { :other => "what" }
                       ]
 
-      expect { 
+      expect {
         batch_result = @neo.batch *batch_commands
-      }.to raise_exception Neography::SyntaxException          
+      }.to raise_exception Neography::SyntaxException
 
-      expect { 
+      expect {
           @neo.execute_query("start person_n=node:person(ssn = '000-00-0001')
                               set bar = {foo}",
                         { :other => "what" })
       }.to raise_exception Neography::SyntaxException
-                      
-      
-    end    
+
+
+    end
   end
 
 end
