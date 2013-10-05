@@ -99,8 +99,12 @@ module Neography
 
       # NodeRelationships
 
-      def get_node_relationships(id, direction = nil)
-        get NodeRelationships.direction_path(:id => get_id(id), :direction => direction || 'all')
+      def get_node_relationships(id, direction = nil, types = nil)
+        if types.nil?
+          get NodeRelationships.direction_path(:id => get_id(id), :direction => direction || 'all')
+        else
+          get NodeRelationships.type_path(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))
+        end
       end
 
       # Relationships
