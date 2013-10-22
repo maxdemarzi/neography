@@ -25,7 +25,7 @@ module Neography
       def find(*args)
         db = args[3] ? args.pop : Neography::Rest.new
 
-        if self.inspect == "Neography::Node"
+        if self <= Neography::Node
           nodes = []
           results = db.find_node_index(*args)
           return nil unless results
