@@ -210,6 +210,23 @@ describe Neography::Rest do
       existing_relationship["self"].should == new_relationship["self"]
     end
 
+    it "can drop a node index" do
+      index_name = generate_text(6)
+      @neo.create_node_index(index_name)
+      @neo.batch [:drop_node_index, index_name]
+      @neo.list_node_indexes[index_name].should be_nil
+    end
+
+    it "can create a node index" do
+      index_name = generate_text(6)
+      @neo.batch [:create_node_index, index_name, "fulltext", "lucene"]
+      indexes = @neo.list_node_indexes
+      index = indexes[index_name]
+      index.should_not be_nil
+      index["provider"].should == "lucene"
+      index["type"].should == "fulltext"
+    end
+
     it "can add a node to an index" do
       index_name = generate_text(6)
       new_node = @neo.create_node
