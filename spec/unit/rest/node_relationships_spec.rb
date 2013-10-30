@@ -39,7 +39,7 @@ module Neography
       end
 
       it "gets relationships with direction and types" do
-        connection.should_receive(:get).with("/node/42/relationships/in/foo&bar")
+        connection.should_receive(:get).with("/node/42/relationships/in/foo%26bar")
         subject.get("42", :in, ["foo", "bar"])
       end
 

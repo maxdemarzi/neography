@@ -28,7 +28,7 @@ module Neography
       end
 
       def encode(value)
-        URI.encode(value).gsub("/","%2F")
+        CGI.escape(value).gsub("+", "%20")
       end
 
     end
