@@ -54,6 +54,21 @@ module Neography
 
       # NodeIndexes
 
+      def create_node_index(name, type = "exact", provider = "lucene")
+        post NodeIndexes.all_path do
+          { :name => name,
+            :config => {
+              :type => type,
+              :provider => provider
+            }
+          }
+        end
+      end
+
+      def drop_node_index(index)
+        delete NodeIndexes.unique_path(:index => index)
+      end
+
       def create_unique_node(index, key, value, properties)
         post NodeIndexes.unique_path(:index => index) do
           {
