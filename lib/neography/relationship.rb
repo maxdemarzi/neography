@@ -16,6 +16,14 @@ module Neography
         rel
       end
 
+      def create_unique(index, key, value, type, from_node, to_node, props = nil)
+        rel = Neography::Relationship.new(from_node.neo_server.create_unique_relationship(index, key, value, type, from_node, to_node, props))
+        rel.start_node = from_node
+        rel.end_node = to_node
+        rel.rel_type = type
+        rel
+      end
+
       def load(rel, db = Neography::Rest.new)
         raise ArgumentError.new("syntax deprecated") if rel.is_a?(Neography::Rest)
 
