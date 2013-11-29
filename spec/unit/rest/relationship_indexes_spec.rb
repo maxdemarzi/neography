@@ -47,10 +47,11 @@ module Neography
           "value"      => "value",
           "type"       => "type",
           "start"      => "http://configuration/node/42",
-          "end"        => "http://configuration/node/43"
+          "end"        => "http://configuration/node/43",
+          "properties" => "properties"
         }
         connection.should_receive(:post).with("/index/relationship/some_index?unique", json_match(:body, expected_body))
-        subject.create_unique("some_index", "key", "value", "type", "42", "43")
+        subject.create_unique("some_index", "key", "value", "type", "42", "43", "properties")
       end
 
       it "adds a relationship to an index" do

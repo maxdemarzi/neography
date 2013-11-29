@@ -17,13 +17,14 @@ module Neography
         super(connection, :relationship)
       end
 
-      def create_unique(index, key, value, type, from, to)
+      def create_unique(index, key, value, type, from, to, props = nil)
         body = {
           :key   => key,
           :value => value,
           :type  => type,
           :start => @connection.configuration + "/node/#{get_id(from)}",
-          :end   => @connection.configuration + "/node/#{get_id(to)}"
+          :end   => @connection.configuration + "/node/#{get_id(to)}",
+          :properties => props
         }
         options = { :body => body.to_json, :headers => json_content_type }
 
