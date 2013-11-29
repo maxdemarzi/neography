@@ -17,7 +17,7 @@ module Neography
         super(connection, :relationship)
       end
 
-      def create_unique(index, key, value, type, from, to, props)
+      def create_unique(index, key, value, type, from, to, props = nil)
         body = {
           :key   => key,
           :value => value,
