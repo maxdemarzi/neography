@@ -17,6 +17,14 @@ module Neography
         node
       end
 
+      def create_unique(index, key, value, props = nil, db = Neography::Rest.new)
+        raise ArgumentError.new("syntax deprecated") if props.is_a?(Neography::Rest)
+
+        node = self.new(db.create_unique_node(index, key, value, props))
+        node.neo_server = db
+        node
+      end
+
       def load(node, db = Neography::Rest.new)
         raise ArgumentError.new("syntax deprecated") if node.is_a?(Neography::Rest)
         node = node.first if node.kind_of?(Array)
