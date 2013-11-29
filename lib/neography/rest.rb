@@ -347,7 +347,7 @@ module Neography
       @relationship_indexes.create_auto(type, provider)
     end
 
-    def create_unique_relationship(index, key, value, type, from, to, props)
+    def create_unique_relationship(index, key, value, type, from, to, props = nil)
       @relationship_indexes.create_unique(index, key, value, type, from, to, props)
     end
 
