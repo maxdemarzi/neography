@@ -204,6 +204,31 @@ module Neography
         end
 
       end
+
+      context "query logging" do
+        before do
+          connection.logger = Logger.new(nil)
+          connection.log_enabled = true
+        end
+
+        let :expected_response do
+          "expected_response"
+        end
+
+        let :request_body do
+          {key1: :val1}
+        end
+
+        it "should log query" do
+          connection.should_receive(:log).with("/foo/bar", request_body).once
+          connection.get("/foo/bar", {body: request_body})
+        end
+
+        it "should return original response" do
+          connection.stub(:evaluate_response).and_return expected_response
+          connection.get("/foo/bar").should eq expected_response
+        end
+      end
     end
   end
 end
