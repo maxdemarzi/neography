@@ -40,9 +40,25 @@ module Neography
 
     ACTIONS.each do |action|
       define_method(action) do |path, options = {}|
-        authenticate(configuration + path)
-        evaluate_response(@client.send(action.to_sym, configuration + path, merge_options(options)[:body], merge_options(options)[:headers]))    
+        query_path = configuration + path
+        query_body = merge_options(options)[:body] 
+        authenticate(query_path)
+        log path, query_body do
+          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]))    
+        end
       end 
+    end
+
+    def log(path, body)
+      if @log_enabled
+        start_time = Time.now
+        response = yield
+        time = ((Time.now - start_time) * 1000).round(2)
+        @logger.info "[Neography::Query] #{path} #{body} [#{time}ms]"
+        response
+      else
+        yield
+      end
     end
 
     def authenticate(path)
