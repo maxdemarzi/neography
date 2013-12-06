@@ -20,35 +20,37 @@ module Neography
       context "hash options" do
         let(:options) do
           {
-            :protocol       => "https://",
-            :server         => "foobar",
-            :port           => 4242,
-            :directory      => "/dir",
-            :cypher_path    => "/cyph",
-            :gremlin_path   => "/grem",
-            :log_file       => "neo.log",
-            :log_enabled    => false,
-            :max_threads    => 10,
-            :parser         => Foo,
-            :authentication => "foo",
-            :username       => "bar",
-            :password       => "baz"
+            :protocol           => "https://",
+            :server             => "foobar",
+            :port               => 4242,
+            :directory          => "/dir",
+            :cypher_path        => "/cyph",
+            :gremlin_path       => "/grem",
+            :log_file           => "neo.log",
+            :log_enabled        => false,
+            :slow_log_threshold => 0,
+            :max_threads        => 10,
+            :parser             => Foo,
+            :authentication     => "foo",
+            :username           => "bar",
+            :password           => "baz"
           }
         end
 
         it "accepts all options in a hash" do
           connection.configuration.should == "https://foobar:4242/dir/db/data"
 
-          connection.protocol.should     == "https://"
-          connection.server.should       == "foobar"
-          connection.port.should         == 4242
-          connection.directory.should    == "/dir"
-          connection.cypher_path.should  == "/cyph"
-          connection.gremlin_path.should == "/grem"
-          connection.log_file.should     == "neo.log"
-          connection.log_enabled.should  == false
-          connection.max_threads.should  == 10
-          connection.parser.should       == Foo
+          connection.protocol.should           == "https://"
+          connection.server.should             == "foobar"
+          connection.port.should               == 4242
+          connection.directory.should          == "/dir"
+          connection.cypher_path.should        == "/cyph"
+          connection.gremlin_path.should       == "/grem"
+          connection.log_file.should           == "neo.log"
+          connection.log_enabled.should        == false
+          connection.slow_log_threshold.should == 0
+          connection.max_threads.should        == 10
+          connection.parser.should             == Foo
 
           connection.authentication.should == {
             :foo_auth => {
@@ -207,17 +209,14 @@ module Neography
 
       context "query logging" do
         before do
-          connection.logger = Logger.new(nil)
+          @logger = Logger.new(nil)
+          connection.logger = @logger
           connection.log_enabled = true
         end
 
-        let :expected_response do
-          "expected_response"
-        end
+        let(:expected_response) {"expected_response"}
 
-        let :request_body do
-          {key1: :val1}
-        end
+        let(:request_body) { {key1: :val1} }
 
         it "should log query" do
           connection.should_receive(:log).with("/foo/bar", request_body).once
@@ -228,6 +227,30 @@ module Neography
           connection.stub(:evaluate_response).and_return expected_response
           connection.get("/foo/bar").should eq expected_response
         end
+
+        describe "slow_log_threshold" do
+          before do
+            connection.stub(:evaluate_response).and_return expected_response
+          end
+
+          context "default value" do
+            it "should have output" do
+              @logger.should_receive(:info).once
+            end
+          end
+
+          context "high value" do
+            before { connection.slow_log_threshold = 100_000 }
+            it "should not have output" do
+              @logger.should_not_receive(:info)
+            end
+          end
+
+          after do
+            connection.get("/foo/bar", {body: request_body})
+          end
+        end
+
       end
     end
   end
