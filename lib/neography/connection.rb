@@ -7,7 +7,7 @@ module Neography
     
     attr_accessor :protocol, :server, :port, :directory,
       :cypher_path, :gremlin_path,
-      :log_file, :log_enabled, :logger,
+      :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
       :authentication, :username, :password,
       :parser, :client
@@ -54,7 +54,7 @@ module Neography
         start_time = Time.now
         response = yield
         time = ((Time.now - start_time) * 1000).round(2)
-        @logger.info "[Neography::Query] #{path} #{body} [#{time}ms]"
+        @logger.info "[Neography::Query] #{path} #{body} [#{time}ms]" if time >= slow_log_threshold
         response
       else
         yield
@@ -76,16 +76,17 @@ module Neography
     end
 
     def save_local_configuration(config)
-      @protocol       = config[:protocol]
-      @server         = config[:server]
-      @port           = config[:port]
-      @directory      = config[:directory]
-      @cypher_path    = config[:cypher_path]
-      @gremlin_path   = config[:gremlin_path]
-      @log_file       = config[:log_file]
-      @log_enabled    = config[:log_enabled]
-      @max_threads    = config[:max_threads]
-      @parser         = config[:parser]
+      @protocol           = config[:protocol]
+      @server             = config[:server]
+      @port               = config[:port]
+      @directory          = config[:directory]
+      @cypher_path        = config[:cypher_path]
+      @gremlin_path       = config[:gremlin_path]
+      @log_file           = config[:log_file]
+      @log_enabled        = config[:log_enabled]
+      @slow_log_threshold = config[:slow_log_threshold]
+      @max_threads        = config[:max_threads]
+      @parser             = config[:parser]
 
       @user_agent     = { "User-Agent" => USER_AGENT }
 
