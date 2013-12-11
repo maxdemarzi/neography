@@ -141,7 +141,7 @@ describe Neography::Rest do
     end
 
 
-    it "can delete everything but start node" do
+    it "can delete everything but start node", :reference => true do
       @neo.execute_query("START n=node(*) MATCH n-[r?]-() WHERE ID(n) <> 0 DELETE n,r")
       expect {
         @neo.execute_query("start n=node({id}) return n", {:id => 1})

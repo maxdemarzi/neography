@@ -17,7 +17,7 @@ def generate_text(length=8)
 end
 
 RSpec.configure do |c|
-  c.filter_run_excluding :slow => true, :gremlin => true
+  c.filter_run_excluding :slow => true, :gremlin => true, :reference => true
 end
 
 
