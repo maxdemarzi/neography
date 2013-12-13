@@ -18,6 +18,7 @@ module Neography
       @client = HTTPClient.new
       @client.send_timeout = 1200 # 10 minutes
       @client.receive_timeout = 1200
+      authenticate
     end
 
     def configure(protocol, server, port, directory)
@@ -42,7 +43,6 @@ module Neography
       define_method(action) do |path, options = {}|
         query_path = configuration + path
         query_body = merge_options(options)[:body] 
-        authenticate(query_path)
         log path, query_body do
           evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]))    
         end
@@ -61,7 +61,7 @@ module Neography
       end
     end
 
-    def authenticate(path)
+    def authenticate(path = nil)
       @client.set_auth(path, 
                        @authentication[@authentication.keys.first][:username], 
                        @authentication[@authentication.keys.first][:password]) unless @authentication.empty?
