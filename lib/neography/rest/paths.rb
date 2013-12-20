@@ -21,13 +21,19 @@ module Neography
         end
       end
 
+
       def build_path(path, attributes)
-        path.gsub(/:([\w_]*)/) do
+        p = String.new(path)
+        p.gsub!(/=:([\w_]*)/) do
             if $1.to_sym == :value and attributes[$1.to_sym].class == String
-                encode("%22"+attributes[$1.to_sym].to_s+"%22")
+                "=%22"+encode(attributes[$1.to_sym].to_s)+"%22";
             else
-                encode(attributes[$1.to_sym].to_s)
+                "="+encode(attributes[$1.to_sym].to_s)
             end
+        end
+
+        p.gsub(/:([\w_]*)/) do
+            encode(attributes[$1.to_sym].to_s)
         end
       end
 
