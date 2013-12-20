@@ -109,7 +109,7 @@ module Neography
         end
 
         it "does requests with authentication" do
-          connection.client.should_receive(:set_auth).with(
+          connection.client.should_not_receive(:set_auth).with(
             "http://localhost:7474/db/data/foo/bar",
              "foo",
              "bar") { double.as_null_object }
