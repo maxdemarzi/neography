@@ -105,6 +105,16 @@ module Neography
                         [:reset_node_properties, "index2", { "key2" => "value2" } ]
       end
 
+      it "adds a node label" do
+        expected_body = [
+          { "id" => 0, "method" => "POST", "to" => "{0}/labels", "body" => "foo" },
+          { "id" => 1, "method" => "POST", "to" => "{0}/labels", "body" => "bar" },
+        ]
+        connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        subject.execute [:add_label, "{0}", "foo"],
+                        [:add_label, "{0}", "bar"]
+      end
+
       it "gets node relationships" do
         expected_body = [
           { "id" => 0, "method" => "GET", "to" => "/node/id1/relationships/direction1" },
