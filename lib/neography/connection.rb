@@ -118,7 +118,7 @@ module Neography
         body = response.body.force_encoding("UTF-8")
         parsed = false
       end
-      return_result(code, body, parsed)
+      return_result(response, code, body, parsed)
     end
 
     def handle_batch(response)
@@ -133,7 +133,7 @@ module Neography
       return code, body, true
     end
     
-    def return_result(code, body, parsed)
+    def return_result(response, code, body, parsed)
       case code
       when 200
         @logger.debug "OK, created #{body}" if @log_enabled
@@ -147,12 +147,12 @@ module Neography
         @logger.debug "OK, no content returned" if @log_enabled
         nil
       when 400..500
-        handle_4xx_500_response(code, body)
+        handle_4xx_500_response(response, code, body)
         nil
       end      
     end
 
-    def handle_4xx_500_response(code, body)
+    def handle_4xx_500_response(response, code, body)
       if body.nil? or body == ""
         parsed_body = {"message" => "No error message returned from server.",
                        "stacktrace" => "No stacktrace returned from server." }
@@ -172,7 +172,7 @@ module Neography
       message = parsed_body["message"]
       stacktrace = parsed_body["stacktrace"]
 
-      @logger.error "#{code} error: #{body}" if @log_enabled
+      @logger.error "#{response} error: #{body}" if @log_enabled
       raise_errors(code, parsed_body["exception"], message, stacktrace)
     end
     
