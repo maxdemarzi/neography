@@ -11,7 +11,8 @@ Gem::Specification.new do |s|
   s.homepage    = "http://rubygems.org/gems/neography"
   s.summary     = "ruby wrapper to Neo4j Rest API"
   s.description = "A Ruby wrapper to the Neo4j Rest API see http://docs.neo4j.org/chunked/stable/rest-api.html for more details."
-
+  s.license     = 'MIT'
+  
   s.rubyforge_project = "neography"
 
   s.files         = `git ls-files`.split("\n")
