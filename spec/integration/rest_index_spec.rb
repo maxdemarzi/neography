@@ -44,6 +44,16 @@ describe Neography::Rest do
       new_index["type"].should == "fulltext"
     end
 
+    it "can create a node index with extra configuration options" do
+      name = generate_text(6)
+      new_index = @neo.create_node_index(name, "fulltext","lucene", extra: 'extra-value')
+      new_index.should_not be_nil
+      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["provider"].should == "lucene"
+      new_index["extra"].should == "extra-value"
+      new_index["type"].should == "fulltext"
+    end
+
     it "can create a relationship index" do
       name = generate_text(6)
       new_index = @neo.create_relationship_index(name)

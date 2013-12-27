@@ -54,13 +54,15 @@ module Neography
 
       # NodeIndexes
 
-      def create_node_index(name, type = "exact", provider = "lucene")
+      def create_node_index(name, type = "exact", provider = "lucene", extra_config = nil)
+        config = {
+          :type => type,
+          :provider => provider
+        }
+        config.merge!(extra_config) unless extra_config.nil?
         post NodeIndexes.all_path do
           { :name => name,
-            :config => {
-              :type => type,
-              :provider => provider
-            }
+            :config => config
           }
         end
       end
