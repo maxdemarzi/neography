@@ -114,6 +114,14 @@ module Neography
         end
       end
 
+      # NodeLabel
+
+      def add_label(id, body)
+        post build_node_uri(id) + "/labels" do
+          body
+        end
+      end
+
       # NodeRelationships
 
       def get_node_relationships(id, direction = nil, types = nil)
