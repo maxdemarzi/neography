@@ -22,9 +22,14 @@ module Neography
         subject.get_nodes("person")
       end
 
-      it "find nodes for labels and property" do
+      it "find nodes for labels and property string" do
         connection.should_receive(:get).with("/label/person/nodes?name=%22max%22")
         subject.find_nodes("person", {:name => "max"})
+      end
+
+      it "find nodes for labels and property integer" do
+        connection.should_receive(:get).with("/label/person/nodes?age=26")
+        subject.find_nodes("person", {:age => 26})
       end
 
       it "can add a label to a node" do
