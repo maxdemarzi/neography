@@ -268,8 +268,8 @@ module Neography
     end
     alias_method :list_indexes, :list_node_indexes
 
-    def create_node_index(name, type = "exact", provider = "lucene")
-      @node_indexes.create(name, type, provider)
+    def create_node_index(name, type = "exact", provider = "lucene", extra_config = nil)
+      @node_indexes.create(name, type, provider, extra_config)
     end
 
     def create_node_auto_index(type = "exact", provider = "lucene")

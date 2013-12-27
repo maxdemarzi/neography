@@ -12,14 +12,16 @@ module Neography
         @connection.get(all_path)
       end
 
-      def create(name, type = "exact", provider = "lucene")
+      def create(name, type = "exact", provider = "lucene", extra_config = nil)
+        config = {
+          :type => type,
+          :provider => provider
+        }
+        config.merge!(extra_config) unless extra_config.nil?
         options = {
           :body => (
             { :name => name,
-              :config => {
-                :type => type,
-                :provider => provider
-              }
+              :config => config
             }
           ).to_json,
           :headers => json_content_type
