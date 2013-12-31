@@ -28,6 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rake", ">= 0.8.7"
   s.add_dependency "json", ">= 1.7.7"
   s.add_dependency "os", ">= 0.9.6"
-  s.add_dependency "rubyzip", "~> 1.0.0"
+  s.add_dependency "rubyzip", ">= 1.0.0"
   s.add_dependency "multi_json", ">= 1.3.2"
 end
