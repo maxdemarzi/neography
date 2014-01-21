@@ -125,7 +125,7 @@ module Neography
       it "adds the User-Agent to the headers" do
         connection.client.should_receive(:get).with(
           "http://localhost:7474/db/data/foo/bar",
-          nil, { "User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true}
+          nil, { "User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true, "max-execution-time"=>6000}
           ) { double.as_null_object }
 
         connection.get("/foo/bar", :headers => {})

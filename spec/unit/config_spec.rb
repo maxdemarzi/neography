@@ -21,6 +21,7 @@ module Neography
       its(:username)           { should == nil }
       its(:password)           { should == nil }
       its(:parser)             { should == MultiJsonParser}
+      its(:max_execution_time) { should == 6000 }
 
       it "has a hash representation" do
         expected_hash = {
@@ -37,7 +38,8 @@ module Neography
           :authentication     => nil,
           :username           => nil,
           :password           => nil,
-          :parser             => MultiJsonParser
+          :parser             => MultiJsonParser,
+          :max_execution_time => 6000
         }
         config.to_hash.should == expected_hash
       end

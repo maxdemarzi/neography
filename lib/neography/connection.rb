@@ -36,6 +36,7 @@ module Neography
       merged_options = options.merge!(@authentication)
       merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
       merged_options[:headers].merge!('X-Stream' => true) if merged_options[:headers]
+      merged_options[:headers].merge!(@max_execution_time) if merged_options[:headers]
       merged_options
     end
 
@@ -88,6 +89,7 @@ module Neography
       @max_threads        = config[:max_threads]
       @parser             = config[:parser]
 
+      @max_execution_time = { 'max-execution-time' => config[:max_execution_time] }
       @user_agent     = { "User-Agent" => USER_AGENT }
 
       @authentication = {}
