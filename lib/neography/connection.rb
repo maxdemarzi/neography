@@ -45,7 +45,7 @@ module Neography
         query_path = configuration + path
         query_body = merge_options(options)[:body] 
         log path, query_body do
-          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]))    
+          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)    
         end
       end 
     end
@@ -112,7 +112,7 @@ module Neography
       return_result(code, result)
     end
 
-    def evaluate_response(response)
+    def evaluate_response(response, path, query_body)
       if response.http_header.request_uri.request_uri == "/db/data/batch"
         code, body, parsed = handle_batch(response)
       else
@@ -120,7 +120,7 @@ module Neography
         body = response.body.force_encoding("UTF-8")
         parsed = false
       end
-      return_result(response, code, body, parsed)
+      return_result(response, code, body, parsed, path, query_body)
     end
 
     def handle_batch(response)
@@ -135,7 +135,7 @@ module Neography
       return code, body, true
     end
     
-    def return_result(response, code, body, parsed)
+    def return_result(response, code, body, parsed, path, query_body)
       case code
       when 200
         @logger.debug "OK, created #{body}" if @log_enabled
@@ -149,20 +149,23 @@ module Neography
         @logger.debug "OK, no content returned" if @log_enabled
         nil
       when 400..500
-        handle_4xx_500_response(response, code, body)
+        handle_4xx_500_response(response, code, body, path, query_body)
         nil
       end      
     end
 
-    def handle_4xx_500_response(response, code, body)
+    def handle_4xx_500_response(response, code, body, path, query_body)
+      index = 0
+      request = {:path => path, :body => query_body}
       if body.nil? or body == ""
         parsed_body = {"message" => "No error message returned from server.",
                        "stacktrace" => "No stacktrace returned from server." }
       elsif body.is_a? Hash
         parsed_body = body
       elsif body.is_a? Array
-        body.each do |result|
+        body.each_with_index do |result, idx|
           if result["status"] >= 400
+            index = idx
             parsed_body = result["body"] || result
             break
           end
@@ -175,10 +178,10 @@ module Neography
       stacktrace = parsed_body["stacktrace"]
 
       @logger.error "#{response.dump} error: #{body}" if @log_enabled
-      raise_errors(code, parsed_body["exception"], message, stacktrace)
+      raise_errors(code, parsed_body["exception"], message, stacktrace, request, index)
     end
     
-    def raise_errors(code, exception, message, stacktrace)
+    def raise_errors(code, exception, message, stacktrace, request, index)
       error = nil
       case code
         when 401
@@ -201,7 +204,7 @@ module Neography
           NeographyError
       end
       
-      raise error.new(message, code, stacktrace)      
+      raise error.new(message, code, stacktrace, request, index)      
     end
 
     def parse_string_options(options)

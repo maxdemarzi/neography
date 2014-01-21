@@ -482,6 +482,20 @@ describe Neography::Rest do
                                         [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
                                         [:create_relationship, "has", "{0}", "{2}", {}]
             }.to raise_error(Neography::NeographyError)
+            
+      begin
+        batch_result = @neo.batch [:create_unique_node, "person", "ssn", "000-00-0001", {:first_name=>"Jane", :last_name=>"Doe", :ssn=>"000-00-0001", :_type=>"Person", :created_at=>1335269478}],
+                                  [:add_node_to_index, "person_ssn", "ssn", "000-00-0001", "{0}"],
+                                  [:create_node, {:street1=>"94437 Kemmer Crossing", :street2=>"Apt. 333", :city=>"Abshireton", :state=>"AA", :zip=>"65820", :_type=>"Address", :created_at=>1335269478}],
+                                  [:create_relationship, "has", "{0}", "{2}", {}]
+      rescue Neography::NeographyError => e
+        e.message.should == "Not Found"
+        e.code.should == 404
+        e.stacktrace.should be_nil
+        e.request[:path].should == "/batch"
+        e.request[:body].should_not be_nil
+        e.index.should == 3
+      end            
     end
 
   end
