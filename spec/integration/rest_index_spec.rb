@@ -30,7 +30,7 @@ describe Neography::Rest do
       name = generate_text(6)
       new_index = @neo.create_node_index(name)
       new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
       new_index["provider"].should == "lucene"
       new_index["type"].should == "exact"
     end
@@ -39,7 +39,7 @@ describe Neography::Rest do
       name = generate_text(6)
       new_index = @neo.create_node_index(name, "fulltext","lucene")
       new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
       new_index["provider"].should == "lucene"
       new_index["type"].should == "fulltext"
     end
@@ -48,7 +48,7 @@ describe Neography::Rest do
       name = generate_text(6)
       new_index = @neo.create_node_index(name, "fulltext","lucene", extra: 'extra-value')
       new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/index/node/#{name}/{key}/{value}"
+      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
       new_index["provider"].should == "lucene"
       new_index["extra"].should == "extra-value"
       new_index["type"].should == "fulltext"
@@ -58,7 +58,7 @@ describe Neography::Rest do
       name = generate_text(6)
       new_index = @neo.create_relationship_index(name)
       new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/index/relationship/#{name}/{key}/{value}"
+      new_index["template"].should == "#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}"
       new_index["provider"].should == "lucene"
       new_index["type"].should == "exact"
     end
@@ -67,7 +67,7 @@ describe Neography::Rest do
       name = generate_text(6)
       new_index = @neo.create_relationship_index(name, "fulltext","lucene")
       new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/index/relationship/#{name}/{key}/{value}"
+      new_index["template"].should == "#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}"
       new_index["provider"].should == "lucene"
       new_index["type"].should == "fulltext"
     end

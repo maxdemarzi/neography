@@ -8,7 +8,7 @@ module Neography
     context "defaults" do
 
       it "intializes with defaults" do
-        connection.configuration.should == "http://localhost:7474/db/data"
+        connection.configuration.should == "http://localhost:7474"
       end
 
     end
@@ -38,7 +38,7 @@ module Neography
         end
 
         it "accepts all options in a hash" do
-          connection.configuration.should == "https://foobar:4242/dir/db/data"
+          connection.configuration.should == "https://foobar:4242/dir"
 
           connection.protocol.should           == "https://"
           connection.server.should             == "foobar"
@@ -65,7 +65,7 @@ module Neography
         let(:options) { "https://user:pass@somehost:8585/path" }
 
         it "accepts a string as configuration" do
-          connection.configuration.should == "https://somehost:8585/path/db/data"
+          connection.configuration.should == "https://somehost:8585/path"
           connection.authentication.should == {
             :basic_auth => {
               :username => "user",

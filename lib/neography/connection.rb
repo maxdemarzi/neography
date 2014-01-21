@@ -29,7 +29,7 @@ module Neography
     end
 
     def configuration
-      @configuration ||= "#{@protocol}#{@server}:#{@port}#{@directory}/db/data"
+      @configuration ||= "#{@protocol}#{@server}:#{@port}#{@directory}"
     end
 
     def merge_options(options)
@@ -41,8 +41,9 @@ module Neography
     end
 
     ACTIONS.each do |action|
-      define_method(action) do |path, options = {}|
-        query_path = configuration + path
+      define_method(action) do |path, options = {}| 
+        base = path.start_with?("/unmanaged") ? "" : "/db/data"
+        query_path = configuration + base + path
         query_body = merge_options(options)[:body] 
         log path, query_body do
           evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)    

@@ -34,10 +34,11 @@ describe Neography::Index do
   end
 
   it "can find a node in an index with brackets" do
+    key = generate_text(6)
     value = "Sen. Roy Blunt [R-MO]"
     new_node = Neography::Node.create("name" => value)
-    new_node.add_to_index("node_test_index", "name", value)
-    existing_node = Neography::Node.find("node_test_index", "name", value)
+    new_node.add_to_index(key, "name", value)
+    existing_node = Neography::Node.find(key, "name", value)
     existing_node.name.should == value
   end
 
