@@ -89,6 +89,7 @@ module Neography
       @slow_log_threshold = config[:slow_log_threshold]
       @max_threads        = config[:max_threads]
       @parser             = config[:parser]
+      @logger             = config[:logger]
 
       @max_execution_time = { 'max-execution-time' => config[:max_execution_time] }
       @user_agent     = { "User-Agent" => USER_AGENT }
@@ -104,7 +105,7 @@ module Neography
       end
 
       if @log_enabled
-        @logger = Logger.new(@log_file)
+        @logger ||= Logger.new(@log_file)
       end
     end
 
