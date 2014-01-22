@@ -15,6 +15,7 @@ module Neography
       its(:gremlin_path)       { should == '/ext/GremlinPlugin/graphdb/execute_script' }
       its(:log_file)           { should == 'neography.log' }
       its(:log_enabled)        { should == false }
+      its(:logger)             { should == nil }
       its(:slow_log_threshold) { should == 0 }
       its(:max_threads)        { should == 20 }
       its(:authentication)     { should == nil }
@@ -33,6 +34,7 @@ module Neography
           :gremlin_path       => '/ext/GremlinPlugin/graphdb/execute_script',
           :log_file           => 'neography.log',
           :log_enabled        => false,
+          :logger             => nil,
           :slow_log_threshold => 0,
           :max_threads        => 20,
           :authentication     => nil,
