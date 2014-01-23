@@ -144,7 +144,7 @@ module Neography
     end
     
     def rollback_transaction(tx)
-      @transactions.add(tx)    
+      @transactions.rollback(tx)    
     end    
     
     # nodes
