@@ -3,7 +3,7 @@ module Neography
 
     attr_accessor :protocol, :server, :port, :directory,
       :cypher_path, :gremlin_path,
-      :log_file, :log_enabled, :slow_log_threshold,
+      :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
       :authentication, :username, :password,
       :parser, :max_execution_time
@@ -22,6 +22,7 @@ module Neography
         :gremlin_path       => @gremlin_path,
         :log_file           => @log_file,
         :log_enabled        => @log_enabled,
+        :logger             => @logger,
         :slow_log_threshold => @slow_log_threshold,
         :max_threads        => @max_threads,
         :authentication     => @authentication,
