@@ -157,7 +157,7 @@ describe Neography::Rest do
       tx.should have_key("transaction")
       tx["results"].should_not be_empty
       existing_tx = @neo.rollback_transaction(tx)
-      existing_tx.should have_key("transaction")
+      existing_tx.should_not have_key("transaction")
       existing_tx.should have_key("results")
       existing_tx["results"].should be_empty
     end
