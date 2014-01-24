@@ -155,4 +155,51 @@ namespace :neo4j do
     end
   end
 
+  task :get_spatial, :version  do |t, args|
+    args.with_defaults(:version => "2.0.0")
+    puts "Installing Neo4j-Spatial #{args[:version]}"
+
+      unless File.exist?('neo4j-spatial.zip')
+        df = File.open('neo4j-spatial.zip', 'wb')
+        case args[:version]
+          when "2.0.0"
+            dist = "dist.neo4j.org"
+            request = "/spatial/neo4j-spatial-0.12-neo4j-2.0.0-server-plugin.zip"
+          when "1.9"
+            dist = "dist.neo4j.org.s3.amazonaws.com"
+            request = "/spatial/neo4j-spatial-0.11-neo4j-1.9-server-plugin.zip"
+          when "1.8.2"
+            dist = "dist.neo4j.org.s3.amazonaws.com"
+            request = "/spatial/neo4j-spatial-0.9.1-neo4j-1.8.2-server-plugin.zip"
+          else
+            abort("I don't know that version of the neo4j spatial plugin")
+        end
+        
+        begin
+          Net::HTTP.start(dist) do |http|            
+            http.request_get(request) do |resp|
+                resp.read_body do |segment|
+                    df.write(segment)
+                end
+            end
+          end
+        ensure
+          df.close()
+        end
+      end
+
+      # Extract to neo4j plugins directory
+      Zip::File.open('neo4j-spatial.zip') do |zip_file|
+        zip_file.each do |f|
+         f_path=File.join("neo4j/plugins/", f.name)
+         FileUtils.mkdir_p(File.dirname(f_path))
+         begin
+           zip_file.extract(f, f_path) unless File.exist?(f_path)
+         rescue
+           puts f.name + " failed to extract."
+         end
+        end
+     end
+
+  end
 end  
