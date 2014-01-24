@@ -138,12 +138,29 @@ node2 = @neo.create_node("age" => 33, "name" => "Roel")
 @neo.add_node_to_index("people", "name", "max", node1)
 @neo.get_node_index("people", "name", "max")
 
-# Cypher queries:
-@neo.execute_query("start n=node(0) return n")
-
 # Batches:
 @neo.batch [:create_node, {"name" => "Max"}],
            [:create_node, {"name" => "Marc"}]
+           
+# Cypher queries:
+@neo.execute_query("start n=node(0) return n")
+           
+```
+
+You can also use the [cypher gem](https://github.com/andreasronge/neo4j-cypher) instead of writing cypher as text.
+
+
+```
+node(1).outgoing(rel(:friends).where{|r| r[:since] == 1994})
+```
+
+would become:
+
+```
+START me=node(1) 
+MATCH (me)-[friend_rel:`friends`]->(friends) 
+WHERE (friend_rel.since = 1994) 
+RETURN friends
 ```
 
 This is just a small sample of the full API, see the [Wiki documentation](https://github.com/maxdemarzi/neography/wiki) for the full API.
