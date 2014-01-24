@@ -28,6 +28,7 @@ require 'neography/rest/extensions'
 require 'neography/rest/batch'
 require 'neography/rest/clean'
 require 'neography/rest/transactions'
+require 'neography/rest/spatial'
 
 require 'neography/errors'
 
@@ -69,6 +70,7 @@ module Neography
       @batch                     = Batch.new(@connection)
       @clean                     = Clean.new(@connection)
       @transactions              = Transactions.new(@connection)
+      @spatial                   = Spatial.new(@connection)
     end
 
     # meta-data
@@ -451,6 +453,16 @@ module Neography
 
     def batch_not_streaming(*args)
       @batch.not_streaming(*args)
+    end
+    
+    # spatial
+    
+    def get_spatial
+      @spatial.index
+    end
+    
+    def add_point_layer(layer, lat = nil, lon = nil)
+      @spatial.add_point_layer(layer, lat, lon)
     end
 
     # clean database
