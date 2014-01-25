@@ -465,6 +465,38 @@ module Neography
       @spatial.add_point_layer(layer, lat, lon)
     end
 
+    def add_editable_layer(layer, format, node_property_name)
+      @spatial.add_editable_layer(layer, format, node_property_name)
+    end
+
+    def get_layer(layer)
+      @spatial.get_layer(layer)
+    end
+
+    def add_geometry_to_layer(layer, geometry)
+      @spatial.add_geometry_to_layer(layer, geometry)
+    end
+    
+    def edit_geometry_from_layer(layer, geometry, node)
+      @spatial.edit_geometry_from_layer(layer, geometry, node)
+    end
+    
+    def add_node_to_layer(layer, node)
+      @spatial.add_node_to_layer(layer, node)
+    end
+    
+    def find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
+      @spatial.find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
+    end
+    
+    def find_geometries_within_distance(layer, pointx, pointy, distance)
+      @spatial.find_geometries_within_distance(layer, pointx, pointy, distance)
+    end
+    
+    def create_spatial_index(name, type = nil, lat = nil, lon = nil)
+      @spatial.create_spatial_index(name, type, lat, lon)
+    end
+    
     # clean database
 
     # For testing (use a separate neo4j instance)
