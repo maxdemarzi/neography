@@ -14,6 +14,7 @@ module Neography
       add_path :find_geometries_in_bbox,        "/ext/SpatialPlugin/graphdb/findGeometriesInBBox"
       add_path :find_geometries_within_distance,"/ext/SpatialPlugin/graphdb/findGeometriesWithinDistance"
       add_path :create_index,                   "/index/node"
+      add_path :add_to_index,                   "/index/node/:index"
 
       def initialize(connection)
         @connection = connection
@@ -134,6 +135,18 @@ module Neography
           :headers => json_content_type.merge({'Accept' => 'application/json;charset=UTF-8'})
         }
         @connection.post(create_index_path, options) 
+      end
+
+      def add_node_to_spatial_index(index, id)
+        options = {
+          :body => {
+            :uri   => @connection.configuration + "/node/#{get_id(id)}",
+            :key => "k",
+            :value => "v"
+          }.to_json,
+          :headers => json_content_type.merge({'Accept' => 'application/json;charset=UTF-8'})
+        }
+        @connection.post(add_to_index_path(:index => index), options)
       end
 
     end

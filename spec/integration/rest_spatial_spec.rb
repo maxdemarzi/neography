@@ -113,6 +113,18 @@ describe Neography::Rest do
       existing_node["data"][0][0]["data"]["lat"].should == properties[:lat]
       existing_node["data"][0][0]["data"]["lon"].should == properties[:lon]
     end
+
+    it "can find a geometry in a bounding box using cypher two" do
+      properties = {:lat => 60.1, :lon => 15.2}
+      @neo.create_spatial_index("geombbcypher2", "point", "lat", "lon")
+      node = @neo.create_node(properties)
+      added = @neo.add_node_to_spatial_index("geombbcypher2", node)
+      existing_node = @neo.execute_query("start node = node:geombbcypher2('bbox:[15.0,15.3,60.0,60.2]') return node")
+      existing_node.should_not be_empty
+      existing_node["data"][0][0]["data"]["lat"].should == properties[:lat]
+      existing_node["data"][0][0]["data"]["lon"].should == properties[:lon]
+    end
+
   end
 
   describe "find geometries within distance" do
@@ -136,6 +148,19 @@ describe Neography::Rest do
       existing_node["data"][0][0]["data"]["lat"].should == properties[:lat]
       existing_node["data"][0][0]["data"]["lon"].should == properties[:lon]
     end
+
+    it "can find a geometry within distance using cypher 2"  do
+      properties = {:lat => 60.1, :lon => 15.2}
+      @neo.create_spatial_index("geowdcypher2", "point", "lat", "lon")
+      node = @neo.create_node(properties)
+      added = @neo.add_node_to_spatial_index("geowdcypher2", node)
+      existing_node = @neo.execute_query("start n = node:geowdcypher2({bbox}) return n", {:bbox => "withinDistance:[60.0,15.0,100.0]"})
+      existing_node.should_not be_empty
+      existing_node.should_not be_empty
+      existing_node["data"][0][0]["data"]["lat"].should == properties[:lat]
+      existing_node["data"][0][0]["data"]["lon"].should == properties[:lon]
+    end
+
   end
   
 end

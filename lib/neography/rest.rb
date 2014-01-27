@@ -497,6 +497,10 @@ module Neography
       @spatial.create_spatial_index(name, type, lat, lon)
     end
     
+    def add_node_to_spatial_index(index, id)
+      @spatial.add_node_to_spatial_index(index, id)
+    end
+    
     # clean database
 
     # For testing (use a separate neo4j instance)
