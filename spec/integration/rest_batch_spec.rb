@@ -304,58 +304,93 @@ describe Neography::Rest do
       batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == id
     end
 
-	it "can delete a node in batch" do
-		node1 = @neo.create_node
-		node2 = @neo.create_node
-		id1 = node1['self'].split('/').last
-		id2 = node2['self'].split('/').last
-		batch_result = @neo.batch [:delete_node, id1 ], [:delete_node, id2]
-    expect {
-      @neo.get_node(node1).should be_nil
-    }.to raise_error Neography::NodeNotFoundException
-    expect {
-      @neo.get_node(node2).should be_nil
-    }.to raise_error Neography::NodeNotFoundException
-	end
+  	it "can delete a node in batch" do
+  		node1 = @neo.create_node
+  		node2 = @neo.create_node
+  		id1 = node1['self'].split('/').last
+  		id2 = node2['self'].split('/').last
+  		batch_result = @neo.batch [:delete_node, id1 ], [:delete_node, id2]
+      expect {
+        @neo.get_node(node1).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
+      expect {
+        @neo.get_node(node2).should be_nil
+      }.to raise_error Neography::NodeNotFoundException
+  	end
 
-	it "can remove a node from an index in batch " do
-		index = generate_text(6)
-		key = generate_text(6)
-		value1 = generate_text
-		value2 = generate_text
-		value3 = generate_text
+  	it "can remove a node from an index in batch " do
+  		index = generate_text(6)
+  		key = generate_text(6)
+  		value1 = generate_text
+  		value2 = generate_text
+  		value3 = generate_text
 
-		node1 = @neo.create_unique_node(index, key, value1, { "name" => "Max" })
-		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" })
-		node3 = @neo.create_unique_node(index, key, value3, { "name" => "Samir"})
+  		node1 = @neo.create_unique_node(index, key, value1, { "name" => "Max" })
+  		node2 = @neo.create_unique_node(index, key, value2, { "name" => "Neo" })
+  		node3 = @neo.create_unique_node(index, key, value3, { "name" => "Samir"})
 
-		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ],
-		                          [:remove_node_from_index, index, key, node2 ],
-		                          [:remove_node_from_index, index, node3 ]
+  		batch_result = @neo.batch [:remove_node_from_index, index, key, value1, node1 ],
+  		                          [:remove_node_from_index, index, key, node2 ],
+  		                          [:remove_node_from_index, index, node3 ]
 
-		@neo.get_node_index(index, key, value1).should be_nil
-		@neo.get_node_index(index, key, value2).should be_nil
-		@neo.get_node_index(index, key, value3).should be_nil
-	end
+  		@neo.get_node_index(index, key, value1).should be_nil
+  		@neo.get_node_index(index, key, value2).should be_nil
+  		@neo.get_node_index(index, key, value3).should be_nil
+  	end
 
-  it "can remove a relationship from an index in batch" do
-     index = generate_text(6)
-     key = generate_text(6)
-     value1 = generate_text
-     value2 = generate_text
+    it "can remove a relationship from an index in batch" do
+       index = generate_text(6)
+       key = generate_text(6)
+       value1 = generate_text
+       value2 = generate_text
 
-     node1 = @neo.create_node
-     node2 = @neo.create_node
-     relationship1 = @neo.create_unique_relationship(index, key, value1, "friends", node1, node2)
-     relationship2 = @neo.create_unique_relationship(index, key, value2, "friends", node2, node1)
+       node1 = @neo.create_node
+       node2 = @neo.create_node
+       relationship1 = @neo.create_unique_relationship(index, key, value1, "friends", node1, node2)
+       relationship2 = @neo.create_unique_relationship(index, key, value2, "friends", node2, node1)
 
-     batch_result = @neo.batch [:remove_relationship_from_index, index, key, relationship1],
-       [:remove_relationship_from_index, index, key, relationship2]
+       batch_result = @neo.batch [:remove_relationship_from_index, index, key, relationship1],
+         [:remove_relationship_from_index, index, key, relationship2]
 
-     @neo.get_relationship_index(index, key, value1).should be_nil
-     @neo.get_relationship_index(index, key, value2).should be_nil
-   end
+       @neo.get_relationship_index(index, key, value1).should be_nil
+       @neo.get_relationship_index(index, key, value2).should be_nil
+     end
 
+    it "can do spatial in batch" do
+      properties = {:lat => 60.1, :lon => 15.2}
+      node = @neo.create_node(properties)
+      batch_result = @neo.batch [:add_point_layer, "restaurantsbatch"],
+                                [:add_node_to_layer, "restaurantsbatch", node],
+                                [:get_layer, "restaurantsbatch"],
+                                [:find_geometries_within_distance, "restaurantsbatch", 60.0,15.0, 100.0],
+                                [:find_geometries_in_bbox, "restaurantsbatch", 60.0, 60.2, 15.0, 15.3]
+      # getting The transaction is marked for rollback only. errors
+      puts batch_result.inspect
+      batch_result[0].first["data"]["layer"].should == "restaurantsbatch"
+      batch_result[1].first["data"]["lat"].should == properties[:lat]
+      batch_result[1].first["data"]["lon"].should == properties[:lon]
+      batch_result[2].first["data"]["layer"].should == "restaurantsbatch"
+      batch_result[3].first["data"].should_not be_empty
+      batch_result[4].first["data"].should_not be_empty
+    end
+    
+    it "can do spatial via Cypher in batch" do
+      properties = {:lat => 60.1, :lon => 15.2}
+      node = @neo.create_node(properties)
+      batch_result = @neo.batch [:create_spatial_index, "geobatchcypher", "point", "lat", "lon"],
+                                [:add_node_to_spatial_index, "geobatchcypher", node],
+                                [:execute_query, "start n = node:geobatchcypher({withinDistance}) return n", {:withinDistance => "withinDistance:[60.0,15.0,100.0]"}],
+                                [:execute_query, "start n = node:geobatchcypher({bbox}) return n", {:bbox => "bbox:[15.0,15.3,60.0,60.2]"}]
+
+      batch_result[0]["body"]["provider"].should == "spatial"
+      batch_result[0]["body"]["geometry_type"].should == "point"
+      batch_result[0]["body"]["lat"].should == "lat"
+      batch_result[0]["body"]["lon"].should == "lon"
+      batch_result[1]["from"].should == "/index/node/geobatchcypher"
+      batch_result[1]["body"]["data"].should == {"lat" => 60.1, "lon" => 15.2}
+      batch_result[2]["body"]["data"].should_not be_empty
+      batch_result[3]["body"]["data"].should_not be_empty
+    end
   end
 
   describe "referenced batch" do

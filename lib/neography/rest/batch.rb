@@ -235,6 +235,115 @@ module Neography
         end
       end
 
+      # Spatial
+      
+      def get_spatial
+        get Spatial.index_path
+      end
+    
+      def add_point_layer(layer, lat = nil, lon = nil)
+         post Spatial.add_simple_point_layer_path do
+          {
+              :layer => layer,
+              :lat => lat || "lat",
+              :lon => lon || "lon"
+            }
+          end
+      end
+
+      def add_editable_layer(layer, format = "WKT", node_property_name = "wkt")
+        post Spatial.add_editable_layer_path do 
+          {
+              :layer => layer,
+              :format => format,
+              :nodePropertyName => node_property_name
+            }
+        end
+      end
+
+      def get_layer(layer)
+        post Spatial.get_layer_path do
+          {
+              :layer => layer
+            }
+        end
+      end
+
+      def add_geometry_to_layer(layer, geometry)
+        post Spatial.add_geometry_to_layer_path do 
+          {
+              :layer => layer,
+              :geometry => geometry
+            }
+        end
+      end
+    
+      def edit_geometry_from_layer(layer, geometry, node)
+        post Spatial.edit_geometry_from_layer_path do 
+          {
+              :layer => layer,
+              :geometry => geometry,
+              :geometryNodeId => get_id(node)
+            }
+        end
+      end
+    
+      def add_node_to_layer(layer, node)
+        post Spatial.add_node_to_layer_path do 
+          {
+              :layer => layer,
+              :node => get_id(node)
+            }
+        end
+      end
+    
+      def find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
+        post Spatial.find_geometries_in_bbox_path do 
+          {
+              :layer => layer,
+              :minx => minx,
+              :maxx => maxx,
+              :miny => miny,
+              :maxy => maxy
+            }
+        end
+      end
+    
+      def find_geometries_within_distance(layer, pointx, pointy, distance)
+        post Spatial.find_geometries_within_distance_path do 
+          {
+              :layer => layer,
+              :pointX => pointx,
+              :pointY => pointy,
+              :distanceInKm => distance
+            }
+        end
+      end
+      
+      def create_spatial_index(name, type, lat, lon)
+        post NodeIndexes.all_path do
+          {
+            :name => name,
+            :config => {
+              :provider => "spatial",
+              :geometry_type => type || "point",
+              :lat => lat || "lat",
+              :lon => lon || "lon"
+              }
+          }
+        end
+      end
+
+      def add_node_to_spatial_index(index, id)
+        post NodeIndexes.base_path(:index => index) do
+          {
+            :uri   => build_node_uri(id),
+            :key   => "k",
+            :value => "v"
+          }
+        end
+      end
+
       def get(to, &block)
         request "GET", to, &block
       end
