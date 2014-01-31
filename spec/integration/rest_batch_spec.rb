@@ -492,7 +492,7 @@ describe Neography::Rest do
         e.message.should == "Not Found"
         e.code.should == 404
         e.stacktrace.should be_nil
-        e.request[:path].should == "/batch"
+        e.request[:path].should == "/db/data/batch"
         e.request[:body].should_not be_nil
         e.index.should == 3
       end            

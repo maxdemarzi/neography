@@ -80,23 +80,23 @@ module Neography
     context "requests" do
 
       it "does a GET request" do
-        connection.client.should_receive(:get).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
-        connection.get("/foo/bar")
+        connection.client.should_receive(:get).with("http://localhost:7474/db/data/node/bar", nil, nil) { double.as_null_object }
+        connection.get("/node/bar")
       end
 
       it "does a POST request" do
-        connection.client.should_receive(:post).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
-        connection.post("/foo/bar")
+        connection.client.should_receive(:post).with("http://localhost:7474/db/data/node/bar", nil, nil) { double.as_null_object }
+        connection.post("/node/bar")
       end
 
       it "does a PUT request" do
-        connection.client.should_receive(:put).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
-        connection.put("/foo/bar")
+        connection.client.should_receive(:put).with("http://localhost:7474/db/data/node/bar", nil, nil) { double.as_null_object }
+        connection.put("/node/bar")
       end
 
       it "does a DELETE request" do
-        connection.client.should_receive(:delete).with("http://localhost:7474/db/data/foo/bar", nil, nil) { double.as_null_object }
-        connection.delete("/foo/bar")
+        connection.client.should_receive(:delete).with("http://localhost:7474/db/data/node/bar", nil, nil) { double.as_null_object }
+        connection.delete("/node/bar")
       end
 
       context "authentication" do
@@ -110,25 +110,25 @@ module Neography
 
         it "does requests with authentication" do
           connection.client.should_not_receive(:set_auth).with(
-            "http://localhost:7474/db/data/foo/bar",
+            "http://localhost:7474/db/data/node/bar",
              "foo",
              "bar") { double.as_null_object }
 
           connection.client.should_receive(:get).with(
-            "http://localhost:7474/db/data/foo/bar", nil, nil
+            "http://localhost:7474/db/data/node/bar", nil, nil
             ) { double.as_null_object }
 
-          connection.get("/foo/bar")
+          connection.get("/node/bar")
         end
       end
 
       it "adds the User-Agent to the headers" do
         connection.client.should_receive(:get).with(
-          "http://localhost:7474/db/data/foo/bar",
+          "http://localhost:7474/db/data/node/bar",
           nil, { "User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true, "max-execution-time"=>6000}
           ) { double.as_null_object }
 
-        connection.get("/foo/bar", :headers => {})
+        connection.get("/node/bar", :headers => {})
       end
 
       context "errors" do
@@ -137,7 +137,7 @@ module Neography
           response = error_response(code: 404, message: "a message", exception: "NodeNotFoundException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error NodeNotFoundException
         end
 
@@ -145,7 +145,7 @@ module Neography
           response = error_response(code: 409, message: "a message", exception: "OperationFailureException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error OperationFailureException
         end
 
@@ -153,7 +153,7 @@ module Neography
           response = error_response(code: 400, message: "a message", exception: "PropertyValueException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error PropertyValueException
         end
 
@@ -161,7 +161,7 @@ module Neography
           response = error_response(code: 404, message: "a message", exception: "NoSuchPropertyException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error NoSuchPropertyException
         end
 
@@ -169,7 +169,7 @@ module Neography
           response = error_response(code: 404, message: "a message", exception: "RelationshipNotFoundException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error RelationshipNotFoundException
         end
 
@@ -177,7 +177,7 @@ module Neography
           response = error_response(code: 400, message: "a message", exception: "BadInputException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error BadInputException
         end
 
@@ -185,7 +185,7 @@ module Neography
           response = error_response(code: 401)
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error UnauthorizedError
         end
 
@@ -193,7 +193,7 @@ module Neography
           response = error_response(code: 418, message: "I'm a teapot.")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error NeographyError
         end
 
@@ -201,7 +201,7 @@ module Neography
           response = error_response(code: 500, message: "a message", exception: "JsonParseException")
           connection.client.stub(:get).and_return(response)
           expect {
-            connection.get("/foo/bar")
+            connection.get("/node/bar")
           }.to raise_error NeographyError
         end
 
@@ -219,13 +219,13 @@ module Neography
         let(:request_body) { {key1: :val1} }
 
         it "should log query" do
-          connection.should_receive(:log).with("/foo/bar", request_body).once
-          connection.get("/foo/bar", {body: request_body})
+          connection.should_receive(:log).with("/db/data/node/bar", request_body).once
+          connection.get("/node/bar", {body: request_body})
         end
 
         it "should return original response" do
           connection.stub(:evaluate_response).and_return expected_response
-          connection.get("/foo/bar").should eq expected_response
+          connection.get("/node/bar").should eq expected_response
         end
 
         describe "slow_log_threshold" do
@@ -247,7 +247,7 @@ module Neography
           end
 
           after do
-            connection.get("/foo/bar", {body: request_body})
+            connection.get("/node/bar", {body: request_body})
           end
         end
 

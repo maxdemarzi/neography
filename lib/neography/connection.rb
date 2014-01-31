@@ -42,8 +42,10 @@ module Neography
 
     ACTIONS.each do |action|
       define_method(action) do |path, options = {}| 
-        base = path.start_with?("/unmanaged") ? "" : "/db/data"
-        query_path = configuration + base + path
+        # This ugly hack is required because internal Batch paths do not start with "/db/data"
+        # if somebody has a cleaner solution... pull request please!
+        path = "/db/data" + path if ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"].include?(path.split("/")[1].split("?").first)
+        query_path = configuration + path
         query_body = merge_options(options)[:body] 
         log path, query_body do
           evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)    
