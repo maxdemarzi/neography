@@ -13,7 +13,7 @@ module Neography
 
       def post(path, body = {}, headers = nil)
         options = {
-          :body => body.to_json,
+          :body => headers.nil? ? body.to_json : body,
           :headers => headers || json_content_type.merge({'Accept' => 'application/json;stream=true'})
         }
 
