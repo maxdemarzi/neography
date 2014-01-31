@@ -57,5 +57,11 @@ module Neography
       end
     end
 
+    ##
+    # List of labels of current node.
+    # Returns array of strings
+    def labels
+      self.neo_server.get_node_labels(self.neo_id)
+    end
   end
 end

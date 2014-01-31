@@ -247,5 +247,14 @@ describe Neography::Node do
     end
   end
 
+  describe 'gets labels' do
+    let(:subject) {
+      node = Neography::Node.create
+      node.neo_server.add_label(node, 'Label')
+      node.neo_server.add_label(node, 'Label2')
+      node
+    }
 
+    it { subject.labels.should == %w(Label Label2) }
+  end
 end
