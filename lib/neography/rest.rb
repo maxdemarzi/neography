@@ -437,8 +437,8 @@ module Neography
 
     # unmanaged extensions
 
-    def post_extension(path, params = {})
-      @extensions.post(path, params)
+    def post_extension(path, params = {}, headers = nil)
+      @extensions.post(path, params, headers)
     end
 
     def get_extension(path)

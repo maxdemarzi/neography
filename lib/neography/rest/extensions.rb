@@ -11,10 +11,10 @@ module Neography
         @connection.get(path)
       end
 
-      def post(path, body = {})
+      def post(path, body = {}, headers = nil)
         options = {
           :body => body.to_json,
-          :headers => json_content_type.merge({'Accept' => 'application/json;stream=true'})
+          :headers => headers || json_content_type.merge({'Accept' => 'application/json;stream=true'})
         }
 
         @connection.post(path, options)
