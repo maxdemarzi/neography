@@ -1,0 +1,617 @@
+v1.3.7
+======
+6bd6842  Bump to 1.3.7
+ab0bc96  add add_node_to_index method
+0a360d9  remove mh spec
+4371c20  passing spatial tests
+0465e80  most of the way there, but cypher still failing :(
+02cca20  add spatial to travis
+c9da4c1  starting on spatial
+11a6368  added get spatial task
+d39d70a  Update Readme, added link to cypher gem
+
+v1.3.6
+======
+63da260  Bump to 1.3.6
+e37cd3d  fix test
+e565ecc  fix rollbacks
+3c9583e  corrected failing spec
+d0e75a6  added the option to configure an existing logger (e.g. Rails.logger)
+
+v1.3.5
+======
+8737a75  Bump to 1.3.5
+8955dda  allow unmanaged extensions if they start with unmanaged
+d4aecae  adding request and index to error messages
+6db7f83  update tests
+7e63e2e  incorporate max-execution-time
+e4e3e87  get rid of double dependency error
+7755ecc  update rubyzip dependency
+
+v1.3.4
+======
+72eea12  Bump to 1.3.4
+b074c38  Allow to pass extra configuration options when creating indexes
+9556d55  adding license in gemspec
+83be1f9  add support for add_label to batch
+34a576d  added another test and fixed paths to not quote values outside of get params
+30a94ff  fixes automatically quoting value in find_node_labels search
+
+v1.3.3
+======
+e2893e9  Bump to 1.3.3
+
+v1.3.2
+======
+04aa008  Bump to 1.3.2
+07bed80  log the whole response if there is a problem
+5800db7  authentication now happens at initialization, not later
+
+v1.3.1
+======
+3b6f990  Bump to 1.3.1
+4c36b68  set client authentication on initializer
+
+v1.3.0
+======
+8daa667  Bump to 1.3.0
+570b632  skip reference node tests, fix rest schema index spec
+1e06e91  upgrade default download to 2.0.0
+235ab7c  Slow query logging for HTTP queries
+
+v1.2.4
+======
+d3e1902  Bump to 1.2.4
+4f49812  basic query logging
+77ef235  rspec fix
+6456640  again...
+bd06cc5  TravisCI builds were failing due to the missing props arg.
+e851d5f  pass properties to unique relationship creation
+80c863d  allow for Neography::Relationship.create_unique
+8e33ad7  allow for Neography::Node.create_unique
+30cf86e  Support for create_node_index and drop_node_index in batch
+
+v1.2.3
+======
+d8cadbd  Bump to 1.2.3
+8d1a370  fixing issue 114
+
+v1.2.2
+======
+619ffeb  Bump to 1.2.2
+5eb807a  Check for subclasses of Neography::Node and not just an instance.
+47cba4c  Use is_a? instead of inspect to cater to subclasses of Neography::Node
+90b3a18  Allow specifying relationship type for batch get_node_relationships
+
+v1.2.1
+======
+4469ed3  Bump to 1.2.1
+c0431f5  bug fixes to rest transactional endpoint, updating tests to 2.0.0-M06
+f1e1ba9  updating neo4j versions
+
+v1.2.0
+======
+3479028  Bump to 1.2.0
+857ffb2  upgrading installer to use 1.9.3
+215b743  maybe code climate likes this way better?
+7fe6b95  maybe easier to follow
+5a6c8c2  adding a little bit of meta
+6f3cfe5  new badge look from code climate
+9583b70  Rubyzip 1.0 compatibility
+
+v1.1.4
+======
+88565f4  Bump to 1.1.4
+67e2f2e  testing against Neo4j 2.0.0M04
+6225501  getting rid of deprecations
+1e1a432  add ability to drop indexes
+
+v1.1.3
+======
+fe61741  Bump to 1.1.3
+2b98eba  Lock rubyzip to 0-9-x-stable
+
+v1.1.2
+======
+b7985ae  Bump to 1.1.2
+07fab4e  adding test
+02295aa  Label operations take node hashes, not just ids
+a1961bd  let vim fix whitespace
+0726da2  better test names
+d11e08f  Fix comment
+8a475f1  encoding specs
+5d4e2d0  adding test...
+85ec0d6  force encoding to see if that makes any difference
+abfa96b  add utf-8 to header
+263a32e  Updated README for clarity.
+
+v1.1.1
+======
+3e25893  Bump to 1.1.1
+1e2c40a  fixing Issue #101
+da45cb3  download wasn't working on windows
+
+v1.1.0
+======
+13f7632  Bump to 1.1.0
+bc22a90  fixing transactions
+
+v1.0.11
+=======
+cbbcc22  Bump to 1.0.11
+531187b  adding tx unit tests
+cd2c452  starting with transactions
+5be8eb5  weird, works on my mac, just not travis
+5a3a9d0  reducing size of batch test to 5k
+da919e8  adding unit tests for labels
+735ebc2  adding nodes labels, still needs unit tests
+679591e  adding cypher profile and stats options
+da3081a  allowing Node to be loaded from Cypher
+b921317  clean up a little code
+ae830d8  increasing receive timeout
+0726323  catching errors in batch and propagating up
+e8f9b2b  skip all gremlin specs
+ea658b0  adding schema indexes
+a547370  make the relationship types properly
+739befe  adding relationship types
+6db5b23  forgot travis
+ee4ce69  make 1.9 default
+
+v1.0.10
+=======
+ae14af1  Bump to 1.0.10
+2b433aa  adding start-no-wait
+4deb7e2  feature: Add unique to add to index
+b452748  catch Neo4j issue
+0eee207  Potential Fix for Batch issue
+40e21d2  added failing test
+a2cdf54  added additional expect for exception
+7b87efb  Created failing example for batch queries
+fd13a05  adding get_node_relationships_to method
+5c18437  up send timeout
+f0bc117  batch chunked
+f800179  fixing issue #81
+e0f56c3  Update README.md
+845df3e  letter version
+f06bc66  add WasCreated type
+
+v1.0.9
+======
+b651d7b  Bump to 1.0.9
+c3df2f3  looking about right
+8e36406  first pass at using httpclient instead of httparty
+4f53d97  ignore coverage dir
+
+v1.0.8
+======
+c8553c0  Bump to 1.0.8
+f5ab9d1  forgot to require zip
+dee6ccf  switching out curl for wget, since some folks don't have wget
+
+v1.0.7
+======
+02efe14  Bump to 1.0.7
+b31f829  finally fixed that all paths bug
+d4bc286  make tests run 1.8.2 as well
+e194963  upgrading to 1.8.2
+dc99e62  Fixed error test
+ff61391  handle json parsing error for empty return body
+
+v1.0.6
+======
+eff6f2a  Bump to 1.0.6
+b234e7f  fixes #69
+4884d9c  need another method for find_exact
+8c95c28  I think this fixes #76
+
+v1.0.5
+======
+d85d88f  Bump to 1.0.5
+c450858  Provides a named initialization hook so people depending on the gem can ensure pre-requisite configuration is complete prior to initialization of neography itself
+f9804f5  Railties are best namespaced inside the gem's namespace Example: http://api.rubyonrails.org/classes/Rails/Railtie.html
+56384b5  rename spec to actual _spec file
+e94ea2e  started working on unmanaged extensions
+
+v1.0.4
+======
+210f494  Bump to 1.0.4
+525ff47  Add UniquePathNotUniqueException.
+
+v1.0.3
+======
+a1e0459  Bump to 1.0.3
+89e2ff0  upgrade to 1.8.1
+091ac99  Pass the db to the new Relationship in Relationship.load
+608dc63  Actually set the neo_server on Relationships
+12c27f2  one more time
+ed6e960  wonder if this works on travis
+2dcfaac  make values exist before trying to remove them
+3263919  config should be subject
+a20d6b5  Avoid removing trying to remove properties that don't exist
+a9687eb  getting rid of find_and_require_user_defined_code, closing #68
+
+v1.0.2
+======
+6fb334b  Bump to 1.0.2
+267bb32  Raise error on HTTP status code 500.
+173a9a4  add delete test.  Will not work on 1.7
+a4a3d31  create_relationship in batch can work without properties
+
+v1.0.1
+======
+b8f5834  Bump to 1.0.1
+cc803eb  Fix Exception matching for pre-1.8 Neo4j.
+
+v1.0.0
+======
+c2bbbff  version 1
+c4f7599  Update neography.gemspec
+34762af  Spec #del.
+bd65e78  Spec #attributes.
+6596207  prepare for 1.8 release
+4bf316e  No need for .with on stubs.
+7470332  Test #other_node.
+1ebac4a  Ignore Gemfile.lock.
+121fabc  Add unit tests for node/relationship properties.
+9f75c12  removing Gemfile.lock
+9514ec3  adding latest Gemfile.lock for archival purposes
+ddefa79  Update neography.gemspec
+491c319  Fix failing spec by using dead code.
+ba37dda  Add note about previous versions and errors.
+b48144f  Add code accessor to NeographyError.
+58eae25  Bump Travis Neo4j version to 1.8.RC1.
+86aa096  Add links to Errors wiki page.
+d3d7752  Raise an error when REST API returns an error.
+e59c8e9  Change spec_helper File requires to simpler requires.
+485c1e9  Remove link to unused Experimental page.
+2a850ef  Some more textual layout.
+b2bc98f  Some more textual layout.
+10921a6  Some layout.
+99785b1  Move more documentation into the Wiki.
+8e3f6d7  Fix code in example.
+02cf457  Fix links to Wiki, explain content, fix code.
+cfbf7d3  Simplify documentation, move API into Github wiki.
+c60dc37  Fix more butchered syntax.
+a1d80cc  Fix more butchered syntax.
+d36d26d  Fix butchered syntax.
+5e47636  Move from rdoc to Markdown.
+b17df33  Remove helper method used by deprecated code.
+fea8727  Deprecated syntax with Neography::Rest server as the first argument to Node and Relationship.
+bee8025  Make configuration a more 'rubyish'.
+317a44d  Move Rest includes to Rest class.
+3552879  Move global constant into class where it is used.
+6536a7e  Clean up the Node and Relationship classes, add some basic specs.
+5bb7d01  Cleaner DSL in Batch.
+798d174  Fix som duplicate code.
+9725bb8  Clean up some code, use more Rest classes paths.
+6b8bd1c  Minor code layout.
+12488e5  Add batch unit tests and refactor Batch class.
+2dd4b16  Add path helpers as class methods.
+23e4522  Move back to instance variables, cleaner.
+24dd564  Remove delegation (less magic is cleaner).
+9e137d2  Make REST delegation a bit cleaner, hopefully.
+cc059ec  Ignore .rvmrc.
+3a5f3b1  Update README.rdoc
+8aa7ead  Add Connection unit test.
+c3eaed8  Use Forwardable in Rest class to delegate API.
+8d3f2a7  Remove remaining logic to separate Rest classes.
+1275c33  Moves duplicate code to superclasses, cleaned up other duplication.
+75f47e8  Update CONTRIBUTORS
+0a1dcaa  Fix URL encoding to make spaces and slashes possible.
+5e00a50  Add RelationshipAutoIndexes spec.
+d0a27e5  Fix typo.
+03d2e80  Add RelationshipIndexes spec.
+c7a17c8  Add Relationships specs.
+c758b82  Add Relationships specs.
+987f5f0  Add NodePaths specs.
+26f9e0e  Add traversal options spec.
+0160de5  Add traversal spec.
+903aa56  Add NodeAutoIndexes spec.
+bff0665  Add NodeIndexes specs.
+65ad592  Add NodeRelationships return specs.
+7456f9e  Update Gemfile.lock.
+cf6f52c  Add NodeRelationships specs.
+9cd051b  Fix hash-rocket syntax.
+5f88ebd  Add spec for REST node properties.
+d1b50e8  Add some basic unit tests for REST classes.
+bbe019c  Rubified some code.
+3b9e97f  Add _path suffix in all REST classes.
+b8f1312  Second step of major refactor of REST class.
+db2f1dd  First step of major refactor of REST class.
+faf7f0c  test with 1.8.M07
+
+v0.0.31
+=======
+1f2d14f  Bump to 0.0.31
+9a1d8ba  updating gems
+3f52df5  updating my development gemfile.lock
+6289b7a  Fix bug with finding nodes in index with spaces and/or slashes in value.
+d8e3319  Fix bug with finding nodes in index with spaces in value.
+620bb11  Update CONTRIBUTORS
+6bfaef8  adding remove_relationship_from_index as batch operation
+
+v0.0.30
+=======
+b227119  Bump to 0.0.30
+0da275e  Making tests work on Travis.
+cfd281f  Provide tests as well.
+a871d00  Add User-Agent header.
+
+v0.0.29
+=======
+b0f6aec  Bump to 0.0.29
+cda0b6e  Update lib/neography/multi_json_parser.rb
+296960d  Fix my hard tabs.
+bbb420a  Add delete_relationship to batch operations.
+802802c  dealing with JSON parsing issues
+1b2aa7e  adding idea to gitignore
+6f60af0  Replace Oj with MultiJson for JSON handling so that neography works with jruby
+65f6ca9  adding more indexing capabilities
+28313e1  using strict mode on Oj gem, so we don't convert to strings with colons to symbols
+100aa75  making note that batch create unique node does not return a referable node
+79ce7eb  update travis to 1.8M6
+6977df6  adding auto indexing methods
+a4eb275  Adding Code Climate badge.
+ad3d0d6  Update travis.yml to use latest neo4j
+0d17d0a  adding multiple ways to remove a node from an index
+a2bdf97  Added Spec Tests for 2 Operations
+a079b5a  Added 2 Operations to Batch Methods to rest.rb
+
+v0.0.27
+=======
+7eec488  Bump to 0.0.28
+1b5b444  Bump to 0.0.27
+a3ae832  adding test
+d528234  Remove require of crack gem as I don't think it's used anywhere.
+4d5c87a  Alter gemspec so we don't depend on exact version of httparty
+e4bd60e  Revert "switching httparty to excon" Getting reports of excon causing problems, waiting for failing tests, but holding off since streaming batch still not working. This reverts commit 2a2333cccd3807065483431b0e3b6bdac3229c76.
+31b4867  reverting
+0cf2222  typo
+e696516  tweaking travis to use Neo4j 1.8.M03
+cca4290  tweaking travis to use 1.9.3 instead of 1.8.7
+f7c15f6  with 5k nodes streaming test
+8aa9f96  still trying to see positive results from batch rest streaming... so far no luck
+2a2333c  switching httparty to excon
+3540965  batch cypher now working
+ac746b1  moving to Oj parser, batch gremlin support, streaming cypher, still need to get streaming batch working
+514e174  Revert "adding streaming cypher support, using two types of JSON parsing since Crack was breaking on large cypher results, stream is twice as fast as not when pulling in 20k nodes"
+d9d524a  creating auto node and relationship commands, tests not done yet
+fcf7c3b  adding streaming cypher support, using two types of JSON parsing since Crack was breaking on large cypher results, stream is twice as fast as not when pulling in 20k nodes
+c6075fb  Rolling back changes, since rdoc, not markdown is used.
+2bab85d  Updating readme, making core a bit easier to read.
+29ca66f  added travis build status icon to README
+4a89c61  Bump to 0.0.26
+346a0f6  using version 1.7 now
+51b1c42  upgrading to 1.7M03
+d230abf  making sure
+5e02630  fixed issue where setting a previously undefined property using dot notation has no effect on the DB
+
+v0.0.25
+=======
+a66922f  Bump to 0.0.25
+b04c2bc  moving crack parser to its own file
+1d14860  let people know that wget is required for rake neo4j:install
+24a1c6c  adding test for batch get multiple node relationships, default to all, added to Contributors file, updated Neo4j to 1.7M02
+65b53b2  Update README.rdoc
+f59d389  Add a batch call to get_node_relationships
+373d390  Show an error when an unknown option is used.
+5a83e3a  document and fix wrong variable access
+49c253c  Add a way to query the attributes of a relationship
+7fddfc9  Added clean_database to Rest module to use test-delete-db-extension plugin
+1f217fb  Update README.rdoc
+7990f3c  add clean database method for testing
+51d5c35  Subclasses HTTParyt's Parser to use Crack parsing again for HTTParty 0.8.1
+
+v0.0.24
+=======
+3efc2b9  Bump to 0.0.24
+c7b2149  making tests 1.8.7 compatible
+8a73e74  adding cypher_path and gremlin_path options
+bba5783  moving up to 1.7.M01 as the default
+24bb3e4  fixing weighted path spec
+122336a  Update README.rdoc
+5bd1325  Support for shortest weighted path
+86095cd  Update to config to allow for different locations for cypher and gremlin plugins
+9e4540e  install 1.6.1 from now on
+644145b  letting reset properties take a newly created relationship
+8a8e13c  Bump to 0.0.23
+f4b31eb  adding get_node_index and get_relationship_index to batch
+4ffc2e2  adding can reset the properties of a relationship test
+208b317  adding create unique relationship to batch
+5e4be72  add create unique node to batch
+f16ecb6  Whoa... can't believe I had my email address wrong on the readme for so long!
+8b6604f  just making sure
+
+v0.0.22
+=======
+9809d99  Bump to 0.0.22
+f4a66ad  using built in cypher instead of cypher plugin
+3313e4a  adding tests and readme for unique nodes and relationships
+914d4d3  added 2 more functions - create_unique_node and create_unique_realtionship
+485e77f  make it Rails 2.x compatible
+72c11fc  update link to community server
+839b2fb  update link to rest api
+b48cf0a  adding centrality example
+
+v0.0.21
+=======
+b67bd6e  Bump to 0.0.21
+aac74c5  heroku compatability (thanks Marcel Scherf for the idea)
+47c2539  lets try that again
+569d791  make links pretty
+aec2a73  adding some sample links to readme
+cddabd3  trying Neo4j 1.6M03
+632cfd9  continue to make it inheritable
+217fc4a  fixing previous untested commit (after being lured by siren of github editor)
+bf039e2  allowing Node.load and Node.create to be overridden
+5b0132c  get rid of old function
+78766b1  discarding nil values, closes #23
+633206b  removed reference to Neo4j 1.4 and neography 0.14 since it's really old
+eb03523  batch arrays of arrays
+1e37b32  Bump to 0.0.20
+ca429b0  whoops, botched that gemspec change
+c88b20a  adding parameters to cypher calls
+c1eef08  making gremlin script parameter aware
+ee2335e  Bump to 0.0.19
+8f15c03  adding more batching functions, now with referencing
+92ce780  more batching functions
+b211af0  starting naive batch implementation
+
+v0.0.18
+=======
+8c1ce42  Bump to 0.0.18
+0e3b309  adding travis build status as well as contributing and help sections to readme
+6de30aa  updating rspec dependency
+9eae2dd  skip gremlin and slow in one line...
+485807c  fixing issue 18
+2b42c9e  got tired of failing gremlin tests, excluding for now
+a185539  reverting httparty to a versin that uses crack until strick json is followed
+f232e05  use empty not nil
+318da9e  Added missing db parameter for loading relationship nodes
+5ac7729  how did that blank? stay in there for so long
+b93913f  starting work on batch specs
+f64652a  updating dependencies
+
+v0.0.17
+=======
+c6bafa4  Bump to 0.0.17
+7c204f0  pick your own version
+f48cfc7  add get relationship start node and relationship end node.
+09e8d50  Remove verbose output message.
+60d32ac  using default of localhost for examples now
+d9f460a  using 1.5 GA for install, found problem with gremlin (see rest_gremlin_fail_spec.rb)
+7596066  adding --trace to travis line to see what we get
+84b31d0  trying to get travis to work
+c82650f  tweak readme version info
+
+v0.0.16
+=======
+2d325f5  Bump to 0.0.16
+7a5c6a8  removing fakeweb, escaping execute_script for gremlin, adding execute_query for cypher, adding tests
+752924a  added railtie to autoload tasks
+066ed4f  ugly attempt at a multi-os installer
+764a146  adding tasks
+bc49b90  finding nodes and relationships through query. Remote Groovy script through Gremlin plugin ext
+1097667  Use version 0.0.l4 for Neo4j 1.4 and 0.0.15 for Neo4j 1.5
+ac2e26a  Bump to 0.0.15
+0ae5090  version bump
+d070b78  fix spec for traverse
+9b97130  fix add relationship to index
+a346ddc  fix add node to index
+
+v0.0.14
+=======
+44395df  Bump to 0.0.14
+0aee952  get rid of dead file
+596f36c  clean up file name
+eac66aa  fix passing neo_server instance for traverser-nodes
+d92dfae  Neo4j API now using underscores for max_depth, prune_evaluator and return_filter
+d58d273  Looks like its missing a .
+4b097f9  Make neo server connection available in Relationship objects, either by accessing the connection from the start_node or accessing the connection passed by the initialization. [Issue #6]
+
+v0.0.13
+=======
+f47f077  Bump to 0.0.13
+25f02cd  root_node returns same as get_node instead of meta-data
+fdffbdb  handle arrays in get_id, thanks to Phuong CAO
+
+v0.0.12
+=======
+db4f3db  Bump to 0.0.12
+10c8228  advanced queries of the node and relationship indexes
+3e41e09  adding new ways to remove nodes and relationships from an index
+1ede7a9  test tweaks for Travis
+cad9c10  excluding slow tests for now
+9118a80  typo in relationship readme
+
+v0.0.11
+=======
+6e238ae  Bump to 0.0.11
+b32f7e1  adding create node and relationship index
+0029ce5  adding another example
+4f1dd0a  adding fullpath type
+
+v0.0.10
+=======
+8f9f6df  Bump to 0.0.10
+994d90c  fix to v2 authentication
+590d763  make sure we're actually getting the right node and relationships in the index
+6dac3ab  typo in relationship index, and updating readme to use latest api docs
+ab853ae  quick initializer
+2015a05  working on relationship indexes
+
+v0.0.9
+======
+64fbdfd  Bump to 0.0.9
+23ca874  Bump to 0.0.8
+49fe9ac  adding authentication options, fixing index tests
+
+v0.0.8
+======
+4eba8e4  Bump to 0.0.8
+56f0508  added Ian to contributors
+517bee3  Updated index methods to Neo4j v1.2.06 API
+
+v0.0.7
+======
+5032bcc  Bump to 0.0.7
+0dd7b47  adding Node Paths
+56fdc6e  adding paths
+6b29ca8  try neography at neography.org
+5fd4f25  Bump to 0.0.6
+da88fba  More Phase 2 Functionality
+d3c4887  adding to documentation
+6c3d33c  node relationship specs
+f894aa9  adding tests, wacky way to solve untyped incoming,outgoing and both calls
+8b20bea  Adding methods to node traverser
+07b30d1  Bump to 0.0.5
+dbaa2ee  forgot to add max_threads parameter to readme
+74204e8  adding relationship tests
+4e0087d  Phase 2: Starting on Relationships
+7182516  node: new properties in phase 2
+4541ce9  property deletion
+9e3b38c  adding setter and getter methods
+54ddb73  more phase 2: adding del and equal to node
+7b90ece  starting phase 2
+8e66583  started addeding fake bulk operations
+3570045  Bump to 0.0.4
+2a6a4bf  do not send max depth in traversal if not specified during, added example
+b48276d  it's ruby, not java, skip the parenthesis
+9dce8b7  easier way to do friend suggestions
+34068ab  adding examples and get_relationship
+7a4edc7  Bump to 0.0.3
+4d0c88a  readme changes
+c3a00a0  added find_id and cleaned up tests
+cafaf2e  
+80cc0f0  typos
+51bec37  Bump to 0.0.2
+ab93266  doc updates
+90cb6ed  adding traverser
+77b9011  adding path tests
+95560ec  removing unnecessary dependency
+eb4e18f  adding logger dependency
+4e1cf8f  documentation changes, use shortest path as default for path
+e42beda  more cleanup
+611af01  forgot to add the new db path to some delete actions, splitting test file
+e01369f  cleaning up
+93e4fbd  adding get_path
+2bedc62  adding indexes
+2b93d8e  adding set_relationship_properties and reset_relationship_properties
+bb3bda9  adding get_relationship_properties and remove_relationship_properties
+8245c12  added delete_node (and its relationship) and delete_relationship
+d352e6a  adding get_node_relationships
+081d8e0  added create_relationship
+100cbbc  added delete_node
+d92c2a6  get some properties
+60e0b4c  changed set to reset and added regular set node properties
+25f1abb  added remove_node_properties
+3bd4035  added get node properties
+7f57fcb  adding get node and set node properties
+ef9f673  Spliting off basic Rest wrapper
+9a9b24a  return nil if trying to get properties of a node or relationship that does not exist
+3a1cef5  make readme prettier
+0b5b547  starting on relationships
+0eff227  adding fakeweb and starting to create fake http responses
+3e4206d  added build_node so we return neo_id on node creates and a few more tests
+bc1f9fc  starting with basic functionality
+1ef9209  bundle gem commit
