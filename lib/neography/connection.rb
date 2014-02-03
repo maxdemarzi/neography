@@ -47,22 +47,27 @@ module Neography
         path = "/db/data" + path if ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"].include?(path.split("/")[1].split("?").first)
         query_path = configuration + path
         query_body = merge_options(options)[:body] 
-        log path, query_body do
-          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)    
+        response = nil
+        log do |extra|
+          response = @client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers])
+          extra.merge!({
+            :response_code => response.code,
+            :response_body => response.body,
+            :query_body => query_body,
+            :path => path
+          })
         end
-      end 
+        evaluate_response( response, path, query_body)
+      end
     end
 
-    def log(path, body)
-      if @log_enabled
-        start_time = Time.now
-        response = yield
-        time = ((Time.now - start_time) * 1000).round(2)
-        @logger.info "[Neography::Query] #{path} #{body} [#{time}ms]" if time >= slow_log_threshold
-        response
-      else
-        yield
-      end
+    def log
+      return unless @log_enabled
+      extra = {}
+      start = Time.now
+      yield(extra)
+      duration = Time.now - start
+      @logger.info( {:duration => duration}.merge!(extra))
     end
 
     def authenticate(path = nil)
@@ -142,15 +147,12 @@ module Neography
     def return_result(response, code, body, parsed, path, query_body)
       case code
       when 200
-        @logger.debug "OK, created #{body}" if @log_enabled
         parsed ? body : @parser.json(body)
       when 201
-        @logger.debug "OK, created #{body}" if @log_enabled
         r = parsed ? body : @parser.json(body)
         r.extend(WasCreated)
         r
       when 204
-        @logger.debug "OK, no content returned" if @log_enabled
         nil
       when 400..500
         handle_4xx_500_response(response, code, body, path, query_body)
