@@ -1,3 +1,17 @@
+v1.3.8
+======
+3343c5e  Bump to 1.3.8
+e99ba36  add ChangeLog (using git-changelog gem)
+de53b89  update neo to 2.0.1, update ruby tests to 2.0.0
+9a76e11  add unmanaged extensions spec (skipped for test suite)
+b788b68  moved broken spatial tests out to their own file, and skipping them until we track this Neo4j bug down
+f1e172e  more work on adding spatial to batch... failing test however...
+8ee5de4  + .labels Node instance method
+d358eb7  + colors in tests
+07e63dc  let body of post extension pass through without the to_json if headers are not nil
+cb21b01  allow headers to be past in when using extensions
+43b64d3  deal with unmanaged extensions a little better... well not really, but at least it should work
+
 v1.3.7
 ======
 6bd6842  Bump to 1.3.7
