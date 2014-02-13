@@ -44,4 +44,7 @@ module Neography
   # Thrown when CREATE UNIQUE matches multiple paths.
   class UniquePathNotUniqueException < NeographyError; end
 
+  # Signals that a deadlock between two or more transactions has been detected
+  class DeadlockDetectedException < NeographyError; end
+
 end

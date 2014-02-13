@@ -213,6 +213,7 @@ module Neography
         when /RelationshipNotFoundException/ ; RelationshipNotFoundException
         when /NotFoundException/             ; NotFoundException
         when /UniquePathNotUniqueException/  ; UniquePathNotUniqueException
+        when /DeadlockDetectedException/     ; DeadlockDetectedException          
         else
           NeographyError
       end
