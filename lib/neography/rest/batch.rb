@@ -114,6 +114,10 @@ module Neography
         end
       end
 
+      def remove_node_property(id, property)
+        delete NodeProperties.single_path(:id => get_id(id), :property => property)
+      end
+
       # NodeLabel
 
       def add_label(id, body)
