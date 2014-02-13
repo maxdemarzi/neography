@@ -66,9 +66,18 @@ module Neography
     end
 
     def authenticate(path = nil)
-      @client.set_auth(path, 
-                       @authentication[@authentication.keys.first][:username], 
-                       @authentication[@authentication.keys.first][:password]) unless @authentication.empty?
+      unless @authentication.empty?
+        auth_type = @authentication.keys.first
+        @client.set_auth(
+          path,
+          @authentication[auth_type][:username],
+          @authentication[auth_type][:password]
+        )
+        # Force http client to always send auth credentials without
+        # waiting for WWW-Authenticate headers, thus saving one request
+        # roundtrip for each URI. Only works for HTTP basic auth.
+        @client.www_auth.basic_auth.challenge(configuration) if auth_type == 'basic_auth'
+      end
     end
     
     private
