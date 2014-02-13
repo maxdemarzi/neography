@@ -123,6 +123,32 @@ describe Neography::Rest do
       existing_node["data"]["weight"].should be_nil
     end
 
+    it "can remove a property of a node" do
+      new_node = @neo.create_node("name" => "Max", "weight" => 200)
+      batch_result = @neo.batch [:remove_node_property, new_node, "weight"]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      existing_node = @neo.get_node(new_node)
+      existing_node["data"]["name"].should == "Max"
+      existing_node["data"]["weight"].should be_nil
+    end
+
+    it "can remove a property of multiple nodes" do
+      node1 = @neo.create_node("name" => "Max", "weight" => 200)
+      node2 = @neo.create_node("name" => "Marc", "weight" => 180)
+      batch_result = @neo.batch [:remove_node_property, node1, "name"], [:remove_node_property, node2, "name"]
+      batch_result.first.should have_key("id")
+      batch_result.first.should have_key("from")
+      batch_result.last.should have_key("id")
+      batch_result.last.should have_key("from")
+      existing_node = @neo.get_node(node1)
+      existing_node["data"]["name"].should be_nil
+      existing_node["data"]["weight"].should == 200
+      existing_node = @neo.get_node(node2)
+      existing_node["data"]["name"].should be_nil
+      existing_node["data"]["weight"].should == 180
+    end
+
     it "can get a single relationship" do
       node1 = @neo.create_node
       node2 = @neo.create_node
