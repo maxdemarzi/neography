@@ -10,12 +10,13 @@ module Neography
       :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
       :authentication, :username, :password,
-      :parser, :client
+      :parser, :client,
+      :proxy
 
     def initialize(options = ENV['NEO4J_URL'] || {})
       config = merge_configuration(options)
       save_local_configuration(config)
-      @client = HTTPClient.new
+      @client = HTTPClient.new(config[:proxy])
       @client.send_timeout = 1200 # 10 minutes
       @client.receive_timeout = 1200
       authenticate
@@ -101,6 +102,7 @@ module Neography
       @max_threads        = config[:max_threads]
       @parser             = config[:parser]
       @logger             = config[:logger]
+      @proxy              = config[:proxy]
 
       @max_execution_time = { 'max-execution-time' => config[:max_execution_time] }
       @user_agent     = { "User-Agent" => USER_AGENT }

@@ -6,7 +6,8 @@ module Neography
       :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
       :authentication, :username, :password,
-      :parser, :max_execution_time
+      :parser, :max_execution_time,
+      :proxy
 
     def initialize
       set_defaults
@@ -29,7 +30,8 @@ module Neography
         :username           => @username,
         :password           => @password,
         :parser             => @parser,
-        :max_execution_time => @max_execution_time
+        :max_execution_time => @max_execution_time,
+        :proxy              => @proxy
       }
     end
 
@@ -51,6 +53,7 @@ module Neography
       @password           = nil
       @parser             = MultiJsonParser
       @max_execution_time = 6000
+      @proxy              = nil
       end
 
   end
