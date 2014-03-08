@@ -331,7 +331,7 @@ describe Neography::NodeRelationship do
     it "#rel returns nil if there is no relationship" do
       a = Neography::Node.create
       b = Neography::Node.create
-      a.rel(:outgoing, :friend).should be_nil
+      a.rel(:outgoing, :friend).should be_empty
     end
 
     it "#rel should only return one relationship even if there are more" do

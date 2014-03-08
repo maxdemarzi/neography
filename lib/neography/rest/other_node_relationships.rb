@@ -39,7 +39,7 @@ module Neography
 
         node_relationships = @connection.post(base_path(:id => get_id(id)), options) || []
 
-        return nil if node_relationships.empty?
+        return [] if node_relationships.empty?
         node_relationships
       end
 
