@@ -158,14 +158,15 @@ module Neography
 
       # RelationshipIndexes
 
-      def create_unique_relationship(index, key, value, type, from, to)
+      def create_unique_relationship(index, key, value, type, from, to, props = nil)
         post RelationshipIndexes.unique_path(:index => index) do
           {
             :key   => key,
             :value => value,
             :type  => type,
             :start => build_node_uri(from),
-            :end   => build_node_uri(to)
+            :end   => build_node_uri(to),
+            :properties => props
           }
         end
       end
