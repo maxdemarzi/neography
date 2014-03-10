@@ -159,13 +159,13 @@ module Neography
 
       it "creates unique nodes" do
         expected_body = [
-          { "id" => 0, "method" => "POST", "to" => "/index/relationship/index1?unique", "body" => { "key" => "key1", "value" => "value1", "type" => "type1", "start" => "/node/node1", "end" => "/node/node2" } },
-          { "id" => 1, "method" => "POST", "to" => "/index/relationship/index2?unique", "body" => { "key" => "key2", "value" => "value2", "type" => "type2", "start" => "{0}", "end" => "{1}" } }
+          { "id" => 0, "method" => "POST", "to" => "/index/relationship/index1?unique", "body" => { "key" => "key1", "value" => "value1", "type" => "type1", "start" => "/node/node1", "end" => "/node/node2", "properties" => "properties" } },
+          { "id" => 1, "method" => "POST", "to" => "/index/relationship/index2?unique", "body" => { "key" => "key2", "value" => "value2", "type" => "type2", "start" => "{0}", "end" => "{1}", "properties" => "properties" } }
         ]
 
         connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
-        subject.execute [:create_unique_relationship, "index1", "key1", "value1", "type1", "node1", "node2" ],
-                        [:create_unique_relationship, "index2", "key2", "value2", "type2", "{0}", "{1}" ]
+        subject.execute [:create_unique_relationship, "index1", "key1", "value1", "type1", "node1", "node2","properties"  ],
+                        [:create_unique_relationship, "index2", "key2", "value2", "type2", "{0}", "{1}", "properties" ]
       end
 
       it "adds relationships to an index" do
