@@ -16,13 +16,13 @@ describe Neography::Rest do
       existing_relationships[0]["self"].should == new_relationship["self"]
     end
 
-    it "returns nil if it tries to get a relationship that does not exist" do
+    it "returns empty array if it tries to get a relationship that does not exist" do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       new_node3 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       existing_relationship = @neo.get_node_relationships_to(new_node1, new_node3)
-      existing_relationship.should be_nil
+      existing_relationship.should be_empty
     end
   end
 
@@ -130,7 +130,7 @@ describe Neography::Rest do
       new_node1 = @neo.create_node
       new_node2 = @neo.create_node
       relationships = @neo.get_node_relationships_to(new_node1, new_node2)
-      relationships.should be_nil
+      relationships.should be_empty
     end
   end
 

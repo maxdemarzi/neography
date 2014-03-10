@@ -33,7 +33,7 @@ module Neography
           node_relationships = @connection.get(type_path(:id => get_id(id), :direction => direction, :types => Array(types).join('&'))) || []
         end
 
-        return nil if node_relationships.empty?
+        return [] if node_relationships.empty?
         node_relationships
       end
 

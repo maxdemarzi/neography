@@ -21,15 +21,15 @@ module Neography
 
     def rel(dir, type)
       rel = Neography::RelationshipTraverser.new(self, type, dir)
-      rel = rel.first unless rel.nil?
+      rel = rel.first unless rel.empty?
       rel
     end
 
     def rel?(dir=nil, type=nil)
       if DIRECTIONS.include?(dir.to_s)
-        !self.neo_server.get_node_relationships(self, dir, type).nil? 
+        !self.neo_server.get_node_relationships(self, dir, type).empty? 
       else
-        !self.neo_server.get_node_relationships(self, type, dir).nil? 
+        !self.neo_server.get_node_relationships(self, type, dir).empty? 
       end
     end
 

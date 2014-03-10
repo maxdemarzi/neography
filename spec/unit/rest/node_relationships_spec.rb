@@ -43,13 +43,13 @@ module Neography
         subject.get("42", :in, ["foo", "bar"])
       end
 
-      it "returns nil if no relationships were found" do
-        connection.stub(:get).and_return(nil)
-        subject.get("42", :in).should be_nil
+      it "returns empty array if no relationships were found" do
+        connection.stub(:get).and_return([])
+        subject.get("42", :in).should be_empty
       end
 
-      it "returns nil if no relationships were found by type" do
-        connection.stub(:get).and_return(nil)
+      it "returns empty array if no relationships were found by type" do
+        connection.stub(:get).and_return([])
         subject.get("42", :in, "foo")
       end
 
