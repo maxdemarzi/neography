@@ -37,10 +37,7 @@ module Neography
           :headers => json_content_type
         }
 
-        node_relationships = @connection.post(base_path(:id => get_id(id)), options) || []
-
-        return [] if node_relationships.empty?
-        node_relationships
+        @connection.post(base_path(:id => get_id(id)), options) || []
       end
 
     end
