@@ -156,12 +156,15 @@ namespace :neo4j do
   end
 
   task :get_spatial, :version  do |t, args|
-    args.with_defaults(:version => "2.0.0")
+    args.with_defaults(:version => "2.0.1")
     puts "Installing Neo4j-Spatial #{args[:version]}"
 
       unless File.exist?('neo4j-spatial.zip')
         df = File.open('neo4j-spatial.zip', 'wb')
         case args[:version]
+          when "2.0.1"
+            dist = "dist.neo4j.org"
+            request = "/spatial/neo4j-spatial-0.12-neo4j-2.0.1-server-plugin.zip"
           when "2.0.0"
             dist = "dist.neo4j.org"
             request = "/spatial/neo4j-spatial-0.12-neo4j-2.0.0-server-plugin.zip"
