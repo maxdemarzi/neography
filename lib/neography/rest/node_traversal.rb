@@ -7,7 +7,7 @@ module Neography
       add_path :traversal, "/node/:id/traverse/:type"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def traverse(id, return_type, description)

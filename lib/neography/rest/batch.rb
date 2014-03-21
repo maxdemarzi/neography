@@ -7,7 +7,7 @@ module Neography
       add_path :batch, "/batch"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def execute(*args)

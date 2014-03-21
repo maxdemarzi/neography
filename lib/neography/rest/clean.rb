@@ -7,7 +7,7 @@ module Neography
       add_path :clean, "/cleandb/secret-key"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def execute

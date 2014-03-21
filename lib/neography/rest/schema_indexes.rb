@@ -8,7 +8,7 @@ module Neography
       add_path :drop,      "/schema/index/:label/:index"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def list(label)

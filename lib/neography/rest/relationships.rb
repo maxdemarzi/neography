@@ -7,7 +7,7 @@ module Neography
       add_path :base,   "/relationship/:id"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def get(id)

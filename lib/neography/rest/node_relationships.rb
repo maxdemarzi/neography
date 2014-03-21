@@ -9,7 +9,7 @@ module Neography
       add_path :type,       "/node/:id/relationships/:direction/:types"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def create(type, from, to, properties = nil)

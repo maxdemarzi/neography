@@ -17,7 +17,7 @@ module Neography
       add_path :add_to_index,                   "/index/node/:index"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def index

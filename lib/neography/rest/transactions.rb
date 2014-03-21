@@ -9,7 +9,7 @@ module Neography
       add_path :commit, "/transaction/:id/commit"
       
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def begin(statements = [], commit = "")

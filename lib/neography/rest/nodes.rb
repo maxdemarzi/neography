@@ -8,7 +8,7 @@ module Neography
       add_path :base,   "/node/:id"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def get(id)

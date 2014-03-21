@@ -6,7 +6,7 @@ module Neography
       add_path :all,    "/relationship/types"
       
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
             
       def list

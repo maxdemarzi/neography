@@ -10,7 +10,7 @@ module Neography
       add_path :unique,     "/schema/constraint/:label/uniqueness/:property"
       
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def drop(label, property)

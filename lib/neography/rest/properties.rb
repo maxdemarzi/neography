@@ -4,7 +4,7 @@ module Neography
       include Neography::Rest::Helpers
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def set(id, properties)

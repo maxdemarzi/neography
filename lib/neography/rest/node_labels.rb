@@ -11,7 +11,7 @@ module Neography
       add_path :delete,    "/node/:id/labels/:label"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def list

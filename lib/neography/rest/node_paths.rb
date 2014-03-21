@@ -8,7 +8,7 @@ module Neography
       add_path :all,  "/node/:id/paths"
 
       def initialize(connection)
-        @connection = connection
+        @connection ||= connection
       end
 
       def get(from, to, relationships, depth = 1, algorithm = "shortestPath")

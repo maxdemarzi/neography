@@ -16,7 +16,7 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       config = merge_configuration(options)
       save_local_configuration(config)
-      @client = HTTPClient.new(config[:proxy])
+      @client ||= HTTPClient.new(config[:proxy])
       @client.send_timeout = 1200 # 10 minutes
       @client.receive_timeout = 1200
       authenticate

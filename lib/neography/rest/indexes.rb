@@ -4,8 +4,8 @@ module Neography
       include Neography::Rest::Helpers
 
       def initialize(connection, index_type)
-        @connection = connection
-        @index_type = index_type
+        @connection ||= connection
+        @index_type ||= index_type
       end
 
       def list
