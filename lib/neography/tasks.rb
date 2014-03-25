@@ -163,8 +163,8 @@ namespace :neo4j do
         df = File.open('neo4j-spatial.zip', 'wb')
         case args[:version]
           when "2.0.1"
-            dist = "dist.neo4j.org"
-            request = "/spatial/neo4j-spatial-0.12-neo4j-2.0.1-server-plugin.zip"
+            dist = "m2.neo4j.org"
+            request = "/content/repositories/releases/org/neo4j/neo4j-spatial/0.13-neo4j-2.0.1/neo4j-spatial-0.13-neo4j-2.0.1-server-plugin.zip"
           when "2.0.0"
             dist = "dist.neo4j.org"
             request = "/spatial/neo4j-spatial-0.12-neo4j-2.0.0-server-plugin.zip"
