@@ -4,21 +4,20 @@ module Neography
   class Rest
     describe Gremlin do
 
-      let(:connection) { double(:gremlin_path => "/gremlin") }
-      subject { Gremlin.new(connection) }
+      subject { Neography::Rest.new }
 
       it "executes a gremlin script" do
         options = {
           :body=>"{\"script\":\"SOME SCRIPT\",\"params\":{\"foo\":\"bar\",\"baz\":\"qux\"}}",
           :headers=>{"Content-Type"=>"application/json"}
         }
-        connection.should_receive(:post).with("/gremlin", options)
-        subject.execute("SOME SCRIPT", { :foo => "bar", :baz => "qux" })
+        subject.connection.should_receive(:post).with("/ext/GremlinPlugin/graphdb/execute_script", options)
+        subject.execute_script("SOME SCRIPT", { :foo => "bar", :baz => "qux" })
       end
 
       it "returns nil if script result is null" do
-        connection.stub(:post).and_return("null")
-        subject.execute("", {}).should be_nil
+        subject.connection.stub(:post).and_return("null")
+        subject.execute_script("", {}).should be_nil
       end
 
     end

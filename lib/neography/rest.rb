@@ -54,6 +54,7 @@ module Neography
     include NodeTraversal
     include NodePaths
     include Cypher
+    include Gremlin
     extend Forwardable
 
     attr_reader :connection
@@ -63,7 +64,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @gremlin                   ||= Gremlin.new(@connection)
       @extensions                ||= Extensions.new(@connection)
       @batch                     ||= Batch.new(@connection)
       @clean                     ||= Clean.new(@connection)
@@ -100,12 +100,6 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end 
-
-    # gremlin script
-
-    def execute_script(script, params = {})
-      @gremlin.execute(script, params)
-    end
 
     # unmanaged extensions
 

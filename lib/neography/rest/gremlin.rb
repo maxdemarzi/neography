@@ -1,13 +1,9 @@
 module Neography
   class Rest
-    class Gremlin
+    module Gremlin
       include Neography::Rest::Helpers
 
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def execute(script, parameters = {})
+      def execute_script(script, parameters = {})
         options = {
           :body => {
             :script => script,
