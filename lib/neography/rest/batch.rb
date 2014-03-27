@@ -22,9 +22,9 @@ module Neography
       end
 
       def get_batch(args)
-        if args[0].class == Symbol
-          send(("batch_" + args[0].to_s).to_sym, *args[1..-1])
-        else
+        begin
+          send("batch_#{args[0]}".to_sym, *args[1..-1])
+        rescue
           raise "Unknown option #{args[0]} - #{args}"
         end
       end

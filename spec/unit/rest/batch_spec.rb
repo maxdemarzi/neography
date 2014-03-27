@@ -16,6 +16,16 @@ module Neography
         subject.batch [:get_node, "foo"], [:get_node, "bar"]
       end
 
+      it "gets nodes without symbol" do
+        expected_body = [
+          { "id" => 0, "method" => "GET", "to" => "/node/foo" },
+          { "id" => 1, "method" => "GET", "to" => "/node/bar" }
+        ]
+
+        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        subject.batch ["get_node", "foo"], [:get_node, "bar"]
+      end
+      
       it "creates nodes" do
         expected_body = [
           { "id" => 0, "method" => "POST", "to" => "/node", "body" => { "foo" => "bar" } },
