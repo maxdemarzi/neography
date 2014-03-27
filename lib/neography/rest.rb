@@ -3,7 +3,6 @@ require 'forwardable'
 require 'neography/rest/helpers'
 require 'neography/rest/paths'
 
-require 'neography/rest/auto_indexes'
 require 'neography/rest/schema_indexes'
 
 require 'neography/rest/nodes'
