@@ -1,17 +1,15 @@
 module Neography
   class Rest
-    class Clean
-      extend Neography::Rest::Paths
+    module Clean
       include Neography::Rest::Helpers
 
-      add_path :clean, "/cleandb/secret-key"
-
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def execute
-        @connection.delete(clean_path)
+      def clean_database(sanity_check = "not_really")
+        if sanity_check == "yes_i_really_want_to_clean_the_database"
+          @connection.delete("/cleandb/secret-key")
+          true
+        else
+          false
+        end          
       end
 
     end

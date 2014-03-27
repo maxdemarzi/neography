@@ -55,6 +55,7 @@ module Neography
     include NodePaths
     include Cypher
     include Gremlin
+    include Clean
     extend Forwardable
 
     attr_reader :connection
@@ -66,7 +67,6 @@ module Neography
 
       @extensions                ||= Extensions.new(@connection)
       @batch                     ||= Batch.new(@connection)
-      @clean                     ||= Clean.new(@connection)
       @spatial                   ||= Spatial.new(@connection)
     end   
 
@@ -167,18 +167,5 @@ module Neography
       @spatial.add_node_to_spatial_index(index, id)
     end
     
-    # clean database
-
-    # For testing (use a separate neo4j instance)
-    # call this before each test or spec
-    def clean_database(sanity_check = "not_really")
-      if sanity_check == "yes_i_really_want_to_clean_the_database"
-        @clean.execute
-        true
-      else
-        false
-      end
-    end
-
   end
 end
