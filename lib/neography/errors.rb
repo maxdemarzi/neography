@@ -51,4 +51,7 @@ module Neography
   # Signals that a deadlock between two or more transactions has been detected
   class DeadlockDetectedException < NeographyError; end
 
+  # Unknown batch option exception detected
+  class UnknownBatchOptionException < NeographyError; end
+
 end
