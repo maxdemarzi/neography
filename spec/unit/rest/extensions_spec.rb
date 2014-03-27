@@ -4,14 +4,13 @@ module Neography
   class Rest
     describe Extensions do
 
-      let(:connection)  { double }
-      subject { Extensions.new(connection) }
+      subject { Neography::Rest.new }
 
       it "executes an extensions get query" do
         path = "/unmanaged_extension/test"
 
-        connection.should_receive(:get).with(path)
-        subject.get("/unmanaged_extension/test")
+        subject.connection.should_receive(:get).with(path)
+        subject.get_extension("/unmanaged_extension/test")
       end
 
       it "executes an extensions post query" do
@@ -20,8 +19,8 @@ module Neography
           :body=>"{\"foo\":\"bar\",\"baz\":\"qux\"}",
           :headers=>{"Content-Type"=>"application/json", "Accept"=>"application/json;stream=true"}
         }
-        connection.should_receive(:post).with(path, options)
-        subject.post("/unmanaged_extension/test", { :foo => "bar", :baz => "qux" })
+        subject.connection.should_receive(:post).with(path, options)
+        subject.post_extension("/unmanaged_extension/test", { :foo => "bar", :baz => "qux" })
       end
 
     end

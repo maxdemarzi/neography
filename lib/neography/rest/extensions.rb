@@ -1,17 +1,13 @@
 module Neography
   class Rest
-    class Extensions
+    module Extensions
       include Neography::Rest::Helpers
-
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def get(path)
+    
+      def get_extension(path)
         @connection.get(path)
       end
 
-      def post(path, body = {}, headers = nil)
+      def post_extension(path, body = {}, headers = nil)
         options = {
           :body => headers.nil? ? body.to_json : body,
           :headers => headers || json_content_type.merge({'Accept' => 'application/json;stream=true'})
