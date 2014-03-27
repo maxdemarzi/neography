@@ -47,6 +47,7 @@ module Neography
     include NodeProperties
     include Relationships
     include RelationshipProperties
+    include NodeRelationships
     extend Forwardable
 
     attr_reader :connection
@@ -56,7 +57,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @node_relationships        ||= NodeRelationships.new(@connection)
       @other_node_relationships  ||= OtherNodeRelationships.new(@connection)
       @node_indexes              ||= NodeIndexes.new(@connection)
       @node_auto_indexes         ||= NodeAutoIndexes.new(@connection)
@@ -100,20 +100,10 @@ module Neography
       get_node(rel["end"])
     end
 
-
-    # node relationships
-
-    def get_node_relationships(id, dir = nil, types = nil)
-      @node_relationships.get(id, dir, types)
-    end
-
     def get_node_relationships_to(id, other_id, dir = "all", types = nil)
       @other_node_relationships.get(id, other_id, dir, Array(types || [nil]))
     end
 
-    def create_relationship(type, from, to, props = nil)
-      @node_relationships.create(type, from, to, props)
-    end
 
     # node indexes
 
