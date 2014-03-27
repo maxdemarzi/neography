@@ -52,6 +52,7 @@ module Neography
     include RelationshipIndexes
     include RelationshipAutoIndexes
     include NodeTraversal
+    include NodePaths
     extend Forwardable
 
     attr_reader :connection
@@ -60,8 +61,6 @@ module Neography
 
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
-
-      @node_paths                ||= NodePaths.new(@connection)
 
       @cypher                    ||= Cypher.new(@connection)
       @gremlin                   ||= Gremlin.new(@connection)
@@ -101,20 +100,6 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end 
-
-    # paths
-
-    def get_path(from, to, relationships, depth = 1, algorithm = "shortestPath")
-      @node_paths.get(from, to, relationships, depth, algorithm)
-    end
-
-    def get_paths(from, to, relationships, depth = 1, algorithm = "allPaths")
-      @node_paths.get_all(from, to, relationships, depth, algorithm)
-    end
-
-    def get_shortest_weighted_path(from, to, relationships, weight_attr = "weight", depth = 1, algorithm = "dijkstra")
-      @node_paths.shortest_weighted(from, to, relationships, weight_attr, depth, algorithm)
-    end
 
     # cypher query
 

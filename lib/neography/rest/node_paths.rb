@@ -1,29 +1,21 @@
 module Neography
   class Rest
-    class NodePaths
-      extend Neography::Rest::Paths
+    module NodePaths
       include Neography::Rest::Helpers
-
-      add_path :base, "/node/:id/path"
-      add_path :all,  "/node/:id/paths"
-
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def get(from, to, relationships, depth = 1, algorithm = "shortestPath")
+    
+      def get_path(from, to, relationships, depth = 1, algorithm = "shortestPath")
         options = path_options(to, relationships, depth, algorithm)
-        @connection.post(base_path(:id => get_id(from)), options) || {}
+        @connection.post("/node/%{id}/path" % {:id => get_id(from)}, options) || {}
       end
 
-      def get_all(from, to, relationships, depth = 1, algorithm = "allPaths")
+      def get_paths(from, to, relationships, depth = 1, algorithm = "allPaths")
         options = path_options(to, relationships, depth, algorithm)
-        @connection.post(all_path(:id => get_id(from)), options) || []
+        @connection.post("/node/%{id}/paths" % {:id => get_id(from)}, options) || []
       end
 
-      def shortest_weighted(from, to, relationships, weight_attribute = "weight", depth = 1, algorithm = "dijkstra")
+      def get_shortest_weighted_path(from, to, relationships, weight_attribute = "weight", depth = 1, algorithm = "dijkstra")
         options = path_options(to, relationships, depth, algorithm, { :cost_property => weight_attribute })
-        @connection.post(all_path(:id => get_id(from)), options) || {}
+        @connection.post("/node/%{id}/paths" % {:id => get_id(from)}, options) || {}
       end
 
       private
