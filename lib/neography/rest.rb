@@ -49,6 +49,7 @@ module Neography
     include RelationshipProperties
     include NodeRelationships
     include OtherNodeRelationships
+    include NodeIndexes
     extend Forwardable
 
     attr_reader :connection
@@ -58,7 +59,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @node_indexes              ||= NodeIndexes.new(@connection)
       @node_auto_indexes         ||= NodeAutoIndexes.new(@connection)
       @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
@@ -73,6 +73,11 @@ module Neography
       @clean                     ||= Clean.new(@connection)
       @spatial                   ||= Spatial.new(@connection)
     end   
+
+    alias_method :list_indexes, :list_node_indexes
+    alias_method :add_to_index, :add_node_to_index
+    alias_method :remove_from_index, :remove_node_from_index
+    alias_method :get_index, :get_node_index
       
     def delete_node!(id)
       relationships = get_node_relationships(get_id(id))
@@ -98,48 +103,6 @@ module Neography
 
     def get_relationship_end_node(rel)
       get_node(rel["end"])
-    end
-
-    # node indexes
-
-    def list_node_indexes
-      @node_indexes.list
-    end
-    alias_method :list_indexes, :list_node_indexes
-
-    def create_node_index(name, type = "exact", provider = "lucene", extra_config = nil)
-      @node_indexes.create(name, type, provider, extra_config)
-    end
-
-    def create_node_auto_index(type = "exact", provider = "lucene")
-      @node_indexes.create_auto(type, provider)
-    end
-
-    def create_unique_node(index, key, value, props={})
-      @node_indexes.create_unique(index, key, value, props)
-    end
-
-    def add_node_to_index(index, key, value, id, unique=false)
-      @node_indexes.add(index, key, value, id, unique)
-    end
-    alias_method :add_to_index, :add_node_to_index
-
-    def remove_node_from_index(index, id_or_key, id_or_value = nil, id = nil)
-      @node_indexes.remove(index, id_or_key, id_or_value, id)
-    end
-    alias_method :remove_from_index, :remove_node_from_index
-
-    def get_node_index(index, key, value)
-      @node_indexes.get(index, key, value)
-    end
-    alias_method :get_index, :get_node_index
-
-    def find_node_index(index, key_or_query, value = nil)
-      @node_indexes.find(index, key_or_query, value)
-    end
-
-    def drop_node_index(index)
-      @node_indexes.drop(index)
     end
 
     # auto node indexes

@@ -60,7 +60,7 @@ module Neography
           :provider => provider
         }
         config.merge!(extra_config) unless extra_config.nil?
-        post NodeIndexes.all_path do
+        post "/index/node" do
           { :name => name,
             :config => config
           }
@@ -68,11 +68,11 @@ module Neography
       end
 
       def drop_node_index(index)
-        delete NodeIndexes.unique_path(:index => index)
+        delete "/index/node/%{index}?unique" % {:index => index}
       end
 
       def create_unique_node(index, key, value, properties)
-        post NodeIndexes.unique_path(:index => index) do
+        post "/index/node/%{index}?unique" % {:index => index} do
           {
             :key        => key,
             :value      => value,
@@ -82,7 +82,7 @@ module Neography
       end
 
       def add_node_to_index(index, key, value, id, unique = false)
-        path = unique ? NodeIndexes.unique_path(:index => index) : NodeIndexes.base_path(:index => index)
+        path = unique ? "/index/node/%{index}?unique" % {:index => index} : "/index/node/%{index}" % {:index => index}
         post path do
           {
             :uri   => build_node_uri(id),
@@ -93,11 +93,11 @@ module Neography
       end
 
       def get_node_index(index, key, value)
-        get NodeIndexes.key_value_path(:index => index, :key => key, :value => value)
+        get "/index/node/%{index}/%{key}/%{value}" % {:index => index, :key => key, :value => encode(value)}
       end
 
       def remove_node_from_index(index, key_or_id, value_or_id = nil, id = nil)
-        delete remove_from_index_path(NodeIndexes, index, key_or_id, value_or_id, id)
+        delete remove_from_index_path("node", index, key_or_id, value_or_id, id)
       end
 
       # NodeProperties
@@ -186,7 +186,7 @@ module Neography
       end
 
       def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
-        delete remove_from_index_path(RelationshipIndexes, index, key_or_id, value_or_id, id)
+        delete remove_from_index_path("relationship", index, key_or_id, value_or_id, id)
       end
 
       # RelationshipProperties
@@ -232,11 +232,11 @@ module Neography
 
       def remove_from_index_path(klass, index, key_or_id, value_or_id = nil, id = nil)
         if id
-          klass.value_path(:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id))
+          "/index/#{klass}/%{index}/%{key}/%{value}/%{id}" % {:index => index, :key => key_or_id, :value => value_or_id, :id => get_id(id)}
         elsif value_or_id
-          klass.key_path(:index => index, :key => key_or_id, :id => get_id(value_or_id))
+          "/index/#{klass}/%{index}/%{key}/%{id}" % {:index => index, :key => key_or_id, :id => get_id(value_or_id)}
         else
-          klass.id_path(:index => index, :id => get_id(key_or_id))
+          "/index/#{klass}/%{index}/%{id}" % {:index => index, :id => get_id(key_or_id)}
         end
       end
 
@@ -326,7 +326,7 @@ module Neography
       end
       
       def create_spatial_index(name, type, lat, lon)
-        post NodeIndexes.all_path do
+        post "/index/node" do
           {
             :name => name,
             :config => {
@@ -340,7 +340,7 @@ module Neography
       end
 
       def add_node_to_spatial_index(index, id)
-        post NodeIndexes.base_path(:index => index) do
+        post "/index/node/%{index}" % {:index => index} do
           {
             :uri   => build_node_uri(id),
             :key   => "k",
