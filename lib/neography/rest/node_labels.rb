@@ -1,7 +1,6 @@
 module Neography
   class Rest
     module NodeLabels
-      extend Neography::Rest::Paths
       include Neography::Rest::Helpers
 
       def list_labels

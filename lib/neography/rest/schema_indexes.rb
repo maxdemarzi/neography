@@ -1,25 +1,17 @@
 module Neography
   class Rest
-    class SchemaIndexes
-      extend Neography::Rest::Paths
+    module SchemaIndexes
       include Neography::Rest::Helpers
-
-      add_path :base,      "/schema/index/:label"
-      add_path :drop,      "/schema/index/:label/:index"
-
-      def initialize(connection)
-        @connection ||= connection
+        
+      def get_schema_index(label)
+        @connection.get("/schema/index/%{label}" % {:label => label})
       end
 
-      def list(label)
-        @connection.get(base_path(:label => label))
+      def delete_schema_index(label, index)
+        @connection.delete("/schema/index/%{label}/%{index}" % {:label => label, :index => index})
       end
 
-      def drop(label, index)
-        @connection.delete(drop_path(:label => label, :index => index))
-      end
-
-      def create(label, keys = [])
+      def create_schema_index(label, keys = [])
         options = {
           :body => (
             { :property_keys => keys
@@ -27,7 +19,7 @@ module Neography
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(base_path(:label => label), options)
+        @connection.post("/schema/index/%{label}" % {:label => label}, options)
       end
     end
   end
