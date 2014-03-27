@@ -1,10 +1,7 @@
 require 'forwardable'
 
 require 'neography/rest/helpers'
-require 'neography/rest/paths'
-
 require 'neography/rest/schema_indexes'
-
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
 require 'neography/rest/node_relationships'
@@ -27,9 +24,7 @@ require 'neography/rest/clean'
 require 'neography/rest/transactions'
 require 'neography/rest/spatial'
 require 'neography/rest/constraints'
-
 require 'neography/errors'
-
 require 'neography/connection'
 
 module Neography
