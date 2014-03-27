@@ -44,6 +44,7 @@ module Neography
     include SchemaIndexes
     include Constraints
     include Transactions
+    include Nodes
     extend Forwardable
 
     attr_reader :connection
@@ -53,7 +54,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @nodes                     ||= Nodes.new(@connection)
       @node_properties           ||= NodeProperties.new(@connection)
       @node_relationships        ||= NodeRelationships.new(@connection)
       @other_node_relationships  ||= OtherNodeRelationships.new(@connection)
@@ -75,38 +75,6 @@ module Neography
       @spatial                   ||= Spatial.new(@connection)
     end   
       
-   
-    
-    # nodes
-
-    def get_root
-      @nodes.root
-    end
-
-    def get_node(id)
-      @nodes.get(id)
-    end
-
-    def get_nodes(*args)
-      @nodes.get_each(*args)
-    end
-
-    def create_node(*args)
-      @nodes.create(*args)
-    end
-
-    def create_nodes(args)
-      @nodes.create_multiple(args)
-    end
-
-    def create_nodes_threaded(args)
-      @nodes.create_multiple_threaded(args)
-    end
-
-    def delete_node(id)
-      @nodes.delete(id)
-    end
-
     def delete_node!(id)
       relationships = get_node_relationships(get_id(id))
       relationships.each do |relationship|

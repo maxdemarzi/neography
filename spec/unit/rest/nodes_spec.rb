@@ -4,35 +4,34 @@ module Neography
   class Rest
     describe Nodes do
 
-      let(:connection) { double }
-      subject { Nodes.new(connection) }
+      subject { Neography::Rest.new }
 
       context "get nodes" do
         it "gets single nodes" do
-          connection.should_receive(:get).with("/node/42")
-          subject.get("42")
+          subject.connection.should_receive(:get).with("/node/42")
+          subject.get_node("42")
         end
 
         it "gets multiple nodes" do
-          connection.should_receive(:get).with("/node/42")
-          connection.should_receive(:get).with("/node/43")
-          subject.get_each("42", "43")
+          subject.connection.should_receive(:get).with("/node/42")
+          subject.connection.should_receive(:get).with("/node/43")
+          subject.get_nodes("42", "43")
         end
 
         it "returns multiple nodes in an array" do
-          connection.stub(:get).and_return("foo", "bar")
-          subject.get_each("42", "43").should == [ "foo", "bar" ]
+          subject.connection.stub(:get).and_return("foo", "bar")
+          subject.get_nodes("42", "43").should == [ "foo", "bar" ]
         end
 
         it "gets the root node" do
-          connection.stub(:get).with("/").and_return({ "reference_node" => "42" })
-          connection.should_receive(:get).with("/node/42")
-          subject.root
+          subject.connection.stub(:get).with("/").and_return({ "reference_node" => "42" })
+          subject.connection.should_receive(:get).with("/node/42")
+          subject.get_root
         end
 
         it "returns the root node" do
-          connection.stub(:get).and_return({ "reference_node" => "42" }, "foo")
-          subject.root.should == "foo"
+          subject.connection.stub(:get).and_return({ "reference_node" => "42" }, "foo")
+          subject.get_root.should == "foo"
         end
       end
 
@@ -43,13 +42,13 @@ module Neography
             :body    => '{"foo":"bar","baz":"qux"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options)
-          subject.create_with_attributes({:foo => "bar", :baz => "qux"})
+          subject.connection.should_receive(:post).with("/node", options)
+          subject.create_node_with_attributes({:foo => "bar", :baz => "qux"})
         end
 
         it "returns the created node" do
-          connection.stub(:post).and_return("foo")
-          subject.create_with_attributes({}).should == "foo"
+          subject.connection.stub(:post).and_return("foo")
+          subject.create_node_with_attributes({}).should == "foo"
         end
 
         it "creates with attributes using #create method" do
@@ -57,23 +56,23 @@ module Neography
             :body    => '{"foo":"bar","baz":"qux"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options)
-          subject.create({:foo => "bar", :baz => "qux"})
+          subject.connection.should_receive(:post).with("/node", options)
+          subject.create_node({:foo => "bar", :baz => "qux"})
         end
 
         it "creates empty nodes" do
-          connection.should_receive(:post).with("/node")
-          subject.create_empty
+          subject.connection.should_receive(:post).with("/node")
+          subject.create_empty_node
         end
 
         it "returns an empty node" do
-          connection.stub(:post).and_return("foo")
-          subject.create_empty.should == "foo"
+          subject.connection.stub(:post).and_return("foo")
+          subject.create_empty_node.should == "foo"
         end
 
         it "creates empty nodes using #create method" do
-          connection.should_receive(:post).with("/node")
-          subject.create
+          subject.connection.should_receive(:post).with("/node")
+          subject.create_node
         end
 
       end
@@ -81,8 +80,8 @@ module Neography
       context "delete nodes" do
 
         it "deletes a node" do
-          connection.should_receive(:delete).with("/node/42")
-          subject.delete("42")
+          subject.connection.should_receive(:delete).with("/node/42")
+          subject.delete_node("42")
         end
 
       end
@@ -98,18 +97,18 @@ module Neography
             :body    => '{"foo2":"bar2","baz2":"qux2"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options1)
-          connection.should_receive(:post).with("/node", options2)
+          subject.connection.should_receive(:post).with("/node", options1)
+          subject.connection.should_receive(:post).with("/node", options2)
 
-          subject.create_multiple([
+          subject.create_nodes([
             {:foo1 => "bar1", :baz1 => "qux1"},
             {:foo2 => "bar2", :baz2 => "qux2"}
           ])
         end
 
         it "returns multiple nodes with attributes in an array" do
-          connection.stub(:post).and_return("foo", "bar")
-          subject.create_multiple([{},{}]).should == ["foo", "bar"]
+          subject.connection.stub(:post).and_return("foo", "bar")
+          subject.create_nodes([{},{}]).should == ["foo", "bar"]
         end
 
         # exotic?
@@ -118,23 +117,23 @@ module Neography
             :body    => '{"foo1":"bar1","baz1":"qux1"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options1)
-          connection.should_receive(:post).with("/node")
+          subject.connection.should_receive(:post).with("/node", options1)
+          subject.connection.should_receive(:post).with("/node")
 
-          subject.create_multiple([
+          subject.create_nodes([
             {:foo1 => "bar1", :baz1 => "qux1"},
             "not a hash" # ?
           ])
         end
 
         it "creates multiple empty nodes" do
-          connection.should_receive(:post).with("/node").twice
-          subject.create_multiple(2)
+          subject.connection.should_receive(:post).with("/node").twice
+          subject.create_nodes(2)
         end
 
         it "returns multiple empty nodes in an array" do
-          connection.stub(:post).and_return("foo", "bar")
-          subject.create_multiple(2).should == ["foo", "bar"]
+          subject.connection.stub(:post).and_return("foo", "bar")
+          subject.create_nodes(2).should == ["foo", "bar"]
         end
 
       end
@@ -152,10 +151,10 @@ module Neography
             :body    => '{"foo2":"bar2","baz2":"qux2"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options1)
-          connection.should_receive(:post).with("/node", options2)
+          subject.connection.should_receive(:post).with("/node", options1)
+          subject.connection.should_receive(:post).with("/node", options2)
 
-          subject.create_multiple_threaded([
+          subject.create_nodes_threaded([
             {:foo1 => "bar1", :baz1 => "qux1"},
             {:foo2 => "bar2", :baz2 => "qux2"}
           ])
@@ -167,18 +166,18 @@ module Neography
             :body    => '{"foo1":"bar1","baz1":"qux1"}',
             :headers => json_content_type
           }
-          connection.should_receive(:post).with("/node", options1)
-          connection.should_receive(:post).with("/node")
+          subject.connection.should_receive(:post).with("/node", options1)
+          subject.connection.should_receive(:post).with("/node")
 
-          subject.create_multiple_threaded([
+          subject.create_nodes_threaded([
             {:foo1 => "bar1", :baz1 => "qux1"},
             "not a hash" # ?
           ])
         end
 
         it "creates multiple empty nodes" do
-          connection.should_receive(:post).with("/node").twice
-          subject.create_multiple_threaded(2)
+          subject.connection.should_receive(:post).with("/node").twice
+          subject.create_nodes_threaded(2)
         end
 
       end

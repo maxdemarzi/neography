@@ -39,15 +39,15 @@ module Neography
       # Nodes
 
       def get_node(id)
-        get Nodes.base_path(:id => get_id(id))
+        get "/node/%{id}" % {:id => get_id(id)}
       end
 
       def delete_node(id)
-        delete Nodes.base_path(:id => get_id(id))
+        delete "/node/%{id}" % {:id => get_id(id)}
       end
 
       def create_node(body)
-        post Nodes.index_path do
+        post "/node" do
           body
         end
       end
