@@ -4,12 +4,11 @@ module Neography
   class Rest
     describe RelationshipTypes do
 
-      let(:connection) { double(:configuration => "http://configuration") }
-      subject { RelationshipTypes.new(connection) }
+      subject { Neography::Rest.new }
 
       it "lists all relationship types" do
-        connection.should_receive(:get).with("/relationship/types")
-        subject.list
+        subject.connection.should_receive(:get).with("/relationship/types")
+        subject.list_relationship_types
       end
     end
   end

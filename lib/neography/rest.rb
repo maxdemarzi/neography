@@ -39,6 +39,7 @@ module Neography
 
   class Rest
     include Helpers
+    include RelationshipTypes
     extend Forwardable
 
     attr_reader :connection
@@ -63,7 +64,6 @@ module Neography
       @relationship_properties   ||= RelationshipProperties.new(@connection)
       @relationship_indexes      ||= RelationshipIndexes.new(@connection)
       @relationship_auto_indexes ||= RelationshipAutoIndexes.new(@connection)
-      @relationship_types        ||= RelationshipTypes.new(@connection)
 
       @cypher                    ||= Cypher.new(@connection)
       @gremlin                   ||= Gremlin.new(@connection)
@@ -73,12 +73,6 @@ module Neography
       @transactions              ||= Transactions.new(@connection)
       @spatial                   ||= Spatial.new(@connection)
       @constraints               ||= Constraints.new(@connection)
-    end
-
-    # meta-data
-
-    def list_relationship_types
-      @relationship_types.list
     end
     
     # labels
