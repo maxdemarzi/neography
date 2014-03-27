@@ -566,4 +566,18 @@ describe Neography::Rest do
     end
   end
 
+  describe "batch unknown option" do
+    it "should raise Neography::UnknownBatchOptionException when bad option is passed in batch" do
+      batch_commands = []
+
+      batch_commands << [ :bad_option, "start person_n=node:person(ssn = '000-00-0002')
+                                           set bar1 = {foo}"]
+
+      expect {
+        batch_result = @neo.batch *batch_commands
+      }.to raise_exception Neography::UnknownBatchOptionException
+
+    end
+  end
+
 end

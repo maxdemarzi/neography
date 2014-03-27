@@ -25,7 +25,7 @@ module Neography
         begin
           send("batch_#{args[0]}".to_sym, *args[1..-1])
         rescue
-          raise "Unknown option #{args[0]} - #{args}"
+          raise UnknownBatchOptionException.new("Unknown option #{args[0]} - #{args}")
         end
       end
 
