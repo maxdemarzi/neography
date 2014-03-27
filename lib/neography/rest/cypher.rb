@@ -1,13 +1,9 @@
 module Neography
   class Rest
-    class Cypher
+    module Cypher
       include Neography::Rest::Helpers
 
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def query(query, parameters = {}, cypher_options = nil)
+      def execute_query(query, parameters = {}, cypher_options = nil)
         options = {
           :body => {
             :query => query,

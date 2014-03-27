@@ -53,6 +53,7 @@ module Neography
     include RelationshipAutoIndexes
     include NodeTraversal
     include NodePaths
+    include Cypher
     extend Forwardable
 
     attr_reader :connection
@@ -62,7 +63,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @cypher                    ||= Cypher.new(@connection)
       @gremlin                   ||= Gremlin.new(@connection)
       @extensions                ||= Extensions.new(@connection)
       @batch                     ||= Batch.new(@connection)
@@ -100,12 +100,6 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end 
-
-    # cypher query
-
-    def execute_query(query, params = {}, cypher_options = nil)
-      @cypher.query(query, params, cypher_options)
-    end
 
     # gremlin script
 
