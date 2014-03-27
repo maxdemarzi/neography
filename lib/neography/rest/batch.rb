@@ -236,11 +236,11 @@ module Neography
       # Spatial
       
       def batch_get_spatial
-        get Spatial.index_path
+        get "/ext/SpatialPlugin"
       end
     
       def batch_add_point_layer(layer, lat = nil, lon = nil)
-         post Spatial.add_simple_point_layer_path do
+         post "/ext/SpatialPlugin/graphdb/addSimplePointLayer" do
           {
               :layer => layer,
               :lat => lat || "lat",
@@ -250,7 +250,7 @@ module Neography
       end
 
       def batch_add_editable_layer(layer, format = "WKT", node_property_name = "wkt")
-        post Spatial.add_editable_layer_path do 
+        post "/ext/SpatialPlugin/graphdb/addEditableLayer" do 
           {
               :layer => layer,
               :format => format,
@@ -260,7 +260,7 @@ module Neography
       end
 
       def batch_get_layer(layer)
-        post Spatial.get_layer_path do
+        post "/ext/SpatialPlugin/graphdb/getLayer" do
           {
               :layer => layer
             }
@@ -268,7 +268,7 @@ module Neography
       end
 
       def batch_add_geometry_to_layer(layer, geometry)
-        post Spatial.add_geometry_to_layer_path do 
+        post "/ext/SpatialPlugin/graphdb/addGeometryWKTToLayer" do 
           {
               :layer => layer,
               :geometry => geometry
@@ -277,7 +277,7 @@ module Neography
       end
     
       def batch_edit_geometry_from_layer(layer, geometry, node)
-        post Spatial.edit_geometry_from_layer_path do 
+        post "/ext/SpatialPlugin/graphdb/updateGeometryFromWKT" do 
           {
               :layer => layer,
               :geometry => geometry,
@@ -287,7 +287,7 @@ module Neography
       end
     
       def batch_add_node_to_layer(layer, node)
-        post Spatial.add_node_to_layer_path do 
+        post "/ext/SpatialPlugin/graphdb/addNodeToLayer" do 
           {
               :layer => layer,
               :node => get_id(node)
@@ -296,7 +296,7 @@ module Neography
       end
     
       def batch_find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
-        post Spatial.find_geometries_in_bbox_path do 
+        post "/ext/SpatialPlugin/graphdb/findGeometriesInBBox" do 
           {
               :layer => layer,
               :minx => minx,
@@ -308,7 +308,7 @@ module Neography
       end
     
       def batch_find_geometries_within_distance(layer, pointx, pointy, distance)
-        post Spatial.find_geometries_within_distance_path do 
+        post "/ext/SpatialPlugin/graphdb/findGeometriesWithinDistance" do 
           {
               :layer => layer,
               :pointX => pointx,

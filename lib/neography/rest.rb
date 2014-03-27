@@ -57,6 +57,7 @@ module Neography
     include Gremlin
     include Batch
     include Extensions
+    include Spatial
     include Clean
     extend Forwardable
 
@@ -66,8 +67,6 @@ module Neography
 
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
-
-      @spatial                   ||= Spatial.new(@connection)
     end   
 
     alias_method :list_indexes, :list_node_indexes
@@ -99,53 +98,7 @@ module Neography
 
     def get_relationship_end_node(rel)
       get_node(rel["end"])
-    end 
-    
-    # spatial
-    
-    def get_spatial
-      @spatial.index
-    end
-    
-    def add_point_layer(layer, lat = nil, lon = nil)
-      @spatial.add_point_layer(layer, lat, lon)
-    end
-
-    def add_editable_layer(layer, format, node_property_name)
-      @spatial.add_editable_layer(layer, format, node_property_name)
-    end
-
-    def get_layer(layer)
-      @spatial.get_layer(layer)
-    end
-
-    def add_geometry_to_layer(layer, geometry)
-      @spatial.add_geometry_to_layer(layer, geometry)
-    end
-    
-    def edit_geometry_from_layer(layer, geometry, node)
-      @spatial.edit_geometry_from_layer(layer, geometry, node)
-    end
-    
-    def add_node_to_layer(layer, node)
-      @spatial.add_node_to_layer(layer, node)
-    end
-    
-    def find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
-      @spatial.find_geometries_in_bbox(layer, minx, maxx, miny, maxy)
-    end
-    
-    def find_geometries_within_distance(layer, pointx, pointy, distance)
-      @spatial.find_geometries_within_distance(layer, pointx, pointy, distance)
-    end
-    
-    def create_spatial_index(name, type = nil, lat = nil, lon = nil)
-      @spatial.create_spatial_index(name, type, lat, lon)
-    end
-    
-    def add_node_to_spatial_index(index, id)
-      @spatial.add_node_to_spatial_index(index, id)
-    end
+    end     
     
   end
 end
