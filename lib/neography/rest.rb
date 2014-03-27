@@ -50,6 +50,7 @@ module Neography
     include NodeRelationships
     include OtherNodeRelationships
     include NodeIndexes
+    include NodeAutoIndexes
     extend Forwardable
 
     attr_reader :connection
@@ -59,7 +60,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @node_auto_indexes         ||= NodeAutoIndexes.new(@connection)
       @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
 
@@ -103,36 +103,6 @@ module Neography
 
     def get_relationship_end_node(rel)
       get_node(rel["end"])
-    end
-
-    # auto node indexes
-
-    def get_node_auto_index(key, value)
-      @node_auto_indexes.get(key, value)
-    end
-
-    def find_node_auto_index(key_or_query, value = nil)
-      @node_auto_indexes.find_or_query(key_or_query, value)
-    end
-
-    def get_node_auto_index_status
-      @node_auto_indexes.status
-    end
-
-    def set_node_auto_index_status(change_to = true)
-      @node_auto_indexes.status = change_to
-    end
-
-    def get_node_auto_index_properties
-      @node_auto_indexes.properties
-    end
-
-    def add_node_auto_index_property(property)
-      @node_auto_indexes.add_property(property)
-    end
-
-    def remove_node_auto_index_property(property)
-      @node_auto_indexes.remove_property(property)
     end
 
     # relationship indexes
