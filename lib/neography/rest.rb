@@ -43,6 +43,7 @@ module Neography
     include NodeLabels
     include SchemaIndexes
     include Constraints
+    include Transactions
     extend Forwardable
 
     attr_reader :connection
@@ -71,35 +72,10 @@ module Neography
       @extensions                ||= Extensions.new(@connection)
       @batch                     ||= Batch.new(@connection)
       @clean                     ||= Clean.new(@connection)
-      @transactions              ||= Transactions.new(@connection)
       @spatial                   ||= Spatial.new(@connection)
     end   
       
-    # transactions
-    
-    def begin_transaction(statements=nil)
-      @transactions.begin(statements)
-    end
-    
-    def in_transaction(tx, statements)
-      @transactions.add(tx, statements)    
-    end
-    
-    def keep_transaction(tx)
-      @transactions.add(tx)    
-    end
-
-    def commit_transaction(tx, statements=[])
-      if (tx.is_a?(Hash) || tx.is_a?(Integer))
-        @transactions.commit(tx, statements)    
-      else
-        @transactions.begin(tx, "/commit")
-      end
-    end
-    
-    def rollback_transaction(tx)
-      @transactions.rollback(tx)    
-    end    
+   
     
     # nodes
 

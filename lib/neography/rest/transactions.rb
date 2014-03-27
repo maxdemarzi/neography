@@ -1,54 +1,53 @@
 module Neography
   class Rest
-    class Transactions
-      extend Neography::Rest::Paths
+    module Transactions
       include Neography::Rest::Helpers
-
-      add_path :base,   "/transaction"
-      add_path :tx,    "/transaction/:id"
-      add_path :commit, "/transaction/:id/commit"
-      
-      def initialize(connection)
-        @connection ||= connection
-      end
-
-      def begin(statements = [], commit = "")
+    
+      def begin_transaction(statements = [], commit = "")
         options = {
           :body => (
             convert_cypher(statements)
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(base_path + commit, options)
+        @connection.post("/transaction" + commit, options)
       end
 
-      def add(tx, statements = [])
+      def in_transaction(tx, statements = [])
         options = {
           :body => (
             convert_cypher(statements)
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(tx_path(:id => get_id(tx)), options)
-      end
-
-      def commit(tx, statements = [])
-        options = {
-          :body => (
-            convert_cypher(statements)
-          ).to_json,
-          :headers => json_content_type
-        }
-        @connection.post(commit_path(:id => get_id(tx)), options)
+        @connection.post("/transaction/%{id}" % {:id => get_tx_id(tx)}, options)
       end
       
-      def rollback(tx)
-        @connection.delete(tx_path(:id => get_id(tx)))
+      def keep_transaction(tx)
+        in_transaction(tx)
+      end
+
+      def commit_transaction(tx, statements = [])
+        if (tx.is_a?(Hash) || tx.is_a?(Integer))
+          options = {
+            :body => (
+              convert_cypher(statements)
+            ).to_json,
+            :headers => json_content_type
+          }
+          @connection.post("/transaction/%{id}/commit" %  {:id => get_tx_id(tx)}, options)
+        else
+          begin_transaction(tx, "/commit")
+        end
+      end
+      
+      def rollback_transaction(tx)
+        @connection.delete("/transaction/%{id}" % {:id => get_tx_id(tx)})
       end
 
       private
       
-      def get_id(tx)
+      def get_tx_id(tx)
         return tx if tx.is_a?(Integer)
         return tx.split("/")[-2] if tx.is_a?(String)
         return tx["commit"].split("/")[-2] if tx["commit"]

@@ -4,16 +4,15 @@ module Neography
   class Rest
     describe Transactions do
 
-      let(:connection) { double(:configuration => "http://configuration") }
-      subject { Transactions.new(connection) }
-
+      subject { Neography::Rest.new }
+      
       it "can create new transactions" do
         options = {
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        connection.should_receive(:post).with("/transaction", options)
-        subject.begin
+        subject.connection.should_receive(:post).with("/transaction", options)
+        subject.begin_transaction
       end
 
       it "can add to transactions" do
@@ -21,8 +20,8 @@ module Neography
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        connection.should_receive(:post).with("/transaction/1", options)
-        subject.add(1, [])
+        subject.connection.should_receive(:post).with("/transaction/1", options)
+        subject.in_transaction(1, [])
       end
 
       it "can commit transactions" do
@@ -30,13 +29,13 @@ module Neography
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        connection.should_receive(:post).with("/transaction/1/commit", options)
-        subject.commit(1, [])
+        subject.connection.should_receive(:post).with("/transaction/1/commit", options)
+        subject.commit_transaction(1, [])
       end
 
       it "can rollback transactions" do
-        connection.should_receive(:delete).with("/transaction/1")
-        subject.rollback(1)
+        subject.connection.should_receive(:delete).with("/transaction/1")
+        subject.rollback_transaction(1)
       end
       
     end
