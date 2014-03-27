@@ -43,6 +43,53 @@ module Neography
           encode(value.to_s)
         end
       end
+      
+      def parse_order(order)
+        case order
+          when :breadth, "breadth", "breadth first", "breadthFirst", :wide, "wide"
+            "breadth first"
+          else
+            "depth first"
+        end
+      end
+
+      def parse_uniqueness(uniqueness)
+        case uniqueness
+          when :nodeglobal, "node global", "nodeglobal", "node_global"
+            "node global"
+          when :nodepath, "node path", "nodepath", "node_path"
+            "node path"
+          when :noderecent, "node recent", "noderecent", "node_recent"
+            "node recent"
+          when :relationshipglobal, "relationship global", "relationshipglobal", "relationship_global"
+            "relationship global"
+          when :relationshippath, "relationship path", "relationshippath", "relationship_path"
+            "relationship path"
+          when :relationshiprecent, "relationship recent", "relationshiprecent", "relationship_recent"
+            "relationship recent"
+          else
+            "none"
+        end
+      end
+
+      def parse_depth(depth)
+        return nil if depth.nil?
+        return 1 if depth.to_i == 0
+        depth.to_i
+      end
+
+      def parse_type(type)
+        case type
+          when :relationship, "relationship", :relationships, "relationships"
+            "relationship"
+          when :path, "path", :paths, "paths"
+            "path"
+          when :fullpath, "fullpath", :fullpaths, "fullpaths"
+            "fullpath"
+          else
+            "node"
+        end
+      end      
 
     end
   end

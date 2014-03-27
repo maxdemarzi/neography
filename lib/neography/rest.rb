@@ -51,6 +51,7 @@ module Neography
     include NodeAutoIndexes
     include RelationshipIndexes
     include RelationshipAutoIndexes
+    include NodeTraversal
     extend Forwardable
 
     attr_reader :connection
@@ -60,7 +61,6 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       @connection = Connection.new(options)
 
-      @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
 
       @cypher                    ||= Cypher.new(@connection)
@@ -101,12 +101,6 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end 
-
-    # traversal
-
-    def traverse(id, return_type, description)
-      @node_traversal.traverse(id, return_type, description)
-    end
 
     # paths
 
