@@ -42,6 +42,7 @@ module Neography
     include RelationshipTypes
     include NodeLabels
     include SchemaIndexes
+    include Constraints
     extend Forwardable
 
     attr_reader :connection
@@ -72,32 +73,7 @@ module Neography
       @clean                     ||= Clean.new(@connection)
       @transactions              ||= Transactions.new(@connection)
       @spatial                   ||= Spatial.new(@connection)
-      @constraints               ||= Constraints.new(@connection)
     end   
-
-
-
-    # constraints
-    
-    def get_constraints(label=nil)
-      label.nil? ? @constraints.list : @constraints.get(label)
-    end
-
-    def drop_constraint(label, property)
-      @constraints.drop(label, property)
-    end
-
-    def get_uniqueness(label)
-      @constraints.get_uniqueness(label)
-    end
-
-    def get_unique_constraint(label, property)
-      @constraints.get_unique(label, property)
-    end
-
-    def create_unique_constraint(label, property)
-      @constraints.create_unique(label, property)
-    end
       
     # transactions
     
