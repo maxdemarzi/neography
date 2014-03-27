@@ -1,57 +1,47 @@
 module Neography
   class Rest
-    class NodeLabels
+    module NodeLabels
       extend Neography::Rest::Paths
       include Neography::Rest::Helpers
 
-      add_path :base,      "/labels"
-      add_path :node,      "/node/:id/labels"
-      add_path :nodes,     "/label/:label/nodes"
-      add_path :find,      "/label/:label/nodes?:property=:value"
-      add_path :delete,    "/node/:id/labels/:label"
-
-      def initialize(connection)
-        @connection ||= connection
+      def list_labels
+        @connection.get("/labels")
       end
 
-      def list
-        @connection.get(base_path)
+      def get_node_labels(id)
+        @connection.get("/node/%{id}/labels"  % {:id => get_id(id)})
       end
 
-      def get(id)
-        @connection.get(node_path(:id => get_id(id)))
+      def get_nodes_labeled(label)
+        @connection.get("/label/%{label}/nodes" % {:label => label})
       end
 
-      def get_nodes(label)
-        @connection.get(nodes_path(:label => label))
+      def find_nodes_labeled(label, hash)
+        @connection.get("/label/%{label}/nodes?%{property}=%{value}"  % {:label => label, :property => hash.keys.first, :value => escape(hash.values.first)})
       end
 
-      def find_nodes(label, hash)
-        @connection.get(find_path(:label => label, :property => hash.keys.first, :value => hash.values.first))
-      end
-
-      def add(id, label)
+      def add_label(id, label)
         options = {
           :body => (
             label
           ).to_json,
           :headers => json_content_type
         }
-        @connection.post(node_path(:id => get_id(id)), options)
+        @connection.post("/node/%{id}/labels"  % {:id => get_id(id)}, options)
       end
 
-      def set(id, label)
+      def set_label(id, label)
         options = {
           :body => (
             Array(label)
           ).to_json,
           :headers => json_content_type
         }
-        @connection.put(node_path(:id => get_id(id)), options)
+        @connection.put("/node/%{id}/labels"  % {:id => get_id(id)}, options)
       end
 
-      def delete(id, label)
-        @connection.delete(delete_path(:id => get_id(id), :label => label))
+      def delete_label(id, label)
+        @connection.delete("/node/%{id}/labels/%{label}" % {:id => get_id(id), :label => label})
       end
 
 

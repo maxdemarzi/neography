@@ -32,6 +32,17 @@ module Neography
         end
       end
 
+      def encode(value)
+        CGI.escape(value).gsub("+", "%20")
+      end
+      
+      def escape(value)
+        if value.class == String
+          "%22"+encode(value)+"%22";
+        else
+          encode(value.to_s)
+        end
+      end
 
     end
   end
