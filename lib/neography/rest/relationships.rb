@@ -1,21 +1,14 @@
 module Neography
   class Rest
-    class Relationships
-      extend Neography::Rest::Paths
+    module Relationships
       include Neography::Rest::Helpers
-
-      add_path :base,   "/relationship/:id"
-
-      def initialize(connection)
-        @connection ||= connection
+        
+      def get_relationship(id)
+        @connection.get("/relationship/%{id}" % {:id => get_id(id)})
       end
 
-      def get(id)
-        @connection.get(base_path(:id => get_id(id)))
-      end
-
-      def delete(id)
-        @connection.delete(base_path(:id => get_id(id)))
+      def delete_relationship(id)
+        @connection.delete("/relationship/%{id}" % {:id => get_id(id)})
       end
 
     end

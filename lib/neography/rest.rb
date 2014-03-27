@@ -46,6 +46,7 @@ module Neography
     include Transactions
     include Nodes
     include NodeProperties
+    include Relationships
     extend Forwardable
 
     attr_reader :connection
@@ -62,7 +63,6 @@ module Neography
       @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
 
-      @relationships             ||= Relationships.new(@connection)
       @relationship_properties   ||= RelationshipProperties.new(@connection)
       @relationship_indexes      ||= RelationshipIndexes.new(@connection)
       @relationship_auto_indexes ||= RelationshipAutoIndexes.new(@connection)
@@ -91,16 +91,7 @@ module Neography
     #   get("/nodes/")
     # end
 
-
     # relationships
-
-    def get_relationship(id)
-      @relationships.get(id)
-    end
-
-    def delete_relationship(id)
-      @relationships.delete(id)
-    end
 
     def get_relationship_start_node(rel)
       get_node(rel["start"])
@@ -109,6 +100,7 @@ module Neography
     def get_relationship_end_node(rel)
       get_node(rel["end"])
     end
+
     
     # relationship properties
 

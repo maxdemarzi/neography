@@ -4,17 +4,16 @@ module Neography
   class Rest
     describe Relationships do
 
-      let(:connection) { double }
-      subject { Relationships.new(connection) }
+      subject { Neography::Rest.new }
 
       it "gets a relationship" do
-        connection.should_receive(:get).with("/relationship/42")
-        subject.get("42")
+        subject.connection.should_receive(:get).with("/relationship/42")
+        subject.get_relationship("42")
       end
 
       it "deletes a relationship" do
-        connection.should_receive(:delete).with("/relationship/42")
-        subject.delete("42")
+        subject.connection.should_receive(:delete).with("/relationship/42")
+        subject.delete_relationship("42")
       end
 
     end
