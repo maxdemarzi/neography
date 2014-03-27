@@ -3,7 +3,6 @@ require 'forwardable'
 require 'neography/rest/helpers'
 require 'neography/rest/paths'
 
-require 'neography/rest/indexes'
 require 'neography/rest/auto_indexes'
 require 'neography/rest/schema_indexes'
 
@@ -51,6 +50,7 @@ module Neography
     include OtherNodeRelationships
     include NodeIndexes
     include NodeAutoIndexes
+    include RelationshipIndexes
     extend Forwardable
 
     attr_reader :connection
@@ -63,7 +63,6 @@ module Neography
       @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
 
-      @relationship_indexes      ||= RelationshipIndexes.new(@connection)
       @relationship_auto_indexes ||= RelationshipAutoIndexes.new(@connection)
 
       @cypher                    ||= Cypher.new(@connection)
@@ -103,45 +102,7 @@ module Neography
 
     def get_relationship_end_node(rel)
       get_node(rel["end"])
-    end
-
-    # relationship indexes
-
-    def list_relationship_indexes
-      @relationship_indexes.list
-    end
-
-    def create_relationship_index(name, type = "exact", provider = "lucene")
-      @relationship_indexes.create(name, type, provider)
-    end
-
-    def create_relationship_auto_index(type = "exact", provider = "lucene")
-      @relationship_indexes.create_auto(type, provider)
-    end
-
-    def create_unique_relationship(index, key, value, type, from, to, props = nil)
-      @relationship_indexes.create_unique(index, key, value, type, from, to, props)
-    end
-
-    def add_relationship_to_index(index, key, value, id)
-      @relationship_indexes.add(index, key, value, id)
-    end
-
-    def remove_relationship_from_index(index, id_or_key, id_or_value = nil, id = nil)
-      @relationship_indexes.remove(index, id_or_key, id_or_value, id)
-    end
-
-    def get_relationship_index(index, key, value)
-      @relationship_indexes.get(index, key, value)
-    end
-
-    def find_relationship_index(index, key_or_query, value = nil)
-      @relationship_indexes.find(index, key_or_query, value)
-    end
-    
-    def drop_relationship_index(index)
-      @relationship_indexes.drop(index)
-    end    
+    end 
 
     # relationship auto indexes
 

@@ -159,7 +159,7 @@ module Neography
       # RelationshipIndexes
 
       def create_unique_relationship(index, key, value, type, from, to, props = nil)
-        post RelationshipIndexes.unique_path(:index => index) do
+        post "/index/relationship/%{index}?unique" % {:index => index} do
           {
             :key   => key,
             :value => value,
@@ -172,7 +172,7 @@ module Neography
       end
 
       def add_relationship_to_index(index, key, value, id)
-        post RelationshipIndexes.base_path(:index => index) do
+        post "/index/relationship/%{index}" % {:index => index} do
           {
             :uri   => build_relationship_uri(id),
             :key   => key,
@@ -182,7 +182,7 @@ module Neography
       end
 
       def get_relationship_index(index, key, value)
-        get RelationshipIndexes.key_value_path(:index => index, :key => key, :value => value)
+        get "/index/relationship/%{index}/%{key}/%{value}" % {:index => index, :key => key, :value => encode(value)}
       end
 
       def remove_relationship_from_index(index, key_or_id, value_or_id = nil, id = nil)
