@@ -192,7 +192,7 @@ module Neography
       # RelationshipProperties
 
       def set_relationship_property(id, property)
-        put RelationshipProperties.single_path(:id => get_id(id), :property => property.keys.first) do
+        put "/relationship/%{id}/properties/%{property}" % {:id => get_id(id), :property => property.keys.first} do
           property.values.first
         end
       end

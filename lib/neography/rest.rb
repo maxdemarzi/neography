@@ -3,7 +3,6 @@ require 'forwardable'
 require 'neography/rest/helpers'
 require 'neography/rest/paths'
 
-require 'neography/rest/properties'
 require 'neography/rest/indexes'
 require 'neography/rest/auto_indexes'
 require 'neography/rest/schema_indexes'
@@ -47,6 +46,7 @@ module Neography
     include Nodes
     include NodeProperties
     include Relationships
+    include RelationshipProperties
     extend Forwardable
 
     attr_reader :connection
@@ -63,7 +63,6 @@ module Neography
       @node_traversal            ||= NodeTraversal.new(@connection)
       @node_paths                ||= NodePaths.new(@connection)
 
-      @relationship_properties   ||= RelationshipProperties.new(@connection)
       @relationship_indexes      ||= RelationshipIndexes.new(@connection)
       @relationship_auto_indexes ||= RelationshipAutoIndexes.new(@connection)
 
@@ -101,24 +100,6 @@ module Neography
       get_node(rel["end"])
     end
 
-    
-    # relationship properties
-
-    def get_relationship_properties(id, *properties)
-      @relationship_properties.get(id, *properties.flatten)
-    end
-
-    def set_relationship_properties(id, properties)
-      @relationship_properties.set(id, properties)
-    end
-
-    def reset_relationship_properties(id, properties)
-      @relationship_properties.reset(id, properties)
-    end
-
-    def remove_relationship_properties(id, *properties)
-      @relationship_properties.remove(id, *properties.flatten)
-    end
 
     # node relationships
 
