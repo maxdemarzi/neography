@@ -103,19 +103,19 @@ module Neography
       # NodeProperties
 
       def set_node_property(id, property)
-        put NodeProperties.single_path(:id => get_id(id), :property => property.keys.first) do
+        put "/node/%{id}/properties/%{property}" % {:id => get_id(id), :property => property.keys.first} do
           property.values.first
         end
       end
 
       def reset_node_properties(id, body)
-        put NodeProperties.all_path(:id => get_id(id)) do
+        put "/node/%{id}/properties" % {:id => get_id(id)} do
           body
         end
       end
 
       def remove_node_property(id, property)
-        delete NodeProperties.single_path(:id => get_id(id), :property => property)
+        delete "/node/%{id}/properties/%{property}" % {:id => get_id(id), :property => property}
       end
 
       # NodeLabel
