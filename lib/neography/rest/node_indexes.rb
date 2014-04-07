@@ -135,7 +135,5 @@ module Neography
       end
 
     end
-
-    end
   end
 end
