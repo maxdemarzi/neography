@@ -4,21 +4,21 @@ module Neography
   class Connection
     USER_AGENT = "Neography/#{Neography::VERSION}"
     ACTIONS = ["get", "post", "put", "delete"]
-    
+
     attr_accessor :protocol, :server, :port, :directory,
       :cypher_path, :gremlin_path,
       :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
       :authentication, :username, :password,
       :parser, :client,
-      :proxy
+      :proxy, :http_send_timeout, :http_receive_timeout
 
     def initialize(options = ENV['NEO4J_URL'] || {})
       config = merge_configuration(options)
       save_local_configuration(config)
       @client ||= HTTPClient.new(config[:proxy])
-      @client.send_timeout = 1200 # 10 minutes
-      @client.receive_timeout = 1200
+      @client.send_timeout = config[:http_send_timeout]
+      @client.receive_timeout = config[:http_receive_timeout]
       authenticate
     end
 
@@ -42,16 +42,16 @@ module Neography
     end
 
     ACTIONS.each do |action|
-      define_method(action) do |path, options = {}| 
+      define_method(action) do |path, options = {}|
         # This ugly hack is required because internal Batch paths do not start with "/db/data"
         # if somebody has a cleaner solution... pull request please!
         path = "/db/data" + path if ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"].include?(path.split("/")[1].split("?").first)
         query_path = configuration + path
-        query_body = merge_options(options)[:body] 
+        query_body = merge_options(options)[:body]
         log path, query_body do
-          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)    
+          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)
         end
-      end 
+      end
     end
 
     def log(path, body)
@@ -80,7 +80,7 @@ module Neography
         @client.www_auth.basic_auth.challenge(configuration) if auth_type == 'basic_auth'
       end
     end
-    
+
     private
 
     def merge_configuration(options)
@@ -143,13 +143,13 @@ module Neography
       body = @parser.json(response.body.force_encoding("UTF-8"))
       body.each do |result|
         if result["status"] >= 400
-          code = result["status"] 
+          code = result["status"]
           break
         end
       end
       return code, body, true
     end
-    
+
     def return_result(response, code, body, parsed, path, query_body)
       case code
       when 200
@@ -166,7 +166,7 @@ module Neography
       when 400..500
         handle_4xx_500_response(response, code, body, path, query_body)
         nil
-      end      
+      end
     end
 
     def handle_4xx_500_response(response, code, body, path, query_body)
@@ -184,7 +184,7 @@ module Neography
             parsed_body = result["body"] || result
             break
           end
-        end        
+        end
       else
         parsed_body = @parser.json(body)
       end
@@ -195,7 +195,7 @@ module Neography
       @logger.error "#{response.dump} error: #{body}" if @log_enabled
       raise_errors(code, parsed_body["exception"], message, stacktrace, request, index)
     end
-    
+
     def raise_errors(code, exception, message, stacktrace, request, index)
       error = nil
       case code
@@ -215,12 +215,12 @@ module Neography
         when /RelationshipNotFoundException/ ; RelationshipNotFoundException
         when /NotFoundException/             ; NotFoundException
         when /UniquePathNotUniqueException/  ; UniquePathNotUniqueException
-        when /DeadlockDetectedException/     ; DeadlockDetectedException          
+        when /DeadlockDetectedException/     ; DeadlockDetectedException
         else
           NeographyError
       end
-      
-      raise error.new(message, code, stacktrace, request, index)      
+
+      raise error.new(message, code, stacktrace, request, index)
     end
 
     def parse_string_options(options)
