@@ -1,6 +1,6 @@
 module Neography
   class Rest
-    module NodeIndexes 
+    module NodeIndexes
       include Neography::Rest::Helpers
 
       def list_node_indexes
@@ -117,7 +117,21 @@ module Neography
           :headers => json_content_type
         }
         @connection.post("/index/node/%{index}?uniqueness=%{function}" %  {:index => index, :function => 'get_or_create'}, options)
-        
+
+      end
+
+      def create_or_fail_unique_node(index, key, value, properties = {})
+        options = {
+          :body => (
+            { :properties => properties,
+              :key => key,
+              :value => value
+            }
+          ).to_json,
+          :headers => json_content_type
+        }
+        @connection.post("/index/node/%{index}?uniqueness=%{function}" %  {:index => index, :function => 'create_or_fail'}, options)
+
       end
 
     end

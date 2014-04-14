@@ -1,6 +1,6 @@
 module Neography
   class Rest
-    module RelationshipIndexes 
+    module RelationshipIndexes
       include Neography::Rest::Helpers
 
       def list_relationship_indexes
@@ -118,7 +118,21 @@ module Neography
           :headers => json_content_type
         }
         @connection.post("/index/relationship/%{index}?uniqueness=%{function}" %  {:index => index, :function => 'get_or_create'}, options)
-        
+
+      end
+
+      def create_or_fail_unique_relationship(index, key, value, properties = {})
+        options = {
+          :body => (
+            { :properties => properties,
+              :key => key,
+              :value => value
+            }
+          ).to_json,
+          :headers => json_content_type
+        }
+        @connection.post("/index/relationship/%{index}?uniqueness=%{function}" %  {:index => index, :function => 'create_or_fail'}, options)
+
       end
 
     end
