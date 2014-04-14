@@ -59,7 +59,26 @@ module Neography
             }
           }
         end
+
+        context "httpclient" do
+          let(:httpclient) { double(:http_client) }
+          let(:options) do
+            {
+              :http_send_timeout     => 120,
+              :http_receive_timeout  => 120
+            }
+          end
+
+          it 'configures send/receive timeout' do
+            HTTPClient.should_receive(:new).and_return(httpclient)
+            httpclient.should_receive(:send_timeout=).with(120)
+            httpclient.should_receive(:receive_timeout=).with(120)
+            connection
+          end
+        end
       end
+
+
 
       context "string option" do
         let(:options) { "https://user:pass@somehost:8585/path" }
