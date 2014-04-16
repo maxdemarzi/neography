@@ -53,7 +53,7 @@ module Neography
         log path, query_body do
           headers = merge_options(options)[:headers]
           evaluate_response(@client.send(action.to_sym, query_path, query_body, headers),
-                            path, query_body, headers['X-Stream'] == true)
+                            path, query_body, headers && (headers['X-Stream'] == true))
         end
       end 
     end
