@@ -1,6 +1,5 @@
 # borrowed from architect4r
 require 'os'
-require 'httpclient'
 require 'zip'
 require 'net/http'
 

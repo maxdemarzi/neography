@@ -5,7 +5,7 @@ module Neography
     USER_AGENT = "Neography/#{Neography::VERSION}"
     ACTIONS = ["get", "post", "put", "delete"]
 
-    attr_accessor :protocol, :server, :port, :directory,
+    attr_reader :protocol, :server, :port, :directory,
       :cypher_path, :gremlin_path,
       :log_file, :log_enabled, :logger, :slow_log_threshold,
       :max_threads,
@@ -16,10 +16,13 @@ module Neography
     def initialize(options = ENV['NEO4J_URL'] || {})
       config = merge_configuration(options)
       save_local_configuration(config)
-      @client ||= HTTPClient.new(config[:proxy])
-      @client.send_timeout = config[:http_send_timeout]
-      @client.receive_timeout = config[:http_receive_timeout]
-      authenticate
+      @client ||= Excon.new(config[:proxy] || "#{@protocol}#{@server}:#{@port}", 
+                            :read_timeout => config[:http_receive_timeout],
+                            :write_timeout => config[:http_send_timeout],
+                            :persistent => true,
+                            :user =>  config[:username],
+                            :password => config[:password])
+      #authenticate
     end
 
     def configure(protocol, server, port, directory)
@@ -47,13 +50,18 @@ module Neography
       define_method(action) do |path, options = {}|
         # This ugly hack is required because internal Batch paths do not start with "/db/data"
         # if somebody has a cleaner solution... pull request please!
-        path = "/db/data" + path if ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"].include?(path.split("/")[1].split("?").first)
-        query_path = configuration + path
-        query_body = merge_options(options)[:body]
+        partial_path = path.split("/") 
+        if partial_path.size > 0
+          partial_path = partial_path[1].split("?").first
+        end
+        reserved = ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"]
+        path = "/db/data" + path if reserved.include?(partial_path)
+        is_batch = (partial_path == "batch") 
+        query_body = options[:body]
         log path, query_body do
           headers = merge_options(options)[:headers]
-          evaluate_response(@client.send(action.to_sym, query_path, query_body, headers),
-                            path, query_body, headers && (headers['X-Stream'] == true))
+          evaluate_response(@client.request(:method => action.to_sym, :path => path, :body => query_body, :headers => headers),
+                            path, query_body, headers && (headers['X-Stream'] == true), is_batch)
         end
       end
     end
@@ -131,11 +139,11 @@ module Neography
       return_result(code, result)
     end
 
-    def evaluate_response(response, path, query_body, streaming)
-      if streaming && response.http_header.request_uri.request_uri == "/db/data/batch"
+    def evaluate_response(response, path, query_body, streaming, batching)
+      if streaming && batching
         code, body, parsed = handle_batch(response)
       else
-        code = response.code
+        code = response.status
         body = response.body.force_encoding("UTF-8")
         parsed = false
       end

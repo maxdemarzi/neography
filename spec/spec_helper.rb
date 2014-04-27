@@ -34,7 +34,7 @@ def error_response(attributes)
   
   double(
     http_header: http_header,
-    code: attributes[:code],
+    status: attributes[:code],
     body: {
     message:   attributes[:message],
     exception: attributes[:exception],
@@ -42,4 +42,3 @@ def error_response(attributes)
   }.reject { |k,v| v.nil? }.to_json
   )
 end
-
