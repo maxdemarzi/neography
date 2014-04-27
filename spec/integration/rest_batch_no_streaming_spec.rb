@@ -5,14 +5,14 @@ describe Neography::Rest do
     @neo = Neography::Rest.new
   end
   
-  describe "streaming" do
+  describe "no streaming" do
   
     it "can send a 1000 item batch" do
       commands = []
       1000.times do |x|
         commands << [:create_node, {"name" => "Max " + x.to_s}]
       end
-      batch_result = @neo.batch *commands
+      batch_result = @neo.batch_no_streaming *commands
       batch_result.first["body"]["data"]["name"].should == "Max 0"
       batch_result.last["body"]["data"]["name"].should == "Max 999"
     end
@@ -22,21 +22,20 @@ describe Neography::Rest do
       5000.times do |x|
         commands << [:get_node, 0]
       end
-      batch_result = @neo.batch *commands
+      batch_result = @neo.batch_no_streaming *commands
       batch_result.first["body"]["self"].split('/').last.should == "0"
       batch_result.last["body"]["self"].split('/').last.should == "0"
     end
 
-    # fails in batch streaming
-    #it "can send a 20000 item batch" do
-    #  commands = []
-    #  20000.times do |x|
-    #    commands << [:create_node, {"name" => "Max " + x.to_s}]
-    #  end
-    #  batch_result = @neo.batch *commands
-    #  batch_result.first["body"]["data"]["name"].should == "Max 0"
-    #  batch_result.last["body"]["data"]["name"].should == "Max 19999"
-    #end
+    it "can send a 20000 item batch" do
+      commands = []
+      20000.times do |x|
+        commands << [:create_node, {"name" => "Max " + x.to_s}]
+      end
+      batch_result = @neo.batch_no_streaming *commands
+      batch_result.first["body"]["data"]["name"].should == "Max 0"
+      batch_result.last["body"]["data"]["name"].should == "Max 19999"
+    end
   end
 
 end

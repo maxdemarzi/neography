@@ -35,9 +35,11 @@ module Neography
 
     def merge_options(options)
       merged_options = options.merge!(@authentication)
-      merged_options[:headers].merge!(@user_agent) if merged_options[:headers]
-      merged_options[:headers].merge!('X-Stream' => true) if merged_options[:headers]
-      merged_options[:headers].merge!(@max_execution_time) if merged_options[:headers]
+      if merged_options[:headers]
+        merged_options[:headers].merge!(@user_agent)
+        merged_options[:headers].merge!('X-Stream' => true) unless merged_options[:headers].key?('X-Stream')
+        merged_options[:headers].merge!(@max_execution_time)
+      end
       merged_options
     end
 
@@ -49,7 +51,9 @@ module Neography
         query_path = configuration + path
         query_body = merge_options(options)[:body]
         log path, query_body do
-          evaluate_response(@client.send(action.to_sym, query_path, query_body, merge_options(options)[:headers]), path, query_body)
+          headers = merge_options(options)[:headers]
+          evaluate_response(@client.send(action.to_sym, query_path, query_body, headers),
+                            path, query_body, headers && (headers['X-Stream'] == true))
         end
       end
     end
@@ -127,8 +131,8 @@ module Neography
       return_result(code, result)
     end
 
-    def evaluate_response(response, path, query_body)
-      if response.http_header.request_uri.request_uri == "/db/data/batch"
+    def evaluate_response(response, path, query_body, streaming)
+      if streaming && response.http_header.request_uri.request_uri == "/db/data/batch"
         code, body, parsed = handle_batch(response)
       else
         code = response.code
