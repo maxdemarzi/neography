@@ -147,12 +147,14 @@ module Neography
     end
 
     def evaluate_response(response, path, query_body, streaming, batching, stream = nil)
+      code = response.status
+      parsed = false
       if streaming && batching
         code, body, parsed = handle_batch(stream)
+      elsif streaming
+        body = (stream || '').force_encoding("UTF-8")
       else
-        code = response.status
         body = response.body.force_encoding("UTF-8")
-        parsed = false
       end
       return_result(response, code, body, parsed, path, query_body)
     end
