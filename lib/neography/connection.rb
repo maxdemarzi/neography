@@ -56,26 +56,19 @@ module Neography
         end
         reserved = ["node", "relationship", "transaction", "cypher", "propertykeys", "schema", "label", "labels", "batch", "index", "ext"]
         path = "/db/data" + path if reserved.include?(partial_path)
-        is_batch = (partial_path == "batch") 
         query_body = options[:body]
         stream = ""
-        streamer = lambda do |chunk, remaining_bytes, total_bytes|
-          stream += chunk        
-        end
         headers = merge_options(options)[:headers]
-        is_streaming = headers && (headers['X-Stream'] == true)
-        if is_batch && is_streaming                 
-          log path, query_body do          
-            response = @client.request(:persistent => false, :method => action.to_sym, :path => path, :body => query_body, 
-            :headers => headers, :response_block => streamer, :read_timeout => 100000000, :write_timeout => 100000000)
-            evaluate_response(response, path, query_body, is_streaming, is_batch, stream)
+        log path, query_body do
+          req_params = {:method => action.to_sym, :path => path, :body => query_body, :headers => headers}
+          is_streaming = headers && (headers['X-Stream'] == true)
+          if is_streaming
+            streamer = lambda { |chunk, _, _| stream += chunk }
+            req_params.merge!({:persistent => false, :response_block => streamer,
+                               :read_timeout => 100000000, :write_timeout => 100000000})
           end
-        else
-          log path, query_body do          
-             evaluate_response(@client.request(:method => action.to_sym, :path => path, :body => query_body, :headers => headers),
-                            path, query_body, is_streaming, is_batch)
-          end
-        
+          response = @client.request(req_params)
+          evaluate_response(response, path, query_body, is_streaming, (partial_path == "batch"), stream)
         end
       end
     end
