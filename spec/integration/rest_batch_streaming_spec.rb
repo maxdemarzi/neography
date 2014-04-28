@@ -27,25 +27,25 @@ describe Neography::Rest do
       batch_result.last["body"]["self"].split('/').last.should == "0"
     end
 
-     it "can send a 20000 get item batch" do
+    it "can send a 20000 get item batch" do
       commands = []
       20000.times do |x|
-       commands << [:get_node, 0]
+        commands << [:get_node, 0]
       end
       batch_result = @neo.batch *commands
       batch_result.first["body"]["self"].split('/').last.should == "0"
       batch_result.last["body"]["self"].split('/').last.should == "0"
     end
 
-     #    it "can send a 20000 create item batch" do
-     #       commands = []
-     #       20000.times do |x|
-     #        commands << [:create_node, {"name" => "Max " + x.to_s}]
-     #       end
-     #       batch_result = @neo.batch *commands
-     #       batch_result.first["body"]["data"]["name"].should == "Max 0"
-     #       batch_result.last["body"]["data"]["name"].should == "Max 19999"
-     #     end
+    it "can send a 20000 create item batch" do
+      commands = []
+      20000.times do |x|
+        commands << [:create_node, {"name" => "Max " + x.to_s}]
+      end
+      batch_result = @neo.batch *commands
+      batch_result.first["body"]["data"]["name"].should == "Max 0"
+      batch_result.last["body"]["data"]["name"].should == "Max 19999"
+    end
 
   end
 end
