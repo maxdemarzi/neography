@@ -27,9 +27,9 @@ describe Neography::Rest do
       batch_result.last["body"]["self"].split('/').last.should == "0"
     end
 
-    it "can send a 70000 get item batch" do
+    it "can send a 7000 get item batch" do
       commands = []
-      70000.times do |x|
+      7000.times do |x|
         commands << [:get_node, 0]
       end
       batch_result = @neo.batch *commands
