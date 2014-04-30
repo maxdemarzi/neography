@@ -24,6 +24,10 @@ module Neography
       it "finds by query if no value passed to #find_or_query" do
         subject.connection.should_receive(:get).with("/index/auto/node/?query=some_query")
         subject.find_node_auto_index("some_query")
+
+        query = "some_query AND another_one"
+        subject.connection.should_receive(:get).with("/index/auto/node/?query=#{URI.encode(query)}")
+        subject.find_node_auto_index(query)
       end
 
       it "finds by key and value" do

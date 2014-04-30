@@ -23,7 +23,7 @@ module Neography
       end
 
       def query_node_auto_index(query_expression)
-        @connection.get("/index/auto/node/?query=%{query}" % {:query => query_expression}) || []
+        @connection.get("/index/auto/node/?query=%{query}" % {:query => encode(query_expression)}) || []
       end
 
       def get_node_auto_index_status
