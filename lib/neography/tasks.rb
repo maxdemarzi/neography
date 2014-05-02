@@ -6,7 +6,7 @@ require 'net/http'
 namespace :neo4j do
   desc "Install Neo4j"
   task :install, :edition, :version do |t, args|
-    args.with_defaults(:edition => "community", :version => "2.0.2")
+    args.with_defaults(:edition => "community", :version => "2.0.3")
     puts "Installing Neo4j-#{args[:edition]}-#{args[:version]}"
     
     if OS::Underlying.windows?
