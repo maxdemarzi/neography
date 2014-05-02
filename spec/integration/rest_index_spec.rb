@@ -420,7 +420,10 @@ describe Neography::Rest do
     it "can query a node from an automatic index" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.find_node_auto_index("name:Max")
-      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
+      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true
+      # check that more complex queries are correctly handled
+      existing_nodes = @neo.find_node_auto_index("name:Max OR name:Max")
+      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true
     end
 
     it "can get a relationship from an automatic index" do
