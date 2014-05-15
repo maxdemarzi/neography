@@ -54,4 +54,7 @@ module Neography
   # Unknown batch option exception detected
   class UnknownBatchOptionException < NeographyError; end
 
+  # A Cypher query is using a parameter that is not supplied
+  class ParameterNotFoundException < NeographyError; end
+
 end

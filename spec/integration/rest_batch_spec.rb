@@ -330,6 +330,13 @@ describe Neography::Rest do
       batch_result.first["body"]["data"][0][0]["self"].split('/').last.should == id
     end
 
+    it "raises ParameterNotFoundException when a cypher parameter is missing and ORDER BY is used" do
+      q = "MATCH n WHERE n.x>{missing_parameter} RETURN n ORDER BY n"
+      expect{
+        @neo.batch [:execute_query, q, {}]
+      }.to raise_error Neography::ParameterNotFoundException
+    end
+
   	it "can delete a node in batch" do
   		node1 = @neo.create_node
   		node2 = @neo.create_node

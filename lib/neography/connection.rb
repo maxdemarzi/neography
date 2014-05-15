@@ -234,6 +234,7 @@ module Neography
         when /NodeNotFoundException/         ; NodeNotFoundException
         when /NoSuchPropertyException/       ; NoSuchPropertyException
         when /RelationshipNotFoundException/ ; RelationshipNotFoundException
+        when /ParameterNotFoundException/    ; ParameterNotFoundException
         when /NotFoundException/             ; NotFoundException
         when /UniquePathNotUniqueException/  ; UniquePathNotUniqueException
         when /DeadlockDetectedException/     ; DeadlockDetectedException
