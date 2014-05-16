@@ -14,7 +14,7 @@ module Neography
           "algorithm"     => "shortestPath"
         }
 
-        subject.connection.should_receive(:post).with("/node/42/path", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/node/42/path", json_match(:body, expected_body))
 
         subject.get_path("42", "43", "relationships", 3, "shortestPath")
       end
@@ -27,7 +27,7 @@ module Neography
           "algorithm"     => "shortestPath"
         }
 
-        subject.connection.should_receive(:post).with("/node/42/paths", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/node/42/paths", json_match(:body, expected_body))
 
         subject.get_paths("42", "43", "relationships", 3, "shortestPath")
       end
@@ -41,7 +41,7 @@ module Neography
           "algorithm"     => "shortestPath"
         }
 
-        subject.connection.should_receive(:post).with("/node/42/paths", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/node/42/paths", json_match(:body, expected_body))
 
         subject.get_shortest_weighted_path("42", "43", "relationships", "cost", 3, "shortestPath")
       end
@@ -50,24 +50,24 @@ module Neography
 
         [ :shortest, "shortest", :shortestPath, "shortestPath", :short, "short" ].each do |algorithm|
           it "parses shortestPath" do
-            subject.send(:get_algorithm, algorithm).should == "shortestPath"
+            expect(subject.send(:get_algorithm, algorithm)).to eq("shortestPath")
           end
         end
 
         [ :allSimplePaths, "allSimplePaths", :simple, "simple" ].each do |algorithm|
           it "parses allSimplePaths" do
-            subject.send(:get_algorithm, algorithm).should == "allSimplePaths"
+            expect(subject.send(:get_algorithm, algorithm)).to eq("allSimplePaths")
           end
         end
 
         [ :dijkstra, "dijkstra" ].each do |algorithm|
           it "parses dijkstra" do
-            subject.send(:get_algorithm, algorithm).should == "dijkstra"
+            expect(subject.send(:get_algorithm, algorithm)).to eq("dijkstra")
           end
         end
 
         it "parses allPaths by default" do
-          subject.send(:get_algorithm, "foo").should == "allPaths"
+          expect(subject.send(:get_algorithm, "foo")).to eq("allPaths")
         end
 
       end

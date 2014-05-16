@@ -5,25 +5,25 @@ describe Neography::Node do
   describe "create and new" do
     it "can create an empty node" do
       new_node = Neography::Node.create
-      new_node.should_not be_nil
+      expect(new_node).not_to be_nil
     end
 
     it "can create a node with one property" do
       new_node = Neography::Node.create("name" => "Max")
-      new_node.name.should == "Max"
+      expect(new_node.name).to eq("Max")
     end
 
     it "can create a node with more than one property" do
       new_node = Neography::Node.create("age" => 31, "name" => "Max")
-      new_node.name.should == "Max"
-      new_node.age.should == 31
+      expect(new_node.name).to eq("Max")
+      expect(new_node.age).to eq(31)
     end
 
     it "can create a node with more than one property not on the default rest server" do
       @neo = Neography::Rest.new
       new_node = Neography::Node.create({"age" => 31, "name" => "Max"}, @neo)
-      new_node.name.should == "Max"
-      new_node.age.should == 31
+      expect(new_node.name).to eq("Max")
+      expect(new_node.age).to eq(31)
     end
 
     it "cannot create a node with more than one property not on the default rest server the other way" do
@@ -39,9 +39,9 @@ describe Neography::Node do
     it "can get a node that exists" do
       new_node = Neography::Node.create
       existing_node = Neography::Node.load(new_node)
-      existing_node.should_not be_nil
-      existing_node.neo_id.should_not be_nil
-      existing_node.neo_id.should == new_node.neo_id
+      expect(existing_node).not_to be_nil
+      expect(existing_node.neo_id).not_to be_nil
+      expect(existing_node.neo_id).to eq(new_node.neo_id)
     end
 
     it "raises an error if it tries to load a node that does not exist" do
@@ -56,9 +56,9 @@ describe Neography::Node do
       @neo = Neography::Rest.new
       new_node = Neography::Node.create({}, @neo)
       existing_node = Neography::Node.load(new_node, @neo)
-      existing_node.should_not be_nil
-      existing_node.neo_id.should_not be_nil
-      existing_node.neo_id.should == new_node.neo_id
+      expect(existing_node).not_to be_nil
+      expect(existing_node.neo_id).not_to be_nil
+      expect(existing_node.neo_id).to eq(new_node.neo_id)
     end
 
     it "cannot load a node that exists not on the default rest server the other way" do
@@ -77,9 +77,9 @@ describe Neography::Node do
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       node_from_index = @neo.get_node_index("test_node_index", key, value) 
       existing_node = Neography::Node.load(node_from_index)
-      existing_node.should_not be_nil
-      existing_node.neo_id.should_not be_nil
-      existing_node.neo_id.should == new_node.neo_id
+      expect(existing_node).not_to be_nil
+      expect(existing_node.neo_id).not_to be_nil
+      expect(existing_node.neo_id).to eq(new_node.neo_id)
     end
 
     it "can get a node that exists via cypher" do
@@ -88,9 +88,9 @@ describe Neography::Node do
       @neo = Neography::Rest.new
       results = @neo.execute_query(cypher, {:id => new_node.neo_id.to_i})
       existing_node = Neography::Node.load(results)
-      existing_node.should_not be_nil
-      existing_node.neo_id.should_not be_nil
-      existing_node.neo_id.should == new_node.neo_id
+      expect(existing_node).not_to be_nil
+      expect(existing_node.neo_id).not_to be_nil
+      expect(existing_node.neo_id).to eq(new_node.neo_id)
     end
 
 
@@ -110,13 +110,13 @@ describe Neography::Node do
   describe "exists?" do
     it "can tell if it exists" do
       new_node = Neography::Node.create
-      new_node.exist?.should be_true
+      expect(new_node.exist?).to be_true
     end
 
     it "can tell if does not exists" do
       new_node = Neography::Node.create
       new_node.del
-      new_node.exist?.should be_false
+      expect(new_node.exist?).to be_false
     end
   end
 
@@ -124,19 +124,19 @@ describe Neography::Node do
     it "can tell two nodes are the same with equal?" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      new_node.equal?(another_node).should be_true 
+      expect(new_node.equal?(another_node)).to be_true 
     end
 
     it "can tell two nodes are the same with eql?" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      new_node.eql?(another_node).should be_true 
+      expect(new_node.eql?(another_node)).to be_true 
     end
 
     it "can tell two nodes are the same with ==" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      (new_node == another_node).should be_true 
+      expect(new_node == another_node).to be_true 
     end
   end
 
@@ -148,8 +148,8 @@ describe Neography::Node do
       new_node[:eyes] = "brown"
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.weight.should == 200
-      existing_node.eyes.should == "brown"
+      expect(existing_node.weight).to eq(200)
+      expect(existing_node.eyes).to eq("brown")
     end
 
     it "can change a node's properties that already exist" do
@@ -159,8 +159,8 @@ describe Neography::Node do
       new_node.eyes = "brown"
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.weight.should == 200
-      existing_node.eyes.should == "brown"
+      expect(existing_node.weight).to eq(200)
+      expect(existing_node.eyes).to eq("brown")
     end
 
     it "can change a node's properties that does not already exist using []=" do
@@ -171,9 +171,9 @@ describe Neography::Node do
       new_node[:hair] = "black"
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.weight.should == 200
-      existing_node.eyes.should == "brown"
-      existing_node.hair.should == "black"
+      expect(existing_node.weight).to eq(200)
+      expect(existing_node.eyes).to eq("brown")
+      expect(existing_node.hair).to eq("black")
     end
 
     it "can change a node's properties that does not already exist" do
@@ -182,23 +182,23 @@ describe Neography::Node do
       new_node.hair = "black"
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.hair.should == "black"
+      expect(existing_node.hair).to eq("black")
     end
 
     it "can pass issue 18" do
       n = Neography::Node.create("name" => "Test")
       n.prop = 1
-      n.prop.should == 1           
+      expect(n.prop).to eq(1)           
       n.prop = 1                   
-      n.prop.should == 1           
-      n[:prop].should == 1         
+      expect(n.prop).to eq(1)           
+      expect(n[:prop]).to eq(1)         
       n[:prop2] = 2                  
-      n[:prop2].should == 2          
+      expect(n[:prop2]).to eq(2)          
       n[:prop2] = 2                  
-      n[:prop2].should == 2          
+      expect(n[:prop2]).to eq(2)          
       n.name                         
       n.name = "New Name"            
-      n.name.should == "New Name"
+      expect(n.name).to eq("New Name")
     end
 
   end
@@ -206,14 +206,14 @@ describe Neography::Node do
   describe "get node properties" do
     it "can get node properties using []" do
       new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
-      new_node[:weight].should == 150
-      new_node[:eyes].should == "green"
+      expect(new_node[:weight]).to eq(150)
+      expect(new_node[:eyes]).to eq("green")
     end
 
     it "can get node properties" do
       new_node = Neography::Node.create("weight" => 150, "eyes" => "green")
-      new_node.weight.should == 150
-      new_node.eyes.should == "green"
+      expect(new_node.weight).to eq(150)
+      expect(new_node.eyes).to eq("green")
     end
   end
 
@@ -224,12 +224,12 @@ describe Neography::Node do
       new_node[:weight] = nil
       new_node[:eyes] = nil
 
-      new_node[:weight].should be_nil
-      new_node[:eyes].should be_nil
+      expect(new_node[:weight]).to be_nil
+      expect(new_node[:eyes]).to be_nil
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.weight.should be_nil
-      existing_node.eyes.should be_nil
+      expect(existing_node.weight).to be_nil
+      expect(existing_node.eyes).to be_nil
     end
 
     it "can delete node properties" do
@@ -238,12 +238,12 @@ describe Neography::Node do
       new_node.weight = nil
       new_node.eyes = nil
 
-      new_node.weight.should be_nil
-      new_node.eyes.should be_nil
+      expect(new_node.weight).to be_nil
+      expect(new_node.eyes).to be_nil
 
       existing_node = Neography::Node.load(new_node)
-      existing_node.weight.should be_nil
-      existing_node.eyes.should be_nil
+      expect(existing_node.weight).to be_nil
+      expect(existing_node.eyes).to be_nil
     end
   end
 
@@ -255,6 +255,6 @@ describe Neography::Node do
       node
     }
 
-    it { subject.labels.should == %w(Label Label2) }
+    it { expect(subject.labels).to eq(%w(Label Label2)) }
   end
 end

@@ -9,7 +9,7 @@ module Neography
       it "executes an extensions get query" do
         path = "/unmanaged_extension/test"
 
-        subject.connection.should_receive(:get).with(path)
+        expect(subject.connection).to receive(:get).with(path)
         subject.get_extension("/unmanaged_extension/test")
       end
 
@@ -19,7 +19,7 @@ module Neography
           :body=>"{\"foo\":\"bar\",\"baz\":\"qux\"}",
           :headers=>{"Content-Type"=>"application/json", "Accept"=>"application/json;stream=true"}
         }
-        subject.connection.should_receive(:post).with(path, options)
+        expect(subject.connection).to receive(:post).with(path, options)
         subject.post_extension("/unmanaged_extension/test", { :foo => "bar", :baz => "qux" })
       end
 

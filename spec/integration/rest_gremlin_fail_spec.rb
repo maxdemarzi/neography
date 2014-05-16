@@ -18,8 +18,8 @@ describe Neography::Rest do
 
     it "gremlin works", :gremlin => true  do
       root_node = @neo.execute_script("g.v(0)")
-      root_node.should have_key("self")
-      root_node["self"].split('/').last.should == "0"
+      expect(root_node).to have_key("self")
+      expect(root_node["self"].split('/').last).to eq("0")
     end
   end
 
@@ -37,8 +37,8 @@ describe Neography::Rest do
 
     it "gremlin works", :gremlin => true  do
       root_node = @neo.execute_script("g.v(0)")
-      root_node.should have_key("self")
-      root_node["self"].split('/').last.should == "0"
+      expect(root_node).to have_key("self")
+      expect(root_node["self"].split('/').last).to eq("0")
     end
   end
 

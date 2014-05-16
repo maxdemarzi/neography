@@ -25,7 +25,7 @@ module Neography
           "max_depth"       => 4
         }
 
-        subject.connection.should_receive(:post).with("/node/42/traverse/relationship", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/node/42/traverse/relationship", json_match(:body, expected_body))
 
         subject.traverse("42", :relationship, description)
       end      

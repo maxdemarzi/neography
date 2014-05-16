@@ -11,8 +11,8 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       rel_types = @neo.list_relationship_types
-      rel_types.should_not be_nil
-      rel_types.should include("friends")
+      expect(rel_types).not_to be_nil
+      expect(rel_types).to include("friends")
     end
   end
 end

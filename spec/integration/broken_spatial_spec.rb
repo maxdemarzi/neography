@@ -17,12 +17,12 @@ describe Neography::Rest do
       # getting "The transaction is marked for rollback only." errors
       # possibly related to a Cypher Transaction Bug.
       puts batch_result.inspect
-      batch_result[0].first["data"]["layer"].should == "restaurantsbatch"
-      batch_result[1].first["data"]["lat"].should == properties[:lat]
-      batch_result[1].first["data"]["lon"].should == properties[:lon]
-      batch_result[2].first["data"]["layer"].should == "restaurantsbatch"
-      batch_result[3].first["data"].should_not be_empty
-      batch_result[4].first["data"].should_not be_empty
+      expect(batch_result[0].first["data"]["layer"]).to eq("restaurantsbatch")
+      expect(batch_result[1].first["data"]["lat"]).to eq(properties[:lat])
+      expect(batch_result[1].first["data"]["lon"]).to eq(properties[:lon])
+      expect(batch_result[2].first["data"]["layer"]).to eq("restaurantsbatch")
+      expect(batch_result[3].first["data"]).not_to be_empty
+      expect(batch_result[4].first["data"]).not_to be_empty
     end
   end
 end

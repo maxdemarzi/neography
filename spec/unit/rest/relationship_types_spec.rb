@@ -7,7 +7,7 @@ module Neography
       subject { Neography::Rest.new }
 
       it "lists all relationship types" do
-        subject.connection.should_receive(:get).with("/relationship/types")
+        expect(subject.connection).to receive(:get).with("/relationship/types")
         subject.list_relationship_types
       end
     end

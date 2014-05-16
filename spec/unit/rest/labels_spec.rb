@@ -7,27 +7,27 @@ module Neography
       subject { Neography::Rest.new }
 
       it "list node labels" do
-        subject.connection.should_receive(:get).with("/labels")
+        expect(subject.connection).to receive(:get).with("/labels")
         subject.list_labels
       end
 
       it "get labels for node" do
-        subject.connection.should_receive(:get).with("/node/0/labels")
+        expect(subject.connection).to receive(:get).with("/node/0/labels")
         subject.get_node_labels(0)
       end
 
       it "get nodes for labels" do
-        subject.connection.should_receive(:get).with("/label/person/nodes")
+        expect(subject.connection).to receive(:get).with("/label/person/nodes")
         subject.get_nodes_labeled("person")
       end
 
       it "find nodes for labels and property string" do
-        subject.connection.should_receive(:get).with("/label/person/nodes?name=%22max%22")
+        expect(subject.connection).to receive(:get).with("/label/person/nodes?name=%22max%22")
         subject.find_nodes_labeled("person", {:name => "max"})
       end
 
       it "find nodes for labels and property integer" do
-        subject.connection.should_receive(:get).with("/label/person/nodes?age=26")
+        expect(subject.connection).to receive(:get).with("/label/person/nodes?age=26")
         subject.find_nodes_labeled("person", {:age => 26})
       end
 
@@ -36,7 +36,7 @@ module Neography
           :body    => '["Actor"]',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:post).with("/node/0/labels", options)
+        expect(subject.connection).to receive(:post).with("/node/0/labels", options)
         subject.add_label(0, ["Actor"])
       end
 
@@ -45,7 +45,7 @@ module Neography
           :body    => '["Actor","Director"]',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:post).with("/node/0/labels", options)
+        expect(subject.connection).to receive(:post).with("/node/0/labels", options)
         subject.add_label(0, ["Actor", "Director"])
       end
 
@@ -54,7 +54,7 @@ module Neography
           :body    => '["Actor"]',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:put).with("/node/0/labels", options)
+        expect(subject.connection).to receive(:put).with("/node/0/labels", options)
         subject.set_label(0, ["Actor"])
       end
 
@@ -63,12 +63,12 @@ module Neography
           :body    => '["Actor","Director"]',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:put).with("/node/0/labels", options)
+        expect(subject.connection).to receive(:put).with("/node/0/labels", options)
         subject.set_label(0, ["Actor", "Director"])
       end
       
       it "can delete a label from a node" do
-        subject.connection.should_receive(:delete).with("/node/0/labels/Actor")
+        expect(subject.connection).to receive(:delete).with("/node/0/labels/Actor")
         subject.delete_label(0,"Actor")
       end
       

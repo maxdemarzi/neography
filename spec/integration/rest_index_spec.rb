@@ -11,7 +11,7 @@ describe Neography::Rest do
       key = generate_text(6)
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
-      @neo.list_indexes.should_not be_nil
+      expect(@neo.list_indexes).not_to be_nil
     end
 
     it "can get a listing of relationship indexes" do
@@ -21,7 +21,7 @@ describe Neography::Rest do
       key = generate_text(6)
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
-      @neo.list_relationship_indexes.should_not be_nil
+      expect(@neo.list_relationship_indexes).not_to be_nil
     end
   end
 
@@ -29,47 +29,47 @@ describe Neography::Rest do
     it "can create a node index" do
       name = generate_text(6)
       new_index = @neo.create_node_index(name)
-      new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
-      new_index["provider"].should == "lucene"
-      new_index["type"].should == "exact"
+      expect(new_index).not_to be_nil
+      expect(new_index["template"]).to eq("#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}")
+      expect(new_index["provider"]).to eq("lucene")
+      expect(new_index["type"]).to eq("exact")
     end
 
     it "can create a node index with options" do
       name = generate_text(6)
       new_index = @neo.create_node_index(name, "fulltext","lucene")
-      new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
-      new_index["provider"].should == "lucene"
-      new_index["type"].should == "fulltext"
+      expect(new_index).not_to be_nil
+      expect(new_index["template"]).to eq("#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}")
+      expect(new_index["provider"]).to eq("lucene")
+      expect(new_index["type"]).to eq("fulltext")
     end
 
     it "can create a node index with extra configuration options" do
       name = generate_text(6)
       new_index = @neo.create_node_index(name, "fulltext","lucene", extra: 'extra-value')
-      new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}"
-      new_index["provider"].should == "lucene"
-      new_index["extra"].should == "extra-value"
-      new_index["type"].should == "fulltext"
+      expect(new_index).not_to be_nil
+      expect(new_index["template"]).to eq("#{@neo.configuration}/db/data/index/node/#{name}/{key}/{value}")
+      expect(new_index["provider"]).to eq("lucene")
+      expect(new_index["extra"]).to eq("extra-value")
+      expect(new_index["type"]).to eq("fulltext")
     end
 
     it "can create a relationship index" do
       name = generate_text(6)
       new_index = @neo.create_relationship_index(name)
-      new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}"
-      new_index["provider"].should == "lucene"
-      new_index["type"].should == "exact"
+      expect(new_index).not_to be_nil
+      expect(new_index["template"]).to eq("#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}")
+      expect(new_index["provider"]).to eq("lucene")
+      expect(new_index["type"]).to eq("exact")
     end
 
     it "can create a relationship index with options" do
       name = generate_text(6)
       new_index = @neo.create_relationship_index(name, "fulltext","lucene")
-      new_index.should_not be_nil
-      new_index["template"].should == "#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}"
-      new_index["provider"].should == "lucene"
-      new_index["type"].should == "fulltext"
+      expect(new_index).not_to be_nil
+      expect(new_index["template"]).to eq("#{@neo.configuration}/db/data/index/relationship/#{name}/{key}/{value}")
+      expect(new_index["provider"]).to eq("lucene")
+      expect(new_index["type"]).to eq("fulltext")
     end
 
 
@@ -82,7 +82,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
   
@@ -94,7 +94,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship) 
     end
   end
@@ -106,10 +106,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "can remove a node from an index without supplying value" do
@@ -118,10 +118,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "can remove a node from an index without supplying key nor value" do
@@ -130,10 +130,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "can remove a relationship from an index" do
@@ -144,10 +144,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "can remove a relationship from an index without supplying value" do
@@ -158,10 +158,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_relationship_from_index("test_relationship_index", key, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "can remove a relationship from an index without supplying key nor value" do
@@ -172,10 +172,10 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_relationship_from_index("test_relationship_index", new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should be_nil
+      expect(new_index).to be_nil
     end
 
     it "throws an error when there is an empty string in the value when removing a node" do
@@ -184,7 +184,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       expect { @neo.remove_node_from_index("test_node_index", key, "", new_node) }.to raise_error Neography::NeographyError
     end
   end
@@ -196,7 +196,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
@@ -206,7 +206,7 @@ describe Neography::Rest do
       value = generate_text + " " + generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node)
       new_index = @neo.get_node_index("test_node_index", key, value)
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
@@ -216,7 +216,7 @@ describe Neography::Rest do
       value = generate_text + "/" + generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node)
       new_index = @neo.get_node_index("test_node_index", key, value)
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
@@ -228,7 +228,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
   end
@@ -240,7 +240,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.first["self"].should == new_node["self"]
+      expect(new_index.first["self"]).to eq(new_node["self"])
       @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
@@ -250,7 +250,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.find_node_index("test_node_index", key, value) 
-      new_index.first["self"].should == new_node["self"]
+      expect(new_index.first["self"]).to eq(new_node["self"])
       @neo.remove_node_from_index("test_node_index", key, value, new_node) 
     end
 
@@ -260,7 +260,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node)
       new_index = @neo.find_node_index("test_node_index", "#{key}: #{value}")
-      new_index.first["self"].should == new_node["self"]
+      expect(new_index.first["self"]).to eq(new_node["self"])
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
@@ -270,8 +270,8 @@ describe Neography::Rest do
       value = generate_text + ' ' + generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node)
       new_index = @neo.find_node_index("test_node_index", key, value)
-      new_index.should_not be_nil
-      new_index.first["self"].should == new_node["self"]
+      expect(new_index).not_to be_nil
+      expect(new_index.first["self"]).to eq(new_node["self"])
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
@@ -281,8 +281,8 @@ describe Neography::Rest do
       value = generate_text + '/' + generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node)
       new_index = @neo.find_node_index("test_node_index", key, value)
-      new_index.should_not be_nil
-      new_index.first["self"].should == new_node["self"]
+      expect(new_index).not_to be_nil
+      expect(new_index.first["self"]).to eq(new_node["self"])
       @neo.remove_node_from_index("test_node_index", key, value, new_node)
     end
 
@@ -294,7 +294,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.first["self"].should == new_relationship["self"]
+      expect(new_index.first["self"]).to eq(new_relationship["self"])
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
@@ -306,7 +306,7 @@ describe Neography::Rest do
       value = generate_text + " " + generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.first["self"].should == new_relationship["self"]
+      expect(new_index.first["self"]).to eq(new_relationship["self"])
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
@@ -318,7 +318,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.find_relationship_index("test_relationship_index", key, value) 
-      new_index.first["self"].should == new_relationship["self"]
+      expect(new_index.first["self"]).to eq(new_relationship["self"])
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
@@ -330,7 +330,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship)
       new_index = @neo.find_relationship_index("test_relationship_index", "#{key}: #{value}")
-      new_index.first["self"].should == new_relationship["self"]
+      expect(new_index.first["self"]).to eq(new_relationship["self"])
       @neo.remove_relationship_from_index("test_relationship_index", key, value, new_relationship)
     end
 
@@ -345,10 +345,10 @@ describe Neography::Rest do
       existing_node1 = @neo.get_node_index("test_node_index", key, value1)
       existing_node2 = @neo.get_node_index("test_node_index", key, value2)
       new_relationship = @neo.create_relationship("friends", existing_node1, existing_node2)
-      new_relationship["start"].should_not be_nil
-      new_relationship["start"].should == new_node1["self"]
-      new_relationship["end"].should_not be_nil
-      new_relationship["end"].should == new_node2["self"]
+      expect(new_relationship["start"]).not_to be_nil
+      expect(new_relationship["start"]).to eq(new_node1["self"])
+      expect(new_relationship["end"]).not_to be_nil
+      expect(new_relationship["end"]).to eq(new_node2["self"])
       @neo.remove_node_from_index("test_node_index", new_node1) 
       @neo.remove_node_from_index("test_node_index", new_node2) 
     end
@@ -358,72 +358,72 @@ describe Neography::Rest do
   describe "auto indexes" do
 
     it "can check the status of node auto index" do
-      @neo.get_node_auto_index_status.should satisfy{|status| [true, false].include?(status)}
+      expect(@neo.get_node_auto_index_status).to satisfy{|status| [true, false].include?(status)}
     end
   
     it "can check the status of relationship auto index" do
-      @neo.get_relationship_auto_index_status.should satisfy{|status| [true, false].include?(status)}
+      expect(@neo.get_relationship_auto_index_status).to satisfy{|status| [true, false].include?(status)}
     end
 
     it "can change the node auto index status" do
       @neo.set_node_auto_index_status(true)
-      @neo.get_node_auto_index_status.should be_true
+      expect(@neo.get_node_auto_index_status).to be_true
     end
 
     it "can change the relationship auto index status" do
       @neo.set_relationship_auto_index_status(true)
-      @neo.get_relationship_auto_index_status.should be_true
+      expect(@neo.get_relationship_auto_index_status).to be_true
     end
 
     it "can get a list of auto indexed node properties" do
       @neo.set_node_auto_index_status(true)
       @neo.create_node_auto_index
       @neo.add_node_auto_index_property("name")
-      @neo.get_node_auto_index_properties.should == ["name"]
+      expect(@neo.get_node_auto_index_properties).to eq(["name"])
     end
 
     it "can get a list of auto indexed relationship properties" do
       @neo.set_relationship_auto_index_status(true)
       @neo.create_relationship_auto_index
       @neo.add_relationship_auto_index_property("weight")
-      @neo.get_relationship_auto_index_properties.should == ["weight"]
+      expect(@neo.get_relationship_auto_index_properties).to eq(["weight"])
     end
 
    it "can remove a property from the auto indexed node properties" do
       @neo.add_node_auto_index_property("name")
       @neo.add_node_auto_index_property("label")
-      @neo.get_node_auto_index_properties.should == ["name", "label"]
+      expect(@neo.get_node_auto_index_properties).to eq(["name", "label"])
       @neo.remove_node_auto_index_property("label")   
-      @neo.get_node_auto_index_properties.should == ["name"]
+      expect(@neo.get_node_auto_index_properties).to eq(["name"])
    end
 
    it "can remove a property from the auto indexed relationship properties" do
       @neo.add_relationship_auto_index_property("weight")
       @neo.add_relationship_auto_index_property("strength")
-      @neo.get_relationship_auto_index_properties.should == ["weight", "strength"]
+      expect(@neo.get_relationship_auto_index_properties).to match_array(["weight", "strength"])
       @neo.remove_relationship_auto_index_property("strength")   
-      @neo.get_relationship_auto_index_properties.should == ["weight"]
+      expect(@neo.get_relationship_auto_index_properties).to eq(["weight"])
    end
 
     it "can get a node from an automatic index" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.get_node_auto_index("name", "Max")
-      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true 
     end
 
     it "can query a node from an automatic index using key value" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.find_node_auto_index("name", "Max")
-      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true 
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true 
     end
 
     it "can query a node from an automatic index" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.find_node_auto_index("name:Max")
-      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true
       # check that more complex queries are correctly handled
       existing_nodes = @neo.find_node_auto_index("name:Max OR name:Max")
-      existing_nodes.collect{|n| n["self"]}.include?(new_node["self"]).should be_true
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true
     end
 
     it "can get a relationship from an automatic index" do
@@ -431,7 +431,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.get_relationship_auto_index("weight", 5)
-      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
     end
 
     it "can query a relationship from an automatic index using key value" do
@@ -439,7 +439,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.find_relationship_auto_index("weight", 5)
-      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
     end
 
     it "can query a relationship from an automatic index" do
@@ -447,7 +447,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.find_relationship_auto_index("weight:5")
-      existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"]).should be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
     end
 
   end
@@ -459,7 +459,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_node_to_index("test_node_index", key, value, new_node) 
       new_index = @neo.get_node_index("test_node_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.drop_node_index("test_node_index")
       expect { @neo.get_node_index("test_node_index", key, value) }.to raise_error Neography::NotFoundException
     end
@@ -472,7 +472,7 @@ describe Neography::Rest do
       value = generate_text
       @neo.add_relationship_to_index("test_relationship_index", key, value, new_relationship) 
       new_index = @neo.get_relationship_index("test_relationship_index", key, value) 
-      new_index.should_not be_nil
+      expect(new_index).not_to be_nil
       @neo.drop_relationship_index("test_relationship_index") 
       expect { @neo.get_relationship_index("test_relationship_index", key, value) }.to raise_error Neography::NotFoundException
     end

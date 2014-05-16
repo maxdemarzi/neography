@@ -12,7 +12,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/node/bar" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:get_node, "foo"], [:get_node, "bar"]
       end
 
@@ -22,7 +22,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/node/bar" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch ["get_node", "foo"], [:get_node, "bar"]
       end
       
@@ -32,7 +32,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/node", "body" => { "baz" => "qux" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:create_node, { "foo" => "bar" }], [:create_node, { "baz" => "qux" }]
       end
 
@@ -42,7 +42,7 @@ module Neography
           { "id" => 1, "method" => "DELETE", "to" => "/node/bar" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:delete_node, "foo"], [:delete_node, "bar"]
       end
 
@@ -52,7 +52,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/index/node/quux?unique", "body" => { "key" => "corge", "value" => "grault", "properties" => "garply" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:create_unique_node, "foo", "bar", "baz", "qux" ],
                         [:create_unique_node, "quux", "corge", "grault", "garply"]
       end
@@ -63,7 +63,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/index/node/quux", "body" => { "uri" => "{0}", "key" => "corge", "value" => "grault" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:add_node_to_index, "foo", "bar", "baz", "qux" ],
                         [:add_node_to_index, "quux", "corge", "grault", "{0}"]
       end
@@ -74,7 +74,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/index/node/qux/quux/corge" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:get_node_index, "foo", "bar", "baz" ],
                         [:get_node_index, "qux", "quux", "corge" ]
       end
@@ -86,7 +86,7 @@ module Neography
           { "id" => 2, "method" => "DELETE", "to" => "/index/node/index3/key3/value3/id3" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:remove_node_from_index, "index1", "id1", ],
                         [:remove_node_from_index, "index2", "key2", "id2" ],
                         [:remove_node_from_index, "index3", "key3", "value3", "id3" ]
@@ -98,7 +98,7 @@ module Neography
           { "id" => 1, "method" => "PUT", "to" => "/node/index2/properties/key2", "body" => "value2" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:set_node_property, "index1", { "key1" => "value1" } ],
                         [:set_node_property, "index2", { "key2" => "value2" } ]
       end
@@ -109,7 +109,7 @@ module Neography
           { "id" => 1, "method" => "PUT", "to" => "/node/index2/properties", "body" => { "key2" => "value2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:reset_node_properties, "index1", { "key1" => "value1" } ],
                         [:reset_node_properties, "index2", { "key2" => "value2" } ]
       end
@@ -119,7 +119,7 @@ module Neography
           { "id" => 0, "method" => "POST", "to" => "{0}/labels", "body" => "foo" },
           { "id" => 1, "method" => "POST", "to" => "{0}/labels", "body" => "bar" },
         ]
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:add_label, "{0}", "foo"],
                         [:add_label, "{0}", "bar"]
       end
@@ -130,7 +130,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/node/id2/relationships/all" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:get_node_relationships, "id1", "direction1" ],
                         [:get_node_relationships, "id2" ]
       end
@@ -141,7 +141,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/relationship/bar" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:get_relationship, "foo"], [:get_relationship, "bar"]
       end
 
@@ -151,7 +151,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "{0}/relationships", "body" => { "to" => "{1}", "type" => "type2", "data" => "data2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:create_relationship, "type1", "from1", "to1", "data1" ],
                         [:create_relationship, "type2", "{0}", "{1}", "data2" ]
       end
@@ -162,7 +162,7 @@ module Neography
           { "id" => 1, "method" => "DELETE", "to" => "/relationship/bar" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:delete_relationship, "foo"], [:delete_relationship, "bar"]
       end
 
@@ -172,7 +172,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/index/relationship/index2?unique", "body" => { "key" => "key2", "value" => "value2", "type" => "type2", "start" => "{0}", "end" => "{1}", "properties" => "properties" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:create_unique_relationship, "index1", "key1", "value1", "type1", "node1", "node2","properties"  ],
                         [:create_unique_relationship, "index2", "key2", "value2", "type2", "{0}", "{1}", "properties" ]
       end
@@ -183,7 +183,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/index/relationship/index2", "body" => { "uri" => "{0}", "key" => "key2", "value" => "value2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:add_relationship_to_index, "index1", "key1", "value1", "rel1" ],
                         [:add_relationship_to_index, "index2", "key2", "value2", "{0}"]
       end
@@ -194,7 +194,7 @@ module Neography
           { "id" => 1, "method" => "GET", "to" => "/index/relationship/qux/quux/corge" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:get_relationship_index, "foo", "bar", "baz" ],
                         [:get_relationship_index, "qux", "quux", "corge" ]
       end
@@ -206,7 +206,7 @@ module Neography
           { "id" => 2, "method" => "DELETE", "to" => "/index/relationship/index3/key3/value3/id3" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:remove_relationship_from_index, "index1", "id1", ],
                         [:remove_relationship_from_index, "index2", "key2", "id2" ],
                         [:remove_relationship_from_index, "index3", "key3", "value3", "id3" ]
@@ -218,7 +218,7 @@ module Neography
           { "id" => 1, "method" => "PUT", "to" => "/relationship/index2/properties/key2", "body" => "value2" }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:set_relationship_property, "index1", { "key1" => "value1" } ],
                         [:set_relationship_property, "index2", { "key2" => "value2" } ]
       end
@@ -229,7 +229,7 @@ module Neography
           { "id" => 1, "method" => "PUT", "to" => "{0}/properties", "body" => { "key2" => "value2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:reset_relationship_properties, "index1", { "key1" => "value1" } ],
                         [:reset_relationship_properties, "{0}", { "key2" => "value2" } ]
       end
@@ -240,7 +240,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/ext/GremlinPlugin/graphdb/execute_script", "body" => { "script" => "script2", "params" => "params2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:execute_script, "script1", "params1"],
                         [:execute_script, "script2", "params2"]
       end
@@ -251,7 +251,7 @@ module Neography
           { "id" => 1, "method" => "POST", "to" => "/cypher", "body" => { "query" => "query2" } }
         ]
 
-        subject.connection.should_receive(:post).with("/batch", json_match(:body, expected_body))
+        expect(subject.connection).to receive(:post).with("/batch", json_match(:body, expected_body))
         subject.batch [:execute_query, "query1", "params1"],
                         [:execute_query, "query2" ]
       end

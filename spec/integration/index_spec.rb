@@ -30,7 +30,7 @@ describe Neography::Index do
     new_node = Neography::Node.create("name" => value)
     new_node.add_to_index("node_test_index", "name", value)
     existing_node = Neography::Node.find("node_test_index", "name", value)
-    existing_node.name.should == value
+    expect(existing_node.name).to eq(value)
   end
 
   it "can find a node in an index with brackets" do
@@ -39,7 +39,7 @@ describe Neography::Index do
     new_node = Neography::Node.create("name" => value)
     new_node.add_to_index(key, "name", value)
     existing_node = Neography::Node.find(key, "name", value)
-    existing_node.name.should == value
+    expect(existing_node.name).to eq(value)
   end
 
   it "can find a relationship in an index" do
@@ -49,7 +49,7 @@ describe Neography::Index do
     r = Neography::Relationship.create(:friends, node1, node2, {"name" => value})
     r.add_to_index("relationship_test_index", "name", value)
     existing_r = Neography::Relationship.find("relationship_test_index", "name", value)
-    existing_r.name.should == value
+    expect(existing_r.name).to eq(value)
   end
 
   it "can find multiple nodes in an index" do
@@ -62,9 +62,9 @@ describe Neography::Index do
     node2.add_to_index("node_test_index", "first_name", value1)
 
     existing_nodes = Neography::Node.find("node_test_index", "first_name", value1)
-    existing_nodes.size.should == 2
-    existing_nodes.first.last_name.should == value2
-    existing_nodes.last.last_name.should == value3
+    expect(existing_nodes.size).to eq(2)
+    expect(existing_nodes.first.last_name).to eq(value2)
+    expect(existing_nodes.last.last_name).to eq(value3)
   end
 
 
