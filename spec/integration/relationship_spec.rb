@@ -7,8 +7,8 @@ describe Neography::Relationship do
       p2 = Neography::Node.create
 
       Neography::Relationship.create(:family, p1, p2)
-      p1.outgoing(:family).should include(p2)
-      p2.incoming(:family).should include(p1)
+      expect(p1.outgoing(:family)).to include(p2)
+      expect(p2.incoming(:family)).to include(p1)
     end
 
     it "#new(:family, p1, p2, :since => '1998', :colour => 'blue') creates relationship and sets its properties" do
@@ -16,10 +16,10 @@ describe Neography::Relationship do
       p2 = Neography::Node.create
       rel = Neography::Relationship.create(:family, p1, p2, :since => 1998, :colour => 'blue')
 
-      rel[:since].should == 1998
-      rel[:colour].should == 'blue'
-      rel.since.should == 1998
-      rel.colour.should == 'blue'
+      expect(rel[:since]).to eq(1998)
+      expect(rel[:colour]).to eq('blue')
+      expect(rel.since).to eq(1998)
+      expect(rel.colour).to eq('blue')
     end
 
     it "#outgoing(:friends).create(other) creates a new relationship between self and other node" do
@@ -27,10 +27,10 @@ describe Neography::Relationship do
       p2 = Neography::Node.create
       rel = p1.outgoing(:foo).create(p2)
 
-      rel.should be_kind_of(Neography::Relationship)
-      p1.outgoing(:foo).first.should == p2
-      p1.outgoing(:foo).should include(p2)
-      p2.incoming(:foo).should include(p1)
+      expect(rel).to be_kind_of(Neography::Relationship)
+      expect(p1.outgoing(:foo).first).to eq(p2)
+      expect(p1.outgoing(:foo)).to include(p2)
+      expect(p2.incoming(:foo)).to include(p1)
     end
   end
 

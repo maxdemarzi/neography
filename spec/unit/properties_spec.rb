@@ -5,7 +5,7 @@ module Neography
 
     before do
       @db = double(Neography::Rest, :is_a? => true).as_null_object
-      Rest.stub(:new) { @db }
+      allow(Rest).to receive(:new) { @db }
     end
 
     context "Node" do
@@ -17,56 +17,56 @@ module Neography
       end
 
       it "sets properties as accessor" do
-        @db.should_receive(:"set_node_properties").with(42, { "key" => "value" })
+        expect(@db).to receive(:"set_node_properties").with(42, { "key" => "value" })
         node.key = "value"
       end
 
       it "sets properties as array entry" do
-        @db.should_receive(:"set_node_properties").with(42, { "key" => "value" })
+        expect(@db).to receive(:"set_node_properties").with(42, { "key" => "value" })
         node["key"] = "value"
       end
 
       it "gets properties as accessor" do
-        @db.stub(:"set_node_properties")
+        allow(@db).to receive(:"set_node_properties")
         node.key = "value"
-        node.key.should == "value"
+        expect(node.key).to eq("value")
       end
 
       it "gets properties as array entry" do
-        @db.stub(:"set_node_properties")
+        allow(@db).to receive(:"set_node_properties")
         node["key"] = "value"
-        node["key"].should == "value"
+        expect(node["key"]).to eq("value")
       end
 
       it "resets properties as accessor" do
-        @db.should_receive(:"remove_node_properties").with(42, ["key"])
+        expect(@db).to receive(:"remove_node_properties").with(42, ["key"])
         node.key = "value"
         node.key = nil
       end
 
       it "resets properties as array entry" do
-        @db.should_receive(:"remove_node_properties").with(42, ["key"])
+        expect(@db).to receive(:"remove_node_properties").with(42, ["key"])
         node["key"] = "value"
         node["key"] = nil
       end
 
       it "gets unknown properties as nil" do
-        node.unknown.should == nil
+        expect(node.unknown).to eq(nil)
       end
 
       it "overwrites existing properties" do
-        @db.should_receive(:"set_node_properties").with(42, { "key" => "value1" })
+        expect(@db).to receive(:"set_node_properties").with(42, { "key" => "value1" })
         node.key = "value1"
 
-        @db.should_receive(:"set_node_properties").with(42, { "key" => "value2" })
+        expect(@db).to receive(:"set_node_properties").with(42, { "key" => "value2" })
         node.key = "value2"
       end
 
       it "knows its attributes" do
-        @db.stub(:"set_node_properties")
+        allow(@db).to receive(:"set_node_properties")
         node.key = "value"
         node["key2"] = "value"
-        node.attributes.should =~ [ :key, :key2 ]
+        expect(node.attributes).to match_array([ :key, :key2 ])
       end
 
     end
@@ -83,56 +83,56 @@ module Neography
       end
 
       it "sets properties as accessor" do
-        @db.should_receive(:"set_relationship_properties").with(42, { "key" => "value" })
+        expect(@db).to receive(:"set_relationship_properties").with(42, { "key" => "value" })
         relationship.key = "value"
       end
 
       it "sets properties as array entry" do
-        @db.should_receive(:"set_relationship_properties").with(42, { "key" => "value" })
+        expect(@db).to receive(:"set_relationship_properties").with(42, { "key" => "value" })
         relationship["key"] = "value"
       end
 
       it "gets properties as accessor" do
-        @db.stub(:"set_relationship_properties")
+        allow(@db).to receive(:"set_relationship_properties")
         relationship.key = "value"
-        relationship.key.should == "value"
+        expect(relationship.key).to eq("value")
       end
 
       it "gets properties as array entry" do
-        @db.stub(:"set_relationship_properties")
+        allow(@db).to receive(:"set_relationship_properties")
         relationship["key"] = "value"
-        relationship["key"].should == "value"
+        expect(relationship["key"]).to eq("value")
       end
 
       it "resets properties as accessor" do
-        @db.should_receive(:"remove_relationship_properties").with(42, ["key"])
+        expect(@db).to receive(:"remove_relationship_properties").with(42, ["key"])
         relationship.key = "value"
         relationship.key = nil
       end
 
       it "resets properties as array entry" do
-        @db.should_receive(:"remove_relationship_properties").with(42, ["key"])
+        expect(@db).to receive(:"remove_relationship_properties").with(42, ["key"])
         relationship["key"] = "value"
         relationship["key"] = nil
       end
 
       it "gets unknown properties as nil" do
-        relationship.unknown.should == nil
+        expect(relationship.unknown).to eq(nil)
       end
 
       it "overwrites existing properties" do
-        @db.should_receive(:"set_relationship_properties").with(42, { "key" => "value1" })
+        expect(@db).to receive(:"set_relationship_properties").with(42, { "key" => "value1" })
         relationship.key = "value1"
 
-        @db.should_receive(:"set_relationship_properties").with(42, { "key" => "value2" })
+        expect(@db).to receive(:"set_relationship_properties").with(42, { "key" => "value2" })
         relationship.key = "value2"
       end
 
       it "knows its attributes" do
-        @db.stub(:"set_relationship_properties")
+        allow(@db).to receive(:"set_relationship_properties")
         relationship.key = "value"
         relationship["key2"] = "value"
-        relationship.attributes.should =~ [ :key, :key2 ]
+        expect(relationship.attributes).to match_array([ :key, :key2 ])
       end
 
     end

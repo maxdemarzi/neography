@@ -8,8 +8,8 @@ describe Neography::Rest do
   describe "create a schema index" do
     it "can create a schema index" do
       si = @neo.create_schema_index("person", ["name"]) 
-      si.should_not be_nil
-      si["property_keys"].should include("name")
+      expect(si).not_to be_nil
+      expect(si["property_keys"]).to include("name")
     end
     
   end
@@ -17,16 +17,16 @@ describe Neography::Rest do
   describe "list schema indexes" do
     it "can get a listing of node indexes" do
       si = @neo.get_schema_index("person")
-      si.should_not be_nil
-      si.first["label"].should include("person")
-      si.first["property_keys"].should include("name")
+      expect(si).not_to be_nil
+      expect(si.first["label"]).to include("person")
+      expect(si.first["property_keys"]).to include("name")
     end
   end
   
   describe "drop schema indexes" do
     it "can drop an existing schema index" do
       si = @neo.delete_schema_index("person", "name")
-      si.should be_nil
+      expect(si).to be_nil
     end
   end
 end

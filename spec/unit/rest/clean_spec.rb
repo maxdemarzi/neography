@@ -7,7 +7,7 @@ module Neography
       subject { Neography::Rest.new }
 
       it "cleans the database" do
-        subject.connection.should_receive(:delete).with("/cleandb/secret-key")
+        expect(subject.connection).to receive(:delete).with("/cleandb/secret-key")
         subject.clean_database("yes_i_really_want_to_clean_the_database")
       end
 

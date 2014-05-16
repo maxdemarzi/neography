@@ -11,7 +11,7 @@ module Neography
           :body=>"{\"query\":\"SOME QUERY\",\"params\":{\"foo\":\"bar\",\"baz\":\"qux\"}}",
           :headers=>{"Content-Type"=>"application/json", "Accept"=>"application/json;stream=true;charset=UTF-8"}
         }
-        subject.connection.should_receive(:post).with("/cypher", options)
+        expect(subject.connection).to receive(:post).with("/cypher", options)
         subject.execute_query("SOME QUERY", { :foo => "bar", :baz => "qux" })
       end
 

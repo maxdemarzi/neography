@@ -5,16 +5,16 @@ describe Neography do
   describe "::configure" do
 
     it "returns the same configuration" do
-      Neography.configuration.should == Neography.configuration
+      expect(Neography.configuration).to eq(Neography.configuration)
     end
 
     it "returns the Config" do
-      Neography.configuration.should be_a Neography::Config
+      expect(Neography.configuration).to be_a Neography::Config
     end
 
     it "yields the configuration" do
       Neography.configure do |config|
-        config.should == Neography.configuration
+        expect(config).to eq(Neography.configuration)
       end
     end
 

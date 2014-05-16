@@ -11,7 +11,7 @@ module Neography
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:post).with("/transaction", options)
+        expect(subject.connection).to receive(:post).with("/transaction", options)
         subject.begin_transaction
       end
 
@@ -20,7 +20,7 @@ module Neography
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:post).with("/transaction/1", options)
+        expect(subject.connection).to receive(:post).with("/transaction/1", options)
         subject.in_transaction(1, [])
       end
 
@@ -29,12 +29,12 @@ module Neography
           :body    => '{"statements":[]}',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:post).with("/transaction/1/commit", options)
+        expect(subject.connection).to receive(:post).with("/transaction/1/commit", options)
         subject.commit_transaction(1, [])
       end
 
       it "can rollback transactions" do
-        subject.connection.should_receive(:delete).with("/transaction/1")
+        expect(subject.connection).to receive(:delete).with("/transaction/1")
         subject.rollback_transaction(1)
       end
       

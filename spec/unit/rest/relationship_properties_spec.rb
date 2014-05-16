@@ -15,8 +15,8 @@ module Neography
           :body    => '"qux"',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:put).with("/relationship/42/properties/foo", options1)
-        subject.connection.should_receive(:put).with("/relationship/42/properties/baz", options2)
+        expect(subject.connection).to receive(:put).with("/relationship/42/properties/foo", options1)
+        expect(subject.connection).to receive(:put).with("/relationship/42/properties/baz", options2)
         subject.set_relationship_properties("42", {:foo => "bar", :baz => "qux"})
       end
 
@@ -25,36 +25,36 @@ module Neography
           :body    => '{"foo":"bar"}',
           :headers => json_content_type
         }
-        subject.connection.should_receive(:put).with("/relationship/42/properties", options)
+        expect(subject.connection).to receive(:put).with("/relationship/42/properties", options)
         subject.reset_relationship_properties("42", {:foo => "bar"})
       end
 
       context "getting properties" do
 
         it "gets all properties" do
-          subject.connection.should_receive(:get).with("/relationship/42/properties")
+          expect(subject.connection).to receive(:get).with("/relationship/42/properties")
           subject.get_relationship_properties("42")
         end
 
         it "gets multiple properties" do
-          subject.connection.should_receive(:get).with("/relationship/42/properties/foo")
-          subject.connection.should_receive(:get).with("/relationship/42/properties/bar")
+          expect(subject.connection).to receive(:get).with("/relationship/42/properties/foo")
+          expect(subject.connection).to receive(:get).with("/relationship/42/properties/bar")
           subject.get_relationship_properties("42", "foo", "bar")
         end
 
         it "returns multiple properties as a hash" do
-          subject.connection.stub(:get).and_return("baz", "qux")
-          subject.get_relationship_properties("42", "foo", "bar").should == { "foo" => "baz", "bar" => "qux" }
+          allow(subject.connection).to receive(:get).and_return("baz", "qux")
+          expect(subject.get_relationship_properties("42", "foo", "bar")).to eq({ "foo" => "baz", "bar" => "qux" })
         end
 
         it "returns nil if no properties were found" do
-          subject.connection.stub(:get).and_return(nil, nil)
-          subject.get_relationship_properties("42", "foo", "bar").should be_nil
+          allow(subject.connection).to receive(:get).and_return(nil, nil)
+          expect(subject.get_relationship_properties("42", "foo", "bar")).to be_nil
         end
 
         it "returns hash without nil return values" do
-          subject.connection.stub(:get).and_return("baz", nil)
-          subject.get_relationship_properties("42", "foo", "bar").should == { "foo" => "baz" }
+          allow(subject.connection).to receive(:get).and_return("baz", nil)
+          expect(subject.get_relationship_properties("42", "foo", "bar")).to eq({ "foo" => "baz" })
         end
 
       end
@@ -62,13 +62,13 @@ module Neography
       context "removing properties" do
 
         it "removes all properties" do
-          subject.connection.should_receive(:delete).with("/relationship/42/properties")
+          expect(subject.connection).to receive(:delete).with("/relationship/42/properties")
           subject.remove_relationship_properties("42")
         end
 
         it "removes multiple properties" do
-          subject.connection.should_receive(:delete).with("/relationship/42/properties/foo")
-          subject.connection.should_receive(:delete).with("/relationship/42/properties/bar")
+          expect(subject.connection).to receive(:delete).with("/relationship/42/properties/foo")
+          expect(subject.connection).to receive(:delete).with("/relationship/42/properties/bar")
           subject.remove_relationship_properties("42", "foo", "bar")
         end
 

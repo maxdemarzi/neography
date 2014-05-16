@@ -10,9 +10,9 @@ describe Neography::Rest do
       label = "User"
       property = "user_id"
       uc = @neo.create_unique_constraint(label, property)
-      uc.should_not be_nil
-      uc["label"].should == label
-      uc["property_keys"].should == [property]
+      expect(uc).not_to be_nil
+      expect(uc["label"]).to eq(label)
+      expect(uc["property_keys"]).to eq([property])
     end
   end
 
@@ -21,9 +21,9 @@ describe Neography::Rest do
       label = "User"
       property = "user_id"
       uc = @neo.get_unique_constraint(label, property)
-      uc.should_not be_nil
-      uc.first["label"].should == label
-      uc.first["property_keys"].should == [property]
+      expect(uc).not_to be_nil
+      expect(uc.first["label"]).to eq(label)
+      expect(uc.first["property_keys"]).to eq([property])
     end
   end
 
@@ -32,9 +32,9 @@ describe Neography::Rest do
       label = "User"
       property = "user_id"
       uc = @neo.get_uniqueness(label)
-      uc.should_not be_nil
-      uc.first["label"].should == label
-      uc.first["property_keys"].should == [property]
+      expect(uc).not_to be_nil
+      expect(uc.first["label"]).to eq(label)
+      expect(uc.first["property_keys"]).to eq([property])
     end
   end
   
@@ -43,18 +43,18 @@ describe Neography::Rest do
       label = "User"
       property = "user_id"
       cs = @neo.get_constraints
-      cs.should_not be_nil
-      cs.first["label"].should == label
-      cs.first["property_keys"].should == [property]
+      expect(cs).not_to be_nil
+      expect(cs.first["label"]).to eq(label)
+      expect(cs.first["property_keys"]).to eq([property])
     end
 
     it "can get a list of constraints for a specifc label" do
       label = "User"
       property = "user_id"
       cs = @neo.get_constraints(label)
-      cs.should_not be_nil
-      cs.first["label"].should == label
-      cs.first["property_keys"].should == [property]
+      expect(cs).not_to be_nil
+      expect(cs.first["label"]).to eq(label)
+      expect(cs.first["property_keys"]).to eq([property])
     end
   end
   
@@ -63,9 +63,9 @@ describe Neography::Rest do
       label = "User"
       property = "user_id"
       uc = @neo.drop_constraint(label, property)
-      uc.should be_nil
+      expect(uc).to be_nil
       cs = @neo.get_constraints(label)
-      cs.should be_empty
+      expect(cs).to be_empty
     end
   end
     
