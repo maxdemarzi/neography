@@ -35,11 +35,15 @@ module Neography
       hash.each do |key, value|
         add_or_remove_ostruct_member(key, value)
       end
-      if node?
-        neo_server.reset_node_properties(self.neo_id, @table)
-      else
-        neo_server.reset_relationship_properties(self.neo_id, @table)
-      end
+      rest_reset_properties
+    end
+
+    # As #set_properties, but this one hard resets the node's/relationship's
+    # properties to exactly what's given in the hash.
+    def reset_properties(hash)
+      @table.keys.each{|key| remove_ostruct_member(key)}
+      hash.each{|key,value| new_ostruct_member(key,value)}
+      rest_reset_properties
     end
 
     def add_or_remove_ostruct_member(name, value)
@@ -90,6 +94,16 @@ module Neography
 
     def node?
       self.is_a?(Neography::Node)
+    end
+
+    private
+
+    def rest_reset_properties
+      if node?
+        neo_server.reset_node_properties(self.neo_id, @table)
+      else
+        neo_server.reset_relationship_properties(self.neo_id, @table)
+      end
     end
 
   end
