@@ -110,13 +110,13 @@ describe Neography::Node do
   describe "exists?" do
     it "can tell if it exists" do
       new_node = Neography::Node.create
-      expect(new_node.exist?).to be_true
+      expect(new_node.exist?).to be true
     end
 
     it "can tell if does not exists" do
       new_node = Neography::Node.create
       new_node.del
-      expect(new_node.exist?).to be_false
+      expect(new_node.exist?).to be false
     end
   end
 
@@ -124,19 +124,19 @@ describe Neography::Node do
     it "can tell two nodes are the same with equal?" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      expect(new_node.equal?(another_node)).to be_true 
+      expect(new_node.equal?(another_node)).to be true 
     end
 
     it "can tell two nodes are the same with eql?" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      expect(new_node.eql?(another_node)).to be_true 
+      expect(new_node.eql?(another_node)).to be true 
     end
 
     it "can tell two nodes are the same with ==" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
-      expect(new_node == another_node).to be_true 
+      expect(new_node == another_node).to be true 
     end
   end
 

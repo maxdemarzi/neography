@@ -1,7 +1,7 @@
 module Neography
   class Rest
     module NodeProperties
-    
+
       def set_node_properties(id, properties)
         properties.each do |property, value|
           options = { :body => value.to_json, :headers => json_content_type }

@@ -13,3 +13,5 @@ log/*
 .rvmrc
 Gemfile.lock
 *.swp
+.ruby-version
+.ruby-gemset

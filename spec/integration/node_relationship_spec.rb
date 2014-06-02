@@ -220,11 +220,11 @@ describe Neography::NodeRelationship do
       r1 = Neography::Relationship.create(:friend, a, b)
       r2 = Neography::Relationship.create(:friend, a, c)
 
-      expect(a.rel?(:friend)).to be_true
+      expect(a.rel?(:friend)).to be true
       a.rels.del
-      expect(a.rel?(:friend)).to be_false
-      expect(r1.exist?).to be_false
-      expect(r2.exist?).to be_false
+      expect(a.rel?(:friend)).to be false
+      expect(r1.exist?).to be false
+      expect(r2.exist?).to be false
     end
 
     it "#rels returns an RelationshipTraverser with methods #del and #to_other which can be combined to only delete a subset of the relationships" do
@@ -233,11 +233,11 @@ describe Neography::NodeRelationship do
       c = Neography::Node.create
       r1 = Neography::Relationship.create(:friend, a, b)
       r2 = Neography::Relationship.create(:friend, a, c)
-      expect(r1.exist?).to be_true
-      expect(r2.exist?).to be_true
+      expect(r1.exist?).to be true
+      expect(r2.exist?).to be true
       a.rels.to_other(c).del
-      expect(r1.exist?).to be_true
-      expect(r2.exist?).to be_false
+      expect(r1.exist?).to be true
+      expect(r2.exist?).to be false
     end
 
  it "#rels should return both incoming and outgoing relationship of any type of depth one" do
@@ -347,21 +347,21 @@ describe Neography::NodeRelationship do
   describe "rel?" do
     it "#rel? returns true if there are any relationships" do
       n1 = Neography::Node.create
-      expect(n1.rel?).to be_false
+      expect(n1.rel?).to be false
       n1.outgoing(:foo) << Neography::Node.create
 
-      expect(n1.rel?).to be_true
-      expect(n1.rel?(:bar)).to be_false
-      expect(n1.rel?(:foo)).to be_true
-      expect(n1.rel?(:incoming, :foo)).to be_false
-      expect(n1.rel?(:outgoing, :foo)).to be_true
-      expect(n1.rel?(:foo, :incoming)).to be_false
-      expect(n1.rel?(:foo, :outgoing)).to be_true
-      expect(n1.rel?(:incoming)).to be_false
-      expect(n1.rel?(:outgoing)).to be_true
-      expect(n1.rel?(:both)).to be_true
-      expect(n1.rel?(:all)).to be_true
-      expect(n1.rel?).to be_true
+      expect(n1.rel?).to be true
+      expect(n1.rel?(:bar)).to be false
+      expect(n1.rel?(:foo)).to be true
+      expect(n1.rel?(:incoming, :foo)).to be false
+      expect(n1.rel?(:outgoing, :foo)).to be true
+      expect(n1.rel?(:foo, :incoming)).to be false
+      expect(n1.rel?(:foo, :outgoing)).to be true
+      expect(n1.rel?(:incoming)).to be false
+      expect(n1.rel?(:outgoing)).to be true
+      expect(n1.rel?(:both)).to be true
+      expect(n1.rel?(:all)).to be true
+      expect(n1.rel?).to be true
     end
   end
 

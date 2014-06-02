@@ -69,6 +69,151 @@ module Neography
         expect(node.attributes).to match_array([ :key, :key2 ])
       end
 
+      describe "resets all node properties with one http request" do
+        before(:each) do
+          @change_node = Node.create
+
+          # A property that we will overwrite
+          @change_node[:old_key] = 'value'
+
+          # Stub neo id
+          @change_node.stub(:neo_id => 22)
+
+          # What we call set_properties with
+          @new_data = { new_key: "new value"}
+
+          # Make sure the request is dispatched to the rest layer
+          expect(@db).to receive(:reset_node_properties).with(22, @new_data)
+        end
+
+        it "removes the old property getter" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node.respond_to?(:old_key)}.from(true).to(false)
+        end
+
+        it "removes the old property setter" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node.respond_to?('old_key=')}.from(true).to(false)
+        end
+
+        it "removes the property from the underlying openstruct" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node['old_key']}.from('value').to(nil)
+        end
+
+        it "adds the new property getter" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node.respond_to?(:new_key)}.from(false).to(true)
+        end
+
+        it "adds the new property setter" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node.respond_to?('new_key=')}.from(false).to(true)
+        end
+
+        it "adds the new property to the underlying openstruct" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node['new_key']}.from(nil).to('new value')
+        end
+
+        it "updates its attributes" do
+          expect{
+            @change_node.reset_properties(@new_data)
+          }.to change{@change_node.attributes}.from([:old_key]).to([:new_key])
+        end
+      end
+
+
+      describe "sets all node properties with one http request" do
+        before(:each) do
+          @change_node = Node.create
+
+          # A property that we will overwrite
+          @change_node[:old_key] = 'value'
+
+          # A property that we will not overwrite and that must stay
+          @change_node[:old_remaining_key] = 'remaining value'
+
+          # Stub neo id
+          @change_node.stub(:neo_id => 22)
+
+          # What we call set_properties with
+          @new_data = { "new_key" => "new value", 'old_key' => nil }
+
+          # What we expect neography to send as the new properties
+          update_data = { new_key: 'new value', old_remaining_key: 'remaining value'}
+
+          # Make sure the request is dispatched to the rest layer
+          expect(@db).to receive(:reset_node_properties).with(22, update_data)
+        end
+
+        it "removes the old property getter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node.respond_to?(:old_key)}.from(true).to(false)
+        end
+
+        it "removes the old property setter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node.respond_to?('old_key=')}.from(true).to(false)
+        end
+
+        it "removes the property from the underlying openstruct" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node['old_key']}.from('value').to(nil)
+        end
+
+        it "doesn't touch the remaining property in the openstruct" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to_not change{@change_node['old_remaining_key']}
+        end
+
+        it "doesn't touch the remaining property getter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to_not change{@change_node.respond_to?(:old_remaining_key)}
+        end
+
+        it "doesn't touch the remaining property setter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to_not change{@change_node.respond_to?('old_remaining_key=')}
+        end
+
+        it "adds the new property getter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node.respond_to?(:new_key)}.from(false).to(true)
+        end
+
+        it "adds the new property setter" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node.respond_to?('new_key=')}.from(false).to(true)
+        end
+
+        it "adds the new property to the underlying openstruct" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node['new_key']}.from(nil).to('new value')
+        end
+
+        it "updates its attributes" do
+          expect{
+            @change_node.set_properties(@new_data)
+          }.to change{@change_node.attributes}.from([:old_key, :old_remaining_key]).to([:old_remaining_key, :new_key])
+        end
+      end
+
     end
 
     context "Relationship" do
