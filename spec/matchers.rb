@@ -5,7 +5,7 @@ RSpec::Matchers.define :json_match do |field, expected|
     expected == JSON.parse(actual[field])
   end
 
-  failure_message_for_should do
+  failure_message do
     "expected JSON in field '#{field}' to match '#{expected}'"
   end
 
@@ -22,7 +22,7 @@ RSpec::Matchers.define :hash_match do |field, expected|
     expected == actual[field]
   end
 
-  failure_message_for_should do
+  failure_message do
     "expected field '#{field}' to match '#{expected}'"
   end
 

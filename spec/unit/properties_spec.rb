@@ -12,7 +12,7 @@ module Neography
 
       subject(:node) do
         node = Node.create
-        node.stub(:neo_id => 42)
+        allow(node).to receive(:neo_id).and_return(42)
         node
       end
 
@@ -77,7 +77,7 @@ module Neography
           @change_node[:old_key] = 'value'
 
           # Stub neo id
-          @change_node.stub(:neo_id => 22)
+          allow(@change_node).to receive(:neo_id).and_return(22)
 
           # What we call set_properties with
           @new_data = { new_key: "new value"}
@@ -141,7 +141,7 @@ module Neography
           @change_node[:old_remaining_key] = 'remaining value'
 
           # Stub neo id
-          @change_node.stub(:neo_id => 22)
+          allow(@change_node).to receive(:neo_id).and_return(22)
 
           # What we call set_properties with
           @new_data = { "new_key" => "new value", 'old_key' => nil }
@@ -223,7 +223,7 @@ module Neography
         to = Node.create
 
         rel = Relationship.create(:type, from, to)
-        rel.stub(:neo_id => 42)
+        allow(rel).to receive(:neo_id).and_return(42)
         rel
       end
 
