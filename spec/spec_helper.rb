@@ -39,6 +39,7 @@ def error_response(attributes)
     message:   attributes[:message],
     exception: attributes[:exception],
     stacktrace: attributes[:stacktrace]
-  }.reject { |k,v| v.nil? }.to_json
+  }.reject { |k,v| v.nil? }.to_json,
+    data: http_header
   )
 end
