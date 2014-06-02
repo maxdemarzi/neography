@@ -29,14 +29,16 @@ module Neography
 
     # Set many properties at once and only issue one http
     # request and update the node/relationship instance on the fly.
-    def reset_properties(hash)
+    #
+    # To remove a property, set its value to nil.
+    def set_properties(hash)
       hash.each do |key, value|
         add_or_remove_ostruct_member(key, value)
       end
       if node?
-        neo_server.reset_node_properties(self.neo_id, hash)
+        neo_server.reset_node_properties(self.neo_id, @table)
       else
-        neo_server.reset_relationship_properties(self.neo_id, hash)
+        neo_server.reset_relationship_properties(self.neo_id, @table)
       end
     end
 
