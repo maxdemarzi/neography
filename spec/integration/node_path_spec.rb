@@ -21,8 +21,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_paths_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -30,8 +30,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_paths_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -41,9 +41,9 @@ describe Neography::NodePath do
       johnathan.all_paths_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end
@@ -55,8 +55,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_simple_paths_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -64,8 +64,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_simple_paths_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -75,9 +75,9 @@ describe Neography::NodePath do
       johnathan.all_simple_paths_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end
@@ -89,8 +89,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_shortest_paths_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -98,8 +98,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.all_shortest_paths_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -109,9 +109,9 @@ describe Neography::NodePath do
       johnathan.all_shortest_paths_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end
@@ -123,8 +123,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.path_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -132,8 +132,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.path_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -143,9 +143,9 @@ describe Neography::NodePath do
       johnathan.path_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end
@@ -157,8 +157,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.simple_path_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -166,8 +166,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.simple_path_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -177,9 +177,9 @@ describe Neography::NodePath do
       johnathan.simple_path_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end
@@ -191,8 +191,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.shortest_path_to(mary).incoming(:friends).depth(4).nodes.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_true}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_false}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be true}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be false}
       end
     end
 
@@ -200,8 +200,8 @@ describe Neography::NodePath do
       johnathan, mark, phill, mary = create_nodes
 
       johnathan.shortest_path_to(mary).incoming(:friends).depth(4).rels.each do |path|
-         path.map{|n| expect(n.is_a?(Neography::Node)).to be_false}
-         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be_true}
+         path.map{|n| expect(n.is_a?(Neography::Node)).to be false}
+         path.map{|n| expect(n.is_a?(Neography::Relationship)).to be true}
       end
     end
 
@@ -211,9 +211,9 @@ describe Neography::NodePath do
       johnathan.shortest_path_to(mary).incoming(:friends).depth(4).each do |path|
         path.each_with_index do  |n,i| 
           if i.even?
-            expect(n.is_a?(Neography::Node)).to be_true
+            expect(n.is_a?(Neography::Node)).to be true
           else
-            expect(n.is_a?(Neography::Relationship)).to be_true 
+            expect(n.is_a?(Neography::Relationship)).to be true 
           end
         end
       end

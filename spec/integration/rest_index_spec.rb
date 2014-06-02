@@ -367,12 +367,12 @@ describe Neography::Rest do
 
     it "can change the node auto index status" do
       @neo.set_node_auto_index_status(true)
-      expect(@neo.get_node_auto_index_status).to be_true
+      expect(@neo.get_node_auto_index_status).to be true
     end
 
     it "can change the relationship auto index status" do
       @neo.set_relationship_auto_index_status(true)
-      expect(@neo.get_relationship_auto_index_status).to be_true
+      expect(@neo.get_relationship_auto_index_status).to be true
     end
 
     it "can get a list of auto indexed node properties" do
@@ -408,22 +408,22 @@ describe Neography::Rest do
     it "can get a node from an automatic index" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.get_node_auto_index("name", "Max")
-      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true 
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be true 
     end
 
     it "can query a node from an automatic index using key value" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.find_node_auto_index("name", "Max")
-      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true 
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be true 
     end
 
     it "can query a node from an automatic index" do
       new_node = @neo.create_node("name" => "Max")
       existing_nodes = @neo.find_node_auto_index("name:Max")
-      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be true
       # check that more complex queries are correctly handled
       existing_nodes = @neo.find_node_auto_index("name:Max OR name:Max")
-      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be_true
+      expect(existing_nodes.collect{|n| n["self"]}.include?(new_node["self"])).to be true
     end
 
     it "can get a relationship from an automatic index" do
@@ -431,7 +431,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.get_relationship_auto_index("weight", 5)
-      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be true 
     end
 
     it "can query a relationship from an automatic index using key value" do
@@ -439,7 +439,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.find_relationship_auto_index("weight", 5)
-      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be true 
     end
 
     it "can query a relationship from an automatic index" do
@@ -447,7 +447,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node("name" => "Peter")
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"weight" => 5})
       existing_rels = @neo.find_relationship_auto_index("weight:5")
-      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be_true 
+      expect(existing_rels.collect{|n| n["self"]}.include?(new_relationship["self"])).to be true 
     end
 
   end
