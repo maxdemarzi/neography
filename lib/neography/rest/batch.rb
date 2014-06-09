@@ -83,6 +83,16 @@ module Neography
           }
         end
       end
+      
+      def batch_create_or_fail_unique_node(index, key, value, properties = {})
+        post "/index/node/%{index}?uniqueness=%{function}" %  {:index => index, :function => 'create_or_fail'} do
+          {
+            :key        => key,
+            :value      => value,
+            :properties => properties
+          }
+        end
+      end
 
       def batch_add_node_to_index(index, key, value, id, unique = false)
         path = unique ? "/index/node/%{index}?unique" % {:index => index} : "/index/node/%{index}" % {:index => index}

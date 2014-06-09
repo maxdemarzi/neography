@@ -74,6 +74,20 @@ describe Neography::Rest do
       expect(existing_node["data"]["age"]).to eq(31)
     end
 
+    it "can create or fail a unique node" do
+      index_name = generate_text(6)
+      key = generate_text(6)
+      value = generate_text
+      @neo.create_node_index(index_name)
+      batch_result = @neo.batch [:create_or_fail_unique_node, index_name, key, value, {"age" => 31, "name" => "Max"}]
+      expect(batch_result.first["body"]["data"]["name"]).to eq("Max")
+      expect(batch_result.first["body"]["data"]["age"]).to eq(31)
+      new_node_id = batch_result.first["body"]["self"].split('/').last
+      expect {
+        batch_result = @neo.batch [:create_or_fail_unique_node, index_name, key, value, {"age" => 31, "name" => "Max"}]
+      }.to raise_error Neography::OperationFailureException
+
+    end
     it "can update a property of a node" do
       new_node = @neo.create_node("name" => "Max")
       batch_result = @neo.batch [:set_node_property, new_node, {"name" => "Marc"}]
