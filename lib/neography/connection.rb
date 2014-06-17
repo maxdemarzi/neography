@@ -213,7 +213,7 @@ module Neography
       message = parsed_body["message"]
       stacktrace = parsed_body["stacktrace"]
 
-      @logger.error "#{response.dump} error: #{body}" if @log_enabled
+      @logger.error "#{response.data} error: #{body}" if @log_enabled
       raise_errors(code, parsed_body["exception"], message, stacktrace, request, index)
     end
 

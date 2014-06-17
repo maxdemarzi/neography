@@ -156,6 +156,13 @@ module Neography
 
       context "errors" do
 
+        subject(:connection) do
+          Connection.new({
+            :logger => Logger.new(nil),
+            :log_enabled => true
+          })
+        end
+
         it "raises NodeNotFoundException" do
           response = error_response(code: 404, message: "a message", exception: "NodeNotFoundException")
           allow(connection.client).to receive(:request).and_return(response)
