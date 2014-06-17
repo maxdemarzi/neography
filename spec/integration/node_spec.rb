@@ -247,14 +247,41 @@ describe Neography::Node do
     end
   end
 
-  describe 'gets labels' do
-    let(:subject) {
+  describe 'labels' do
+
+    it "loading from neo4j" do
       node = Neography::Node.create
       node.neo_server.add_label(node, 'Label')
       node.neo_server.add_label(node, 'Label2')
-      node
-    }
+      expect(node.labels).to eq(%w(Label Label2))
+    end
 
-    it { expect(subject.labels).to eq(%w(Label Label2)) }
+    it "adding via the node" do
+      node = Neography::Node.create
+      node.neo_server.add_label(node, 'Label')
+      node.add_labels('Label2')
+      expect(node.labels).to eq(%w(Label Label2))
+    end
+
+    it "resetting via the node" do
+      node = Neography::Node.create
+      node.neo_server.add_label(node, 'Label')
+      expect do
+        node.set_labels("Reset")
+      end.to change{ node.labels }.from(['Label']).to(["Reset"])
+    end
+
+    it "deleting via the node" do
+      node = Neography::Node.create
+      node.neo_server.add_label(node, 'Label')
+      expect do
+        node.delete_label("Label")
+      end.to change{ node.labels }.from(['Label']).to([])
+    end
+
+
+
+
   end
+
 end

@@ -53,11 +53,34 @@ module Neography
       end
     end
 
-    ##
-    # List of labels of current node.
-    # Returns array of strings
     def labels
-      self.neo_server.get_node_labels(self.neo_id)
+      @cached_labels ||= [self.neo_server.get_node_labels(self.neo_id)].compact.flatten
+    end
+
+    def set_labels(labels)
+      # I just invalidate the cache instead of updating it to make sure
+      # it doesn't contain something else than what ends up in neo4j
+      # (consider duplicate/invalid labels, etc).
+      @cached_labels = nil
+      self.neo_server.set_label(self, [labels].flatten)
+    end
+    alias_method :set_label, :set_labels
+
+    def add_labels(labels)
+      # Just invalidating the cache on purpose, see set_labels
+      @cached_labels = nil
+      self.neo_server.add_label(self, [labels].flatten)
+    end
+    alias_method :add_label, :add_labels
+
+
+    def delete_label(label)
+      @cached_labels = nil
+      self.neo_server.delete_label(self, label)
+    end
+
+    def cached_labels=(labels)
+      @cached_labels = [labels].flatten
     end
   end
 end
