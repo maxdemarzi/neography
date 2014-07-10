@@ -18,9 +18,10 @@ module Neography
       else
         data = []
       end
-
-      for k,v in data
-        new_ostruct_member(k.to_sym, v)
+      unless data.nil?
+        for k,v in data
+          new_ostruct_member(k.to_sym, v)
+        end
       end
     end
 
