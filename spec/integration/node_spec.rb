@@ -121,12 +121,6 @@ describe Neography::Node do
   end
 
   describe "equality" do
-    it "can tell two nodes are the same with equal?" do
-      new_node = Neography::Node.create
-      another_node = Neography::Node.load(new_node)
-      expect(new_node.equal?(another_node)).to be true 
-    end
-
     it "can tell two nodes are the same with eql?" do
       new_node = Neography::Node.create
       another_node = Neography::Node.load(new_node)
