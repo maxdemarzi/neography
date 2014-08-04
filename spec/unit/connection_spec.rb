@@ -79,6 +79,25 @@ module Neography
             connection
           end
         end
+
+        context "persistent" do
+          let(:persistent) { double(:persistent)}
+          let(:options) do
+            {
+              :persistent => false
+            }
+          end
+
+          it 'configures persistent' do
+            expect(Excon).to receive(:new).with("http://localhost:7474",
+                                                :read_timeout => 1200,
+                                                :write_timeout => 1200,
+                                                :persistent => false,
+                                                :user => nil,
+                                                :password => nil).and_return(persistent)
+            connection
+          end
+        end
       end
 
 
