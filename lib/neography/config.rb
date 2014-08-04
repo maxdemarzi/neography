@@ -7,7 +7,8 @@ module Neography
       :max_threads,
       :authentication, :username, :password,
       :parser, :max_execution_time,
-      :proxy, :http_send_timeout, :http_receive_timeout
+      :proxy, :http_send_timeout, :http_receive_timeout,
+      :persistent
 
     def initialize
       set_defaults
@@ -33,7 +34,8 @@ module Neography
         :max_execution_time    => @max_execution_time,
         :proxy                 => @proxy,
         :http_send_timeout     => @http_send_timeout,
-        :http_receive_timeout  => @http_receive_timeout
+        :http_receive_timeout  => @http_receive_timeout,
+        :persistent            => @persistent
       }
     end
 
@@ -58,7 +60,7 @@ module Neography
       @proxy                = nil
       @http_send_timeout    = 1200
       @http_receive_timeout = 1200
-      end
-
+      @persistent           = true
+    end
   end
 end

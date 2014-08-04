@@ -19,7 +19,7 @@ module Neography
       @client ||= Excon.new(config[:proxy] || "#{@protocol}#{@server}:#{@port}", 
                             :read_timeout => config[:http_receive_timeout],
                             :write_timeout => config[:http_send_timeout],
-                            :persistent => true,
+                            :persistent => config[:persistent],
                             :user =>  config[:username],
                             :password => config[:password])
       #authenticate

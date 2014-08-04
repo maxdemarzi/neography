@@ -102,6 +102,11 @@ module Neography
         it  { should == 1200 }
       end
 
+      describe '#persistent' do
+        subject { super().persistent }
+        it { should == true }
+      end
+
 
       it "has a hash representation" do
         expected_hash = {
@@ -123,7 +128,8 @@ module Neography
           :max_execution_time   => 6000,
           :proxy                => nil,
           :http_send_timeout    => 1200,
-          :http_receive_timeout => 1200
+          :http_receive_timeout => 1200,
+          :persistent           => true
 
         }
         expect(config.to_hash).to eq(expected_hash)
