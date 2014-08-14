@@ -77,6 +77,7 @@ Neography.configure do |config|
   config.parser               = MultiJsonParser
   config.http_send_timeout    = 1200
   config.http_receive_timeout = 1200
+  config.persistent           = true
   end
   ```
 
