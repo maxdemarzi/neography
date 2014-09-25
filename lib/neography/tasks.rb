@@ -127,11 +127,11 @@ namespace :neo4j do
          %x[neo4j/bin/Neo4j.bat stop]
          
         # Reset the database
-        FileUtils.rm_rf("neo4j/data/graph.db")
+        FileUtils.rm_rf("neo4j/data/graph.db") if File.exist?("neo4j/data/graph.db")
         FileUtils.mkdir("neo4j/data/graph.db")
         
         # Remove log files
-        FileUtils.rm_rf("neo4j/data/log")
+        FileUtils.rm_rf("neo4j/data/log") if File.exist?("neo4j/data/log")
         FileUtils.mkdir("neo4j/data/log")
 
         %x[neo4j/bin/Neo4j.bat start]
@@ -142,11 +142,11 @@ namespace :neo4j do
       %x[neo4j/bin/neo4j stop]
       
       # Reset the database
-      FileUtils.rm_rf("neo4j/data/graph.db")
+      FileUtils.rm_rf("neo4j/data/graph.db") if File.exist?("neo4j/data/graph.db")
       FileUtils.mkdir("neo4j/data/graph.db")
       
       # Remove log files
-      FileUtils.rm_rf("neo4j/data/log")
+      FileUtils.rm_rf("neo4j/data/log") if File.exist?("neo4j/data/log")
       FileUtils.mkdir("neo4j/data/log")
       
       # Start the server
