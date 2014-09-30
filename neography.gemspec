@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", "3.0"
   s.add_development_dependency "net-http-spy", "0.2.1"
   s.add_development_dependency "coveralls"
-  s.add_development_dependency "debugger"
   s.add_development_dependency "guard-rspec"
   s.add_dependency "excon", ">= 0.33.0"
   s.add_dependency "json", ">= 1.7.7"
