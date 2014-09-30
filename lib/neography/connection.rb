@@ -13,7 +13,7 @@ module Neography
       :parser, :client,
       :proxy, :http_send_timeout, :http_receive_timeout
 
-    def initialize(options = ENV['NEO4J_URL'] || {})
+    def initialize(options = {})
       config = merge_configuration(options)
       save_local_configuration(config)
       @client ||= Excon.new(config[:proxy] || "#{@protocol}#{@server}:#{@port}", 

@@ -60,7 +60,7 @@ module Neography
 
     def_delegators :@connection, :configuration
 
-    def initialize(options = ENV['NEO4J_URL'] || {})
+    def initialize(options = {})
       @connection = Connection.new(options)
     end   
 
