@@ -174,7 +174,7 @@ module Neography
     def return_result(response, code, body, parsed, path, query_body)
       case code
       when 200
-        @logger.debug "OK, created #{body}" if @log_enabled
+        @logger.debug "OK #{body}" if @log_enabled
         parsed ? body : @parser.json(body)
       when 201
         @logger.debug "OK, created #{body}" if @log_enabled
