@@ -10,11 +10,11 @@ module Neography
       @request    = request
       @index      = index
     end
-  end
 
     def to_s
      "NeographyError: \n--message: #{@message}, \n--code: #{@code}, \n--stacktrace: #{@stacktrace}, \n--request: #{@request}, \n--index: #{@index}"
     end
+  end
 
   # HTTP Authentication error
   class UnauthorizedError < NeographyError; end
