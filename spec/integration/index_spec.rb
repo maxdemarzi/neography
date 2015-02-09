@@ -50,8 +50,11 @@ describe Neography::Index do
     r.add_to_index("relationship_test_index", "name", value)
     existing_r = Neography::Relationship.find("relationship_test_index", "name", value)
     expect(existing_r.name).to eq(value)
+    expect(existing_r.start_node).to eq(node1)
+    expect(existing_r.end_node).to eq(node2)
+    existing_r.del
   end
-
+  
   it "can find multiple nodes in an index" do
     value1 = generate_text
     value2 = generate_text

@@ -40,7 +40,7 @@ module Neography
           results = db.find_relationship_index(*args)
           return nil unless results
           results.each do |r|
-            rel = self.new(r, db)
+            rel = self.load(r, db)
             rels << rel
           end
           rels.size > 1 ? rels : rels.first
