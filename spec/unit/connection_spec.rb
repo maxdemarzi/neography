@@ -122,7 +122,7 @@ module Neography
       let(:response) { double("response", :status => 200, :body=> "").as_null_object }
 
       it "does a GET request" do
-        expect(connection.client).to receive(:request).with(:method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response}
+        expect(connection.client).to receive(:request).with(:method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
         connection.get("/node/bar")
       end
 
@@ -154,7 +154,7 @@ module Neography
           expect(connection.client).not_to receive(:set_auth).with(
             "http://localhost:7474/db/data/node/bar",
              "foo",
-             "bar") { double.as_null_object }
+             "bar") { response }
 
           expect(connection.client).to receive(:request).with(
             :method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
