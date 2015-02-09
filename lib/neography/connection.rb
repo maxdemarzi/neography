@@ -189,7 +189,6 @@ module Neography
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
-      #when 400..500
       else
         handle_4xx_500_response(response, code, body, path, query_body)
         nil

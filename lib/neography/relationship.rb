@@ -54,7 +54,7 @@ module Neography
     end
 
     def del
-      start_node.neo_server.delete_relationship(neo_id)
+      neo_server.delete_relationship(neo_id)
     end
 
     def exist?
