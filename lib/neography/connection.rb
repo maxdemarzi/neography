@@ -16,7 +16,7 @@ module Neography
     def initialize(options = {})
       config = merge_configuration(options)
       save_local_configuration(config)
-      @client ||= Excon.new(config[:proxy] || "#{@protocol}#{@server}:#{@port}", 
+      @client ||= Excon.new(config[:proxy] || "#{protocol}://#{@server}:#{@port}", 
                             :read_timeout => config[:http_receive_timeout],
                             :write_timeout => config[:http_send_timeout],
                             :persistent => config[:persistent],
@@ -32,8 +32,13 @@ module Neography
       @directory = directory
     end
 
+    # Keeping backward compatability for folks who used "http://" syntax instead of "http"
+    def protocol
+      @protocol.sub("://","")
+    end
+
     def configuration
-      @configuration ||= "#{@protocol}#{@server}:#{@port}#{@directory}"
+      @configuration ||= "#{protocol}://#{@server}:#{@port}#{@directory}"
     end
 
     def merge_options(options)
@@ -184,7 +189,8 @@ module Neography
       when 204
         @logger.debug "OK, no content returned" if @log_enabled
         nil
-      when 400..500
+      #when 400..500
+      else
         handle_4xx_500_response(response, code, body, path, query_body)
         nil
       end
@@ -248,7 +254,7 @@ module Neography
     def parse_string_options(options)
       url = URI.parse(options)
       options = {
-        :protocol  => url.scheme + "://",
+        :protocol  => url.scheme,
         :server    => url.host,
         :port      => url.port,
         :directory => url.path,

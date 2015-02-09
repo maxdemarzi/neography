@@ -20,7 +20,7 @@ module Neography
       context "hash options" do
         let(:options) do
           {
-            :protocol           => "https://",
+            :protocol           => "https",
             :server             => "foobar",
             :port               => 4242,
             :directory          => "/dir",
@@ -40,7 +40,7 @@ module Neography
         it "accepts all options in a hash" do
           expect(connection.configuration).to eq("https://foobar:4242/dir")
 
-          expect(connection.protocol).to           eq("https://")
+          expect(connection.protocol).to           eq("https")
           expect(connection.server).to             eq("foobar")
           expect(connection.port).to               eq(4242)
           expect(connection.directory).to          eq("/dir")
@@ -119,24 +119,25 @@ module Neography
     end
 
     context "requests" do
+      let(:response) { double("response", :status => 200, :body=> "").as_null_object }
 
       it "does a GET request" do
-        expect(connection.client).to receive(:request).with(:method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { double.as_null_object }
+        expect(connection.client).to receive(:request).with(:method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response}
         connection.get("/node/bar")
       end
 
       it "does a POST request" do
-        expect(connection.client).to receive(:request).with(:method => :post, :path => "/db/data/node/bar", :body => nil, :headers => nil) { double.as_null_object }
+        expect(connection.client).to receive(:request).with(:method => :post, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
         connection.post("/node/bar")
       end
 
       it "does a PUT request" do
-        expect(connection.client).to receive(:request).with(:method => :put, :path => "/db/data/node/bar", :body => nil, :headers => nil) { double.as_null_object }
+        expect(connection.client).to receive(:request).with(:method => :put, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
         connection.put("/node/bar")
       end
 
       it "does a DELETE request" do
-        expect(connection.client).to receive(:request).with(:method => :delete, :path => "/db/data/node/bar", :body => nil, :headers => nil) { double.as_null_object }
+        expect(connection.client).to receive(:request).with(:method => :delete, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
         connection.delete("/node/bar")
       end
 
@@ -156,7 +157,7 @@ module Neography
              "bar") { double.as_null_object }
 
           expect(connection.client).to receive(:request).with(
-            :method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { double.as_null_object }
+            :method => :get, :path => "/db/data/node/bar", :body => nil, :headers => nil) { response }
 
           connection.get("/node/bar")
         end
@@ -168,7 +169,7 @@ module Neography
                 {:method => :get, :path => "/db/data/node/bar", :body => nil,
                  :headers => {"User-Agent" => "Neography/#{Neography::VERSION}", "X-Stream"=>true, "max-execution-time" => 6000}}
             )
-        ) { double.as_null_object }
+        ) { response }
 
         connection.get("/node/bar", :headers => {})
       end

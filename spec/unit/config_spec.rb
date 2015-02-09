@@ -9,7 +9,7 @@ module Neography
 
       describe '#protocol' do
         subject { super().protocol }
-        it              { should == 'http://' }
+        it              { should == 'http' }
       end
 
       describe '#server' do
@@ -110,7 +110,7 @@ module Neography
 
       it "has a hash representation" do
         expected_hash = {
-          :protocol             => 'http://',
+          :protocol             => 'http',
           :server               => 'localhost',
           :port                 => 7474,
           :directory            => '',

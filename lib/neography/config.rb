@@ -42,7 +42,7 @@ module Neography
     private
 
     def set_defaults
-      @protocol             = "http://"
+      @protocol             = "http"
       @server               = "localhost"
       @port                 = 7474
       @directory            = ""

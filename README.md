@@ -61,7 +61,7 @@ Configure Neography as follows:
 ```ruby
 # these are the default values:
 Neography.configure do |config|
-  config.protocol             = "http://"
+  config.protocol             = "http"
   config.server               = "localhost"
   config.port                 = 7474
   config.directory            = ""  # prefix this path with '/'
