@@ -85,6 +85,8 @@ Then initialize a `Rest` instance:
 
 ```ruby
 @neo = Neography::Rest.new
+@neo = Neography::Rest.new({:authentication => 'basic', :username => "neo4j", :password => "swordfish"})
+@neo = Neography::Rest.new("http://neo4j:swordfish@localhost:7474")
 ```
 
 For overriding these default and other initialization methods, see the
