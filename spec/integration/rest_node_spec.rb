@@ -139,9 +139,9 @@ describe Neography::Rest do
       expect(node_properties["eyes"]).to be_nil
     end
 
-    it "returns nil if it gets the properties on a node that does not have any" do
+    it "returns empty array if it gets the properties on a node that does not have any" do
       new_node = @neo.create_node
-      expect(@neo.get_node_properties(new_node)).to be_nil
+      expect(@neo.get_node_properties(new_node)).to be_empty
     end
 
     it "raises error if it tries to get some of the properties on a node that does not have any" do
@@ -164,7 +164,7 @@ describe Neography::Rest do
     it "can remove a node's properties" do
       new_node = @neo.create_node("weight" => 200, "eyes" => "brown")
       @neo.remove_node_properties(new_node)
-      expect(@neo.get_node_properties(new_node)).to be_nil
+      expect(@neo.get_node_properties(new_node)).to be_empty
     end
 
     it "raises error if it fails to remove the properties of a node that does not exist" do

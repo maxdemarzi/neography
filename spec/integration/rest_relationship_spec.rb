@@ -148,7 +148,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2)
       relationship_properties = @neo.get_relationship_properties(new_relationship)
-      expect(relationship_properties).to be_nil
+      expect(relationship_properties).to be_empty
     end
 
     it "raises error if it tries to get some of the properties on a relationship that does not have any" do
@@ -177,7 +177,7 @@ describe Neography::Rest do
       new_node2 = @neo.create_node
       new_relationship = @neo.create_relationship("friends", new_node1, new_node2, {"since" => '10-1-2010', "met" => "college"})
       @neo.remove_relationship_properties(new_relationship)
-      expect(@neo.get_relationship_properties(new_relationship)).to be_nil
+      expect(@neo.get_relationship_properties(new_relationship)).to be_empty
     end
 
     it "raises error if it fails to remove the properties of a relationship that does not exist" do

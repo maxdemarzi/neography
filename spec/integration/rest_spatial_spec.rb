@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Neography::Rest do
+describe Neography::Rest, :spatial => true do
   before(:each) do
     @neo = Neography::Rest.new
   end

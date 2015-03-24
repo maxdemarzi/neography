@@ -21,8 +21,8 @@ describe Neography::Rest do
       expect(nodes).not_to be_nil
       expect(nodes[0]["self"]).to eq(@new_node2["self"])
       expect(nodes[1]["self"]).to eq(@new_node3["self"])
-      expect(nodes[2]["self"]).to eq(@new_node4["self"])
-      expect(nodes[3]["self"]).to eq(@new_node5["self"])
+      expect(nodes[2]["self"]).to eq(@new_node5["self"])
+      expect(nodes[3]["self"]).to eq(@new_node4["self"])
     end
     it "can traverse the graph and return relationships" do
       new_relationship1= @neo.create_relationship("friends", @new_node1, @new_node2)
@@ -36,8 +36,8 @@ describe Neography::Rest do
 
       expect(relationships[0]["self"]).to eq(new_relationship1["self"])
       expect(relationships[1]["self"]).to eq(new_relationship2["self"])
-      expect(relationships[2]["self"]).to eq(new_relationship3["self"])
-      expect(relationships[3]["self"]).to eq(new_relationship4["self"])
+      expect(relationships[2]["self"]).to eq(new_relationship5["self"])
+      expect(relationships[3]["self"]).to eq(new_relationship3["self"])
     end
 
     it "can traverse the graph and return paths" do
@@ -52,8 +52,8 @@ describe Neography::Rest do
   
       expect(paths[0]["nodes"]).to eq([@new_node1["self"], @new_node2["self"]])
       expect(paths[1]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"]])
-      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
-      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"], @new_node5["self"]])
+      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node5["self"]])
+      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
     end
 
     it "can traverse the graph up to a certain depth" do
@@ -68,8 +68,8 @@ describe Neography::Rest do
 
       expect(paths[0]["nodes"]).to eq([@new_node1["self"], @new_node2["self"]])
       expect(paths[1]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"]])
-      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
-      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node5["self"]])
+      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node5["self"]])
+      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
     end
 
     it "can traverse the graph in a certain order" do
@@ -84,8 +84,8 @@ describe Neography::Rest do
     
       expect(paths[0]["nodes"]).to eq([@new_node1["self"], @new_node2["self"]])
       expect(paths[1]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"]])
-      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
-      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node5["self"]])
+      expect(paths[2]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node5["self"]])
+      expect(paths[3]["nodes"]).to eq([@new_node1["self"], @new_node2["self"], @new_node3["self"], @new_node4["self"]])
     end
 
     it "can traverse the graph with a specific uniqueness" do
@@ -138,8 +138,8 @@ describe Neography::Rest do
       expect(nodes[0]["self"]).to eq(@new_node1["self"])
       expect(nodes[1]["self"]).to eq(@new_node2["self"])
       expect(nodes[2]["self"]).to eq(@new_node3["self"])
-      expect(nodes[3]["self"]).to eq(@new_node4["self"])
-      expect(nodes[4]["self"]).to eq(@new_node5["self"])
+      expect(nodes[3]["self"]).to eq(@new_node5["self"])
+      expect(nodes[4]["self"]).to eq(@new_node4["self"])
     end
 
 

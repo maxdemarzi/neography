@@ -3,6 +3,9 @@ require 'spec_helper'
 describe Neography::Rest do
   before(:each) do
     @neo = Neography::Rest.new
+    node = @neo.create_node
+    @node_id = node["self"].split('/').last.to_i
+
   end
 
   describe "start a transaction" do
@@ -51,7 +54,7 @@ describe Neography::Rest do
       tx = @neo.begin_transaction
       expect(tx).to have_key("transaction")
       expect(tx["results"]).to be_empty
-      existing_tx = @neo.in_transaction(tx, "start n=node(0) return n")
+      existing_tx = @neo.in_transaction(tx, "MATCH (n) WHERE ID(n) =#{@node_id} RETURN n")
       expect(existing_tx).to have_key("transaction")
       expect(existing_tx).to have_key("results")
       expect(existing_tx["results"]).not_to be_empty
@@ -61,7 +64,7 @@ describe Neography::Rest do
       tx = @neo.begin_transaction
       expect(tx).to have_key("transaction")
       expect(tx["results"]).to be_empty
-      existing_tx = @neo.in_transaction(tx, ["start n=node({id}) return n", {:id => 0}])
+      existing_tx = @neo.in_transaction(tx, ["MATCH (n) WHERE ID(n) ={id} RETURN n", {:id => @node_id}])
       expect(existing_tx).to have_key("transaction")
       expect(existing_tx).to have_key("results")
       expect(existing_tx["results"]).not_to be_empty
@@ -71,7 +74,7 @@ describe Neography::Rest do
       tx = @neo.begin_transaction
       expect(tx).to have_key("transaction")
       expect(tx["results"]).to be_empty
-      existing_tx = @neo.in_transaction(tx, ["start n=node(0) return n", [:row,:rest]])
+      existing_tx = @neo.in_transaction(tx, ["MATCH (n) RETURN n LIMIT 1", [:row,:rest]])
       expect(existing_tx).to have_key("transaction")
       expect(existing_tx).to have_key("results")
       expect(existing_tx["results"]).not_to be_empty
@@ -81,7 +84,7 @@ describe Neography::Rest do
       tx = @neo.begin_transaction
       expect(tx).to have_key("transaction")
       expect(tx["results"]).to be_empty
-      existing_tx = @neo.in_transaction(tx, ["start n=node({id}) return n", {:id => 0}, [:row,:rest]])
+      existing_tx = @neo.in_transaction(tx, ["MATCH (n) WHERE ID(n)={id} RETURN n", {:id => 0}, [:row,:rest]])
       expect(existing_tx).to have_key("transaction")
       expect(existing_tx).to have_key("results")
       expect(existing_tx["results"]).not_to be_empty
@@ -127,7 +130,7 @@ describe Neography::Rest do
     end
     
     it "can commit an new transaction right away with parameters" do
-      tx = @neo.commit_transaction(["start n=node({id}) return n", {:id => 0}])
+      tx = @neo.commit_transaction(["start n=node({id}) return n", {:id => @node_id}])
       expect(tx).not_to have_key("transaction")
       expect(tx).to have_key("results")
       expect(tx["results"]).not_to be_empty
