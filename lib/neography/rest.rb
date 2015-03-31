@@ -1,6 +1,7 @@
 require 'forwardable'
 
 require 'neography/rest/helpers'
+require 'neography/rest/auth'
 require 'neography/rest/schema_indexes'
 require 'neography/rest/nodes'
 require 'neography/rest/node_properties'
@@ -31,6 +32,7 @@ module Neography
 
   class Rest
     include Helpers
+    include Auth
     include RelationshipTypes
     include NodeLabels
     include SchemaIndexes
