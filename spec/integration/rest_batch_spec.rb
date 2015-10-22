@@ -504,15 +504,15 @@ describe Neography::Rest do
       new_relationship1 = @neo.create_relationship("friends", node1, node2)
       new_relationship2 = @neo.create_relationship("brothers", node1, node3)
       batch_result = @neo.batch [:get_node_relationships, node1]
-      expect(batch_result.first["body"].length).to be(2)
-      expect(batch_result.first["body"][0]["type"]).to eq("friends")
-      expect(batch_result.first["body"][0]["start"].split('/').last).to eq(node1["self"].split('/').last)
-      expect(batch_result.first["body"][0]["end"].split('/').last).to eq(node2["self"].split('/').last)
-      expect(batch_result.first["body"][0]["self"]).to eq(new_relationship1["self"])
-      expect(batch_result.first["body"][1]["type"]).to eq("brothers")
+      expect(batch_result.first["body"].length).to be(2)      
+      expect(batch_result.first["body"][1]["type"]).to eq("friends")
       expect(batch_result.first["body"][1]["start"].split('/').last).to eq(node1["self"].split('/').last)
-      expect(batch_result.first["body"][1]["end"].split('/').last).to eq(node3["self"].split('/').last)
-      expect(batch_result.first["body"][1]["self"]).to eq(new_relationship2["self"])
+      expect(batch_result.first["body"][1]["end"].split('/').last).to eq(node2["self"].split('/').last)
+      expect(batch_result.first["body"][1]["self"]).to eq(new_relationship1["self"])
+      expect(batch_result.first["body"][0]["type"]).to eq("brothers")
+      expect(batch_result.first["body"][0]["start"].split('/').last).to eq(node1["self"].split('/').last)
+      expect(batch_result.first["body"][0]["end"].split('/').last).to eq(node3["self"].split('/').last)
+      expect(batch_result.first["body"][0]["self"]).to eq(new_relationship2["self"])
     end
 
     it "can get relationships of specific type" do

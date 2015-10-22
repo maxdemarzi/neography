@@ -48,16 +48,16 @@ describe Neography::Rest do
       new_relationship = @neo.create_relationship("enemies", new_node1, new_node2, {"since" => '10-2-2010', "met" => "work"})
       relationships = @neo.get_node_relationships_to(new_node1, new_node2)
       expect(relationships).not_to be_nil
-      expect(relationships[0]["start"]).to eq(new_node1["self"])
-      expect(relationships[0]["end"]).to eq(new_node2["self"])
-      expect(relationships[0]["type"]).to eq("friends")
-      expect(relationships[0]["data"]["met"]).to eq("college")
-      expect(relationships[0]["data"]["since"]).to eq('10-1-2005')
       expect(relationships[1]["start"]).to eq(new_node1["self"])
       expect(relationships[1]["end"]).to eq(new_node2["self"])
-      expect(relationships[1]["type"]).to eq("enemies")
-      expect(relationships[1]["data"]["met"]).to eq("work")
-      expect(relationships[1]["data"]["since"]).to eq('10-2-2010')
+      expect(relationships[1]["type"]).to eq("friends")
+      expect(relationships[1]["data"]["met"]).to eq("college")
+      expect(relationships[1]["data"]["since"]).to eq('10-1-2005')
+      expect(relationships[0]["start"]).to eq(new_node1["self"])
+      expect(relationships[0]["end"]).to eq(new_node2["self"])
+      expect(relationships[0]["type"]).to eq("enemies")
+      expect(relationships[0]["data"]["met"]).to eq("work")
+      expect(relationships[0]["data"]["since"]).to eq('10-2-2010')
     end
 
     it "can get all of a node's outgoing relationship" do

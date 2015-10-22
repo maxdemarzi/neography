@@ -6,7 +6,7 @@ require 'net/http'
 namespace :neo4j do
   desc "Install Neo4j"
   task :install, :edition, :version do |t, args|
-    args.with_defaults(:edition => "community", :version => "2.2.5")
+    args.with_defaults(:edition => "community", :version => "2.3.0")
     puts "Installing Neo4j-#{args[:edition]}-#{args[:version]}"
     
     if OS::Underlying.windows?
@@ -163,12 +163,18 @@ namespace :neo4j do
   end
 
   task :get_spatial, :version  do |t, args|
-    args.with_defaults(:version => "2.1.4")
+    args.with_defaults(:version => "2.2.3")
     puts "Installing Neo4j-Spatial #{args[:version]}"
 
       unless File.exist?('neo4j-spatial.zip')
         df = File.open('neo4j-spatial.zip', 'wb')
         case args[:version]
+          when "2.2.3"
+            dist = "https://raw.githubusercontent.com"
+            request = "/neo4j-contrib/m2/master/releases/org/neo4j/neo4j-spatial/0.15-neo4j-2.2.3/neo4j-spatial-0.15-neo4j-2.2.3-server-plugin.zip"            
+          when "2.2.0"
+            dist = "https://raw.githubusercontent.com"
+            request = "/neo4j-contrib/m2/master/releases/org/neo4j/neo4j-spatial/0.14-neo4j-2.2.0/neo4j-spatial-0.14-neo4j-2.2.0-server-plugin.zip"            
           when "2.1.4"
             dist = "m2.neo4j.org"
             request = "/content/repositories/releases/org/neo4j/neo4j-spatial/0.13-neo4j-2.1.4/neo4j-spatial-0.13-neo4j-2.1.4-server-plugin.zip"
@@ -189,11 +195,15 @@ namespace :neo4j do
         end
         
         begin
-          Net::HTTP.start(dist) do |http|            
-            http.request_get(request) do |resp|
-                resp.read_body do |segment|
-                    df.write(segment)
-                end
+          case args[:version] when "2.2.3", "2.2.0" 
+            df.write(Net::HTTP.get(URI(dist+request)))
+          else
+            Net::HTTP.start(dist) do |http|            
+              http.request_get(request) do |resp|
+                  resp.read_body do |segment|
+                      df.write(segment)
+                  end
+              end
             end
           end
         ensure
