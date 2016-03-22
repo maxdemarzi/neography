@@ -12,13 +12,13 @@ describe Neography::Rest do
     end
     
     it "can call a POST based unmanaged extension" do 
-      results = @neo.post_extention('/movie/recommend', {"title" => "Rambo"})
+      results = @neo.post_extension('/movie/recommend', {"title" => "Rambo"})
       expect(results).not_to be_null
     end
     
     it "can call a POST based unmanaged extension that uses form-urlencoded" do
       headers = {'Content-Type' =>'application/x-www-form-urlencoded'}
-      results = @neo.post_extention('/music/recommend', {"artist" => "Ministry", "song" => "Just one Fix"}, headers)    
+      results = @neo.post_extension('/music/recommend', {"artist" => "Ministry", "song" => "Just one Fix"}, headers)
       expect(results).not_to be_null
     end
 
