@@ -1,4 +1,5 @@
 script: "bundle exec rake neo4j:install['enterprise','2.3.2'] neo4j:get_spatial neo4j:unsecure neo4j:start spec --trace"
+sudo: false
 language: ruby
 rvm:
   - 2.2.0
