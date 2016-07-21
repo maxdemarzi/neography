@@ -344,7 +344,7 @@ describe Neography::Rest do
     end
 
     it "raises ParameterNotFoundException when a cypher parameter is missing and ORDER BY is used" do
-      q = "MATCH n WHERE n.x>{missing_parameter} RETURN n ORDER BY n"
+      q = "MATCH (n) WHERE n.x>{missing_parameter} RETURN n ORDER BY n"
       expect{
         @neo.batch [:execute_query, q, {}]
       }.to raise_error Neography::ParameterNotFoundException

@@ -23,7 +23,7 @@ describe Neography::Rest do
     end
 
     it "can start a transaction with statements and represent them as a graph" do
-      tx = @neo.begin_transaction(["CREATE ( bike:Bike { weight: 10 } ) CREATE ( frontWheel:Wheel { spokes: 3 } ) CREATE ( backWheel:Wheel { spokes: 32 } ) CREATE p1 = bike -[:HAS { position: 1 } ]-> frontWheel CREATE p2 = bike -[:HAS { position: 2 } ]-> backWheel RETURN bike, p1, p2", 
+      tx = @neo.begin_transaction(["CREATE ( bike:Bike { weight: 10 } ) CREATE ( frontWheel:Wheel { spokes: 3 } ) CREATE ( backWheel:Wheel { spokes: 32 } ) CREATE p1 = (bike) -[:HAS { position: 1 } ]-> (frontWheel) CREATE p2 = (bike) -[:HAS { position: 2 } ]-> (backWheel) RETURN bike, p1, p2", 
                                  ["row", "graph", "rest"]])
       expect(tx).to have_key("transaction")
       expect(tx).to have_key("results")

@@ -164,11 +164,11 @@ describe Neography::Rest do
       id2 = node2["self"].split('/').last.to_i
 
       # create two 'FOO' relationships
-      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
-      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
+      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE (a)-[r:FOO]->(b) RETURN r", { :id1 => id1, :id2 => id2 })
+      @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE (a)-[r:FOO]->(b) RETURN r", { :id1 => id1, :id2 => id2 })
 
       expect {
-        @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE UNIQUE a-[r:FOO]->b RETURN r", { :id1 => id1, :id2 => id2 })
+        @neo.execute_query("START a=node({id1}), b=node({id2}) CREATE UNIQUE (a)-[r:FOO]->(b) RETURN r", { :id1 => id1, :id2 => id2 })
       }.to raise_error(Neography::UniquePathNotUniqueException)
     end
 
