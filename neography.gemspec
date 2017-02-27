@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency "rspec", "3.0"
+  s.add_development_dependency "rspec", "3.5.0"
   s.add_development_dependency "net-http-spy", "0.2.1"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "guard-rspec"
@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "multi_json", ">= 1.3.2"
 
   if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-    s.add_runtime_dependency 'rake', '>= 0.8.7'
+    s.add_runtime_dependency 'rake', '>= 12.0.0'
   else
     s.add_development_dependency "rake", ">= 0.8.7"
     s.add_dependency "rake", ">= 0.8.7"
