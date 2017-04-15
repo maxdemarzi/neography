@@ -244,6 +244,7 @@ Complement to Neography are the:
 * [Neo4j Active Record Adapter](https://github.com/yournextleap/activerecord-neo4j-adapter) by Nikhil Lanjewar
 * [Neology](https://github.com/lordkada/neology) by Carlo Alberto Degli Atti
 * [Neoid](https://github.com/elado/neoid) by Elad Ossadon
+* [Cadet](https://github.com/karabijavad/cadet) by Javad Karabi
 
 An alternative to Neography is [Architect4r](https://github.com/namxam/architect4r) by Maximilian Schulz
 
